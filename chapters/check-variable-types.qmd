@@ -1,0 +1,92 @@
+---
+title: "check-variable-types"
+format: html
+---
+
+R has several core variable types — character, numeric, integer, factor, logical, and date. This section covers the most common conversions and what to watch out for with each.
+
+#### Checking a variable's current type
+
+Before converting anything, confirm what type a column currently is:
+
+```         
+class(data$variable)
+```
+
+If numeric/integer variables are being read as character variables incorrectly, check whether there are any non-numeric responses:
+
+``` r
+data %>%
+  filter(is.na(as.numeric(variable))) %>%
+  distinct(variable)
+```
+
+**What this is doing:**
+
+-   `as.numeric(variable)` attempts to convert every value in the column to a number. Wherever a value genuinely can't be converted (e.g. text like `"N/A"`, a stray letter, or an empty string), R returns `NA` for that entry instead of a number — and typically throws a warning (`NAs introduced by coercion`) letting you know this happened.
+
+<!-- -->
+
+-   `is.na(as.numeric(variable))` flags exactly those problem entries as `TRUE`.
+
+<!-- -->
+
+-   `filter(...)` keeps only the rows where that's `TRUE` — i.e. only the rows containing the non-numeric culprits.
+
+<!-- -->
+
+-   `distinct(variable)` collapses the result down to just the unique offending values, rather than showing you every row that contains them — so if `"N/A"` appears 40 times, you see it once, not 40 times.
+
+The end result is a short list of exactly which text values are preventing the column from being read as numeric — from there you can decide whether to [recode](recoding.qmd) them to `NA`, fix a typo, or handle them some other way.
+
+## Convert to different variable types
+
+### To convert to numeric:
+
+``` r
+data <- data %>%
+  mutate(variable = as.numeric(variable))
+```
+
+**What this is doing:**
+
+-   `as.numeric()` attempts to convert every value in the column to a number. Any value that isn't a valid number (e.g. `"N/A"`, a stray letter, an empty string) becomes `NA`, usually accompanied by a warning (`NAs introduced by coercion`).
+
+::: callout-caution
+## Caution
+
+Never convert a factor straight to numeric with `as.numeric(variable)` if the factor levels are numbers stored as text (e.g. levels `"1"`, `"2"`, `"3"`). Doing this returns the factor's internal **level position** (1, 2, 3...), not the actual numeric value of the label — these can look identical and still be wrong if the levels aren't in the order you expect.
+:::
+
+### To convert to integer:
+
+``` r
+data <- data %>%
+  mutate(variable = as.integer(variable))
+```
+
+**What this is doing:**
+
+-   Works the same as `as.numeric()`, but stores the result as a whole number (integer) rather than allowing decimals.
+
+-   Only use this for genuinely whole-number data (e.g. age in years, number of children) — if the underlying values have decimals, `as.integer()` will truncate them (cut off the decimal, not round), which can silently lose information.
+
+### To convert to character:
+
+``` r
+data <- data %>%
+  mutate(variable = as.character(variable))
+```
+
+**What this is doing:**
+
+-   Converts numbers to text. Useful for ID variables that happen to be stored as numbers (e.g. participant IDs) but shouldn't ever be used in arithmetic — converting to character prevents them from accidentally being summed, averaged, etc. in later code.
+
+### To convert to factor:
+
+``` r
+data <- data %>%
+  mutate(variable = as.character(variable))
+```
+
+Covered in more detail [here](recoding.qmd), including how to set your own level order rather than relying on R's alphabetical default.
