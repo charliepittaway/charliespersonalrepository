@@ -1,0 +1,66 @@
+---
+title: "Themes and Plot Colouring"
+format: html
+---
+
+## APA-formatted figures
+
+There are two approaches here: using a purpose-built theme from an existing package, or building the APA look manually with `theme()`. Both are worth knowing.
+
+**Packages required:**
+
+-   ggplot2 (part of **tidyverse**)
+
+-   jtools [@jtools]
+
+### Using the theme_apa() function in ggplot2
+
+``` r
+#| eval: false
+ggplot(data, aes(x = condition, y = outcome)) +
+  geom_boxplot() +
+  labs(x = "Condition", y = "Outcome Score") +
+  theme_apa()
+```
+
+**What this is doing:**
+
+-   `theme_apa()` applies a pre-built theme designed to match APA figure conventions in one line — removing gridlines, using a clean black-and-white base, and adjusting font/line styling to match APA's expectations for published figures.
+
+::: callout-tip
+## Tip
+
+`theme_apa()` has a few optional arguments worth knowing: `legend.pos = "none"` removes the legend entirely (useful if your plot doesn't need one), and `facet.title.size` adjusts facet label sizing if you're using `facet_wrap()`/`facet_grid()`. Run `?theme_apa` for the full list, and visit this cookbook for the full ggplot2 customisation: [@Chang].
+:::
+
+### Building the APA look manually
+
+These are the APA conventions specified manually in ggplot2:
+
+``` r
+#| eval: false
+ggplot(dat, aes(x = condition, y = outcome)) +
+  geom_boxplot() +
+  labs(x = "Condition", y = "Outcome Score") +
+  theme_classic(base_size = 12) +
+  theme(
+    axis.line = element_line(colour = "black"),
+    axis.text = element_text(colour = "black"),
+    legend.title = element_blank(),
+    legend.position = "bottom",
+    panel.grid = element_blank(),
+    plot.title = element_text(hjust = 0.5)
+  )
+```
+
+::: callout-tip
+## Tip
+
+You can apply these APA formatting conventions to any kind of ggplot2 figure: just add the `theme()` part to the end of the plot code.
+:::
+
+## Colour blindness
+
+Use the **viridis** colour package for **ggplot2**. This has colours designed to be seen regardless of colour blindness.
+
+More information available here: [https://ggplot2.tidyverse.org/reference/scale_viridis.html](#0)

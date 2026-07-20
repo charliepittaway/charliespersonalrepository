@@ -1,0 +1,10 @@
+---
+title: "Overview"
+format: html
+---
+
+You could run your analyses and then manually build your tables, copying over every relevant value by hand as you write up your results section. Or... you could use packages and functions to do that for you.
+
+The benefit of this is threefold. First, it saves you time and cognitive effort, since you're no longer trying to remember exactly which values a given psychology journal expects to see reported, in what order, and to how many decimal places. Second, it removes a huge number of opportunities for human error. Rather than manually copying dozens (or hundreds) of values — many of which may need updating repeatedly throughout drafting, revision, and re-analysis — you can handle this directly in R, so your tables update automatically whenever your underlying analysis changes. Finally, it allows your tables to be reproducible, so that if other researchers download your R code from your OSF repository, they, too, can create the same tables you have created.
+
+In this section, I have included the code to create reproducible sample demographics tables and correlations tables. The code to produce tables for specific analyses can be found on the respective analysis pages.

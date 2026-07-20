@@ -1,0 +1,38 @@
+---
+title: "Saving Data"
+format: html
+---
+
+## Saving to .csv
+
+### Using base R
+
+``` r
+write.csv(data, "data/data.csv", row.names = FALSE)
+```
+
+### A better option, using tidyverse
+
+``` r
+library(tidyverse)
+write_csv(data, "data/data.csv")
+```
+
+-   Automatically does not save row names.
+
+## Saving to .sav
+
+``` r
+library(haven)
+write_sav(data, "outdata.sav")
+```
+
+## Saving as an R data file
+
+``` r
+saveRDS(df, "data/data.rds")
+```
+
+**The benefits of saving an R data file:**
+
+-   It preserves the complete R object, including data types (factors, dates, logicals, integers, lists, etc.), attributes (labels, metadata, row names, factor levels), complex objects (like models, lists, tibbles, spatial objects, plots, etc.), no additional parsing is required because data are saved exactly as they are, and they're usually quicker to read than .cvs or .sav files.

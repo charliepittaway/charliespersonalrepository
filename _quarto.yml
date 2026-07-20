@@ -1,0 +1,67 @@
+project:
+  type: book
+  execute-dir: project
+
+book:
+  title: "Charlie's R for Psychological Science Repository"
+  author: "Charlie Pittaway"
+  date: last-modified
+  date-format: "D MMMM YYYY"
+  chapters:
+    - index.qmd
+    - part: Data Wrangling & Basics
+      chapters:
+        - chapters/getting-started.qmd
+        - chapters/load-specific-variables.qmd
+        - chapters/renaming-variables.qmd
+        - chapters/recoding.qmd
+        - chapters/row-id-numbers.qmd
+        - chapters/saving-files.qmd
+    - part: Data Cleaning
+      chapters: 
+        - chapters/data-cleaning-overview.qmd
+    - part: Reproducible Tables
+      chapters:
+        - chapters/reproducible-tables.qmd
+        - chapters/sample-descriptives.qmd
+        - chapters/correlation-table.qmd
+    - part: Analyses
+      chapters:
+        - chapters/t-tests.qmd
+        - chapters/regression.qmd
+        - chapters/anova.qmd
+        - chapters/sem.qmd
+        - chapters/meta-analysis-basic.qmd
+    - part: Data Visualisation
+      chapters: 
+        - chapters/themes-colours.qmd
+    - part: Bayesian Analysis
+      chapters: 
+        - chapters/bayesian-meta-analysis.qmd
+    - part: Miscellaneous
+      chapters:
+        - chapters/package-index.qmd
+        - chapters/guides.qmd
+    - part: References
+      chapters: 
+        - references.qmd
+
+language:
+  title-block-published: "Last updated"
+
+bibliography: references.bib
+csl: apa.csl
+
+format:
+  html:
+    theme:
+      - materia
+      - brand
+    grid:
+      body-width: 1000px
+    code-overflow: wrap
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+

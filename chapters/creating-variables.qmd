@@ -1,0 +1,16 @@
+---
+title: "Creating Variables"
+format: html
+---
+
+I typically create variables in R using **dplyr** from the **tidyverse** package.
+
+-   tidyverse [@tidyverse2019]
+
+## Creating an averaged variable
+
+See the [Data Cleaning: Step-by-Step](data-cleaning-overview.qmd) page for an overview of how to create new, averaged variables (i.e., creating a scale).
+
+See this guide for a much more thorough overview of how to create different types of variables:
+
+-   The R CookBook [@LongTeetor]

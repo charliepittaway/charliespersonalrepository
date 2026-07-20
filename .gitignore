@@ -1,0 +1,7 @@
+/_book/
+/.quarto/
+*.Rproj
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata

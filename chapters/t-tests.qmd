@@ -1,0 +1,460 @@
+---
+title: "T-Tests"
+format: html
+---
+
+I use the **rempsyc** package to run t-tests, which is a "wrapper" on top of other functions designed to produce APA-formatted t-test tables directly. Rather than running a t-test, then manually formatting the output into a table, **rempsyc** does both in two function calls.
+
+**Packages required:**
+
+-   rempsych [@rempsyc]
+
+## Running a single t-test
+
+``` r
+library(rempsyc)
+
+t_test_results <- nice_t_test(
+  data = dat,
+  response = "dependent_variable",
+  group = "grouping_variable"
+)
+
+t_test_table <- nice_table(t_test_results)
+t_test_table
+```
+
+**What this is doing:**
+
+-   `nice_t_test()` runs the actual t-test. Unlike base R's `t.test()`, it returns results already formatted for reporting, including the test statistic, degrees of freedom, p-value, and an effect size (Cohen's d), all in one output.
+
+-   `response = "dependent_variable"` and `group = "grouping_variable"` are given as **character strings** (in quotes) rather than bare column names.
+
+-   `nice_table()` takes the results from `nice_t_test()` and converts them into a polished, APA-styled table, with leading zeros dropped.
+
+## Running multiple t-tests at once
+
+The function accepts either a single variable or a vector of several variables (e.g. `response = c("var1", "var2", "var3")`) to run multiple t-tests at once, all formatted consistently in the same output.
+
+``` r
+t_test_results <- nice_t_test(
+  data = dat,
+  response = c("var1", "var2", "var3", "var4"),
+  group = "grouping_variable",
+  correction = "bonferroni"
+)
+
+t_test_table <- nice_table(t_test_results)
+t_test_table
+```
+
+**What this is doing:**
+
+-   `correction = "bonferroni"` applies a **Bonferroni correction** to the p-values across the four tests.
+
+-   Bonferroni is, of course, the most conservative correction for multiple tests. You can select the **Holm** correction (`correction = "holm"`) or **false discovery rate** methods (`correction = "fdr"`) for less conservative corrections that are also supported by `nice_t_test()`.
+
+    -   @Perneger1998 discusses when Bonferroni adjustments might be the wrong choice, and @BenjaminiHochberg1995 explain the false discovery rate method.
+
+## Running t-tests using lavaan/SEM frameworks
+
+I can't imagine this being particularly useful to anyone but me, but I once had to figure out how to fit a t-test but using full information maximum likelihood (FIML). For background, a large representative survey contained around 50% missingness by design (to reduce questionnaire completion time and cognitive load for participants). Running standard t-tests would therefore require lisewise deletion of a devastatingly large amount of data.
+
+My supervisor asked me to devise a way to run t-tests using FIML estimation, which allows partially missing cases to be retained and contribute to the overall model estimation, reducing bias.[^t-tests-1] However, FIML is an estimation method used in structural equation modelling and is not something that has been widely incorporated into other statistical analyses. As such, I had to figure out how to run the *equivalent* of a t-test using the SEM framework.
+
+[^t-tests-1]: And can handle up to 60% missing data [@EndersBandalos2001]!
+
+In order to run a t-test equivalent with FIML in R, the following packages are required:
+
+-   lavaan [@lavaanpackage][@lavaanarticle]
+
+### Building the models
+
+Essentially what I wanted to do was compare two different models: one in which the mean of the variable of interest is constrained to be equal (equivalent to the null hypothesis) and one in which the mean is able to vary (alternative hypothesis). I used the multigroups function in **lavaan**, which allowed me to specify the grouping variable. Variance in the dependent variables is freely estimated across groups to approximate a Welch t-test when group sizes are unequal. The models are then compared. A significant likelihood ratio test indicates that the unconstrained model fit the data better than the constrained model; therefore, the groups differed significantly.
+
+The code below shows a full workflow in which I listed all the variables I wanted to run t-tests on (in this case, many!), created an analysis function, looped it over all the dependent variables, and exported the results to a table with correction applied for multiple testing.
+
+### Step 1: List dependent variables
+
+``` r
+`%||%` <- function(a, b) if (!is.null(a)) a else b
+
+dv_config_controlled <- list(
+  list(dv = "stress",                  scale_factor = NULL),
+  list(dv = "dangerous",               scale_factor = NULL),
+  list(dv = "emotional_wb",            scale_factor = NULL),
+  list(dv = "psych_wb",                scale_factor = NULL),
+  list(dv = "swb_contribution",        scale_factor = NULL),
+  list(dv = "swb_acceptance",          scale_factor = NULL),
+  list(dv = "swb_integration",         scale_factor = NULL),
+  list(dv = "swb_own_actualisation",   scale_factor = NULL),
+  list(dv = "swb_other_actualisation", scale_factor = NULL),
+  list(dv = "swb_coherence",           scale_factor = NULL),
+  list(dv = "anomie",                  scale_factor = NULL),
+  list(dv = "prej_immigrant_s",        scale_factor = 10),
+  list(dv = "prej_muslim_s",           scale_factor = 10),
+  list(dv = "prej_jewish_s",           scale_factor = 10),
+  list(dv = "collangst",               scale_factor = NULL),
+  list(dv = "fear_immigrants",         scale_factor = NULL),
+  list(dv = "norms_immigration_s",     scale_factor = 10),
+  list(dv = "norms_racism_s",          scale_factor = 10),
+  list(dv = "norms_demo_s",            scale_factor = 10),
+  list(dv = "poleff",                  scale_factor = NULL),
+  list(dv = "sysjust",                 scale_factor = NULL),
+  list(dv = "demo_indecisive",         scale_factor = NULL),
+  list(dv = "demo_best_option",        scale_factor = NULL),
+  list(dv = "undemo",                  scale_factor = NULL),
+  list(dv = "polviol",                 scale_factor = NULL),
+  list(dv = "anger_govt",              scale_factor = NULL)
+)
+```
+
+**What this is doing:**
+
+-   `%||% <- function(a, b) if (!is.null(a)) a else b` defines a custom operator, `%||%`, borrowed from a common pattern in other languages. It returns `a` if `a` isn't `NULL`, and falls back to `b` otherwise. It's used later as a shorthand: `dv_config_controlled[[i]]$scale_factor %||% 1` means "use this DV's specified scale_factor, or default to 1 if none was given" — this is exactly what lets you leave `scale_factor = NULL` for any DV that doesn't need rescaling, without writing a separate `if`/`else` check for every single variable.
+
+-   `dv_config_controlled` is a list of DVs to run the models over (equivalent to running multiple t-tests). In this particular case, most of my variables ranged from 1-7 but a select few were on 0-100 scales. Estimating a model with variables on wildly different numeric scales can cause convergence problems in SEM software, since parameters for the larger-scale variables end up many times bigger than parameters for the smaller-scale ones. Dividing the 0–100 variables by 10 brings them onto a comparable 0–10 range, closer to the other DVs, which helps the model estimate more reliably.
+
+-   If every variable is already on a comparable scale, you can simply set `scale_factor = NULL` for every entry (or omit it entirely and let `%||%` default to 1 throughout).
+
+### Step 2: Created scaled variables
+
+``` r
+# ── Scale prejudice and norms variables from 0-100 to 0-10 ────────────────────
+group_comparisons <- group_comparisons %>%
+  mutate(
+    prej_jewish_s        = prej_jewish / 10,
+    prej_immigrant_s     = prej_immigrant / 10,
+    prej_muslim_s        = prej_muslim / 10,
+    norms_immigration_s  = norms_immigration / 10,
+    norms_racism_s       = norms_racism / 10,
+    norms_demo_s         = norms_demo / 10)
+```
+
+**What this is doing:**
+
+-   Created the rescaled variables referred to in `dv_config_controlled`
+
+### Step 3: Define auxiliary variables
+
+``` r
+COMMON_AUXILIARY <- "gender_r"
+```
+
+**What this is doing:**
+
+-   FIML estimates model parameters using all available data, including partially missing cases.
+
+-   An auxiliary variable is a variable that isn't part of your substantive hypothesis (it's not a DV or a theoretically important predictor), but is included in the model purely to improve the plausibility of that assumption and increase estimation precision. You want to include a variable that has very little missing data, thereby giving FIML more information to work with when handling the missing cases.
+
+This code is written for **one** common auxiliary variable, applied to every DV. You can adapt it either direction:
+
+-   **For zero auxiliary variables:** just set `COMMON_AUXILIARY <- NULL`. The `use_auxiliary` check inside the function (below) already handles this — if `common_auxiliary` is `NULL`, the auxiliary syntax is simply left blank, and the model runs without one.
+
+-   **For multiple auxiliary variables:** you'd adjust the `aux_syntax` construction to loop over a vector of auxiliary variables instead of a single one:
+
+``` r
+COMMON_AUXILIARIES <- c("gender_r", "AGE", "EDUC")
+
+if (length(common_auxiliaries) > 0) {
+  aux_lines <- unlist(lapply(common_auxiliaries, function(aux) {
+    paste0(
+      "\n  ", aux, " ~ 1",
+      "\n  ", dv_name, " ~~ ", aux
+    )
+  }))
+  aux_syntax <- paste(aux_lines, collapse = "\n")
+} else {
+  aux_syntax <- ""
+}
+```
+
+### Step 4: Mean-centring covariates 
+
+If you wanted to add controls/covariates to the model, you must mean-centre continuous variables and ensure that dichotomous variables are effect-coded.
+
+``` r
+group_comparisons <- group_comparisons %>%
+  mutate(
+    AGE_c  = AGE  - mean(AGE,  na.rm = TRUE),
+    EDUC_c = EDUC - mean(EDUC, na.rm = TRUE),
+    CONS_c = CONS - mean(CONS, na.rm = TRUE)
+  )
+
+group_comparisons <- group_comparisons %>%
+  mutate(VIC = case_when(
+    STATE_2 == 0 ~ -1,
+    TRUE ~ 1
+  ))
+```
+
+**What this is doing:**
+
+-   `AGE_c`, `EDUC_c`, and `CONS_c` are mean-centered versions of the covariates (subtracting each variable's own mean from every value), which makes the model's intercept interpretable as the predicted value at the *average* level of these covariates, rather than at a covariate value of zero (which is often meaningless — e.g. an age of 0).
+
+-   `VIC` is created using effect coding (covered earlier in this chapter) rather than standard 0/1 dummy coding, so this covariate's coefficient reflects deviation from the grand mean rather than from an arbitrary reference group.
+
+### Step 5: The analysis function
+
+``` r
+run_group_comparison_controlled <- function(dv_name, common_auxiliary = NULL, data,
+                                            scale_factor = 1) {
+  
+  # Build auxiliary syntax — a single common auxiliary variable used for every DV
+  # (skip it if the DV itself happens to be the common auxiliary)
+  use_auxiliary <- !is.null(common_auxiliary) && common_auxiliary != dv_name
+  
+  if (use_auxiliary) {
+    aux_syntax <- paste0(
+      "\n  # Auxiliary variable - estimate its mean\n  ",
+      common_auxiliary, " ~ 1",
+      "\n\n  # Covariance between DV and auxiliary\n  ",
+      dv_name, " ~~ ", common_auxiliary
+    )
+  } else {
+    aux_syntax <- ""
+  }
+  
+  # Unconstrained model
+  model_unconstrained <- paste0("
+  ", dv_name, " ~ c(mu1, mu2)*1
+  ", dv_name, " ~ AGE_c + EDUC_c + CONS_c + VIC
+  ", dv_name, " ~~ c(v1, v2)*", dv_name, aux_syntax, "
+
+  diff     := mu2 - mu1
+  sd_welch := sqrt((v1 + v2) / 2)
+  d_welch  := diff / sd_welch
+")
+  
+  # Constrained model (means equal across groups)
+  model_constrained <- paste0("
+  ", dv_name, " ~ c(mu_equal, mu_equal)*1
+  ", dv_name, " ~ AGE_c + EDUC_c + CONS_c + VIC
+  ", dv_name, " ~~ c(v1, v2)*", dv_name, aux_syntax, "
+")
+  
+  fit_unconstrained <- sem(
+    model_unconstrained,
+    data          = data,
+    group         = "pre_post",
+    meanstructure = TRUE,
+    fixed.x       = FALSE,
+    missing       = "FIML"
+  )
+  
+  fit_constrained <- sem(
+    model_constrained,
+    data          = data,
+    group         = "pre_post",
+    meanstructure = TRUE,
+    fixed.x       = FALSE,
+    missing       = "FIML"
+  )
+  
+  # Verify group ordering (pre = 1, post = 2)
+  group_labels <- lavInspect(fit_unconstrained, "group.label")
+  if (!identical(group_labels, c("pre", "post"))) {
+    stop(
+      "Unexpected group ordering for '", dv_name, "': ",
+      paste(group_labels, collapse = ", "),
+      ". Expected c('pre', 'post')."
+    )
+  }
+  
+  # Sample sizes
+  N_total <- lavInspect(fit_unconstrained, "nobs")
+  n1      <- N_total[1]
+  n2      <- N_total[2]
+  
+  # Likelihood ratio test
+  lr_test <- anova(fit_constrained, fit_unconstrained)
+  chi_sq  <- lr_test$`Chisq diff`[2]
+  df      <- lr_test$`Df diff`[2]
+  p_raw   <- lr_test$`Pr(>Chisq)`[2]
+  
+  # Extract parameters
+  params    <- parameterEstimates(fit_unconstrained, ci = TRUE)
+  means     <- subset(params, op == "~1" & lhs == dv_name)
+  diff_row  <- subset(params, label == "diff")
+  d_row     <- subset(params, label == "d_welch")
+  variances <- subset(params, op == "~~" & lhs == dv_name & rhs == dv_name)
+  
+  # Back-transform scale-dependent outputs; Cohen's d is dimensionless so no transform
+  data.frame(
+    variable = sub("_s$", "", dv_name),   # strip _s suffix for display
+    
+    pre_M   = round(means$est[means$group == 1]         * scale_factor, 2),
+    pre_var = round(variances$est[variances$group == 1] * scale_factor^2, 2),
+    
+    post_M   = round(means$est[means$group == 2]         * scale_factor, 2),
+    post_var = round(variances$est[variances$group == 2] * scale_factor^2, 2),
+    
+    diff_est = round(diff_row$est      * scale_factor, 2),
+    diff_lci = round(diff_row$ci.lower * scale_factor, 2),
+    diff_uci = round(diff_row$ci.upper * scale_factor, 2),
+    
+    d_est = round(d_row$est,      2),
+    d_lci = round(d_row$ci.lower, 2),
+    d_uci = round(d_row$ci.upper, 2),
+    
+    chi_sq  = round(chi_sq, 2),
+    df      = df,
+    p_raw   = p_raw,
+    
+    n_pre   = n1,
+    n_post  = n2,
+    n_total = sum(N_total),
+    
+    stringsAsFactors = FALSE
+  )
+}
+```
+
+**What this is doing:**
+
+-   This is a custom function, written once, then looped over every DV in the next step.
+
+<!-- -->
+
+-   `use_auxiliary <- !is.null(common_auxiliary) && common_auxiliary != dv_name` checks two things: that an auxiliary variable was actually specified, and that it isn't the same variable as the DV currently being tested (which would be nonsensical). If both are true, `aux_syntax` is built (the auxiliary's mean is estimated, and its covariance with the DV specified) — this is the lavaan syntax that actually implements the FIML auxiliary-variable approach.
+
+<!-- -->
+
+-   `model_unconstrained` is the **alternative hypothesis** model: `c(mu1, mu2)*1` estimates a **separate mean** for each of the two groups (labeled `mu1` and `mu2`) — this is the "the groups genuinely differ" model.
+
+    -   `~~ c(v1, v2)*dv_name` estimates a **separate variance** per group too, which is what makes this approximate a **Welch t-test** (which doesn't assume equal variances) rather than a standard Student's t-test.
+
+    -   The `diff`, `sd_welch`, and `d_welch` lines are lavaan's `:=` syntax for defining new quantities *derived* from the model's parameters — here, calculating the mean difference and a Welch-style Cohen's d directly as part of the model, rather than needing a separate calculation step afterward.
+
+<!-- -->
+
+-   `model_constrained` is your **null hypothesis** model: `c(mu_equal, mu_equal)*1` forces both groups to share the **same** mean — this is "the groups don't actually differ" model, everything else kept identical.
+
+<!-- -->
+
+-   `sem(..., missing = "FIML")` is what actually runs each model using full information maximum likelihood — this single argument is what allows participants with partial missing data to still contribute to parameter estimation, rather than being dropped via listwise deletion, addressing the exact problem described in your intro paragraph.
+
+<!-- -->
+
+-   `group = "pre_post"` tells lavaan which variable defines your two comparison groups — the model is fit **separately per group**, which is what allows the means (and variances) to differ between them in the unconstrained model.
+
+-   The `group_labels` check is a safeguard: lavaan orders groups alphabetically/by factor level internally, and if that order ever didn't match your expectation (`"pre"` first, `"post"` second), any downstream code assuming `group == 1` is "pre" would silently mislabel results. `stop()` halts execution with a clear error message the moment this happens, rather than letting a silent labeling mistake flow through to your final table.
+
+<!-- -->
+
+-   `lavInspect(..., "nobs")` extracts the sample size used in each group.
+
+<!-- -->
+
+-   `anova(fit_constrained, fit_unconstrained)` runs a **likelihood ratio test**, comparing how well the two models fit the data. This is the "t-test equivalent": rather than a t-statistic, you get a chi-square difference test, where a significant result means the unconstrained model (means allowed to differ) fits meaningfully better than the constrained one (means forced equal) — i.e. the groups differ significantly.
+
+-   The `params` block tpulls every result out of the fitted model — group means, variances, the mean difference with its confidence interval, and Cohen's d with its confidence interval — and assembles them into a single tidy row of output for this one DV.
+
+    -   This is where **`scale_factor`** does its work: `pre_M * scale_factor`, `post_M * scale_factor`, and the difference/CI values are all multiplied back up, undoing the /10 rescaling, so the variables are reported back on their original, interpretable 0–100 scale.
+
+    -   `d_est`, `d_lci`, `d_uci` are **not** multiplied by `scale_factor` — Cohen's d is a standardised effect size (already expressed in SD units), so it's scale-invariant by design and doesn't need back-transforming.
+
+    -   `sub("_s$", "", dv_name)` also strips the `_s` suffix back off the variable name for the final table, so it reads as `"prej_immigrant"` rather than the working name `"prej_immigrant_s"`.
+
+### Step 6: Running every comparison in a loop
+
+``` r
+results_list_controlled <- vector("list", length(dv_config_controlled))
+for (i in seq_along(dv_config_controlled)) {
+  cat("\n#### Comparison", i, "of", length(dv_config_controlled), ":",
+      dv_config_controlled[[i]]$dv, "####\n")
+  results_list_controlled[[i]] <- run_group_comparison_controlled(
+    dv_name           = dv_config_controlled[[i]]$dv,
+    common_auxiliary  = COMMON_AUXILIARY,
+    scale_factor      = dv_config_controlled[[i]]$scale_factor %||% 1,
+    data              = group_comparisons
+  )
+}
+
+final_results_controlled <- do.call(rbind, results_list_controlled)
+rownames(final_results_controlled) <- NULL
+```
+
+**What this is doing:**
+
+-   `vector("list", length(...))` pre-allocates an empty list of the right size — more efficient than growing a list one element at a time in a loop.
+
+-   The `for` loop then runs `run_group_comparison_controlled()` once per DV listed in `dv_config_controlled`, printing a progress message (`cat(...)`) each time so you can track how far through a long list of comparisons you are.
+
+-   The `scale_factor = dv_config_controlled[[i]]$scale_factor %||% 1` line is exactly where the Step 2 operator gets used in practice — pulling each DV's own specified scale_factor, or defaulting to 1 if it was left `NULL`.
+
+-   `do.call(rbind, results_list_controlled)` stacks every DV's one-row result into a single combined dataframe, and `rownames(...) <- NULL` tidies up the row numbering.
+
+### Step 7: Correcting for multiple comparisons
+
+``` r
+final_results_controlled$p_adj_BH         <- p.adjust(final_results_controlled$p_raw, method = "BH")
+final_results_controlled$p_adj_bonferroni <- p.adjust(final_results_controlled$p_raw, method = "bonferroni")
+```
+
+**What this is doing:**
+
+-   `p.adjust()` is base R's general-purpose function for correcting a whole vector of p-values at once.
+
+-   Two different methods have been applied: Bonferroni and BH (which is the false discovery rate method).
+
+### Step 8: Formatting and exporting the table
+
+``` r
+format_results_table_controlled <- function(results) {
+  format_mean_sd <- function(mean, var) sprintf("%.2f (%.2f)", mean, sqrt(var))
+  format_mean_ci <- function(mean, lower, upper) sprintf("%.2f [%.2f, %.2f]", mean, lower, upper)
+  
+  data.frame(
+    Variable          = results$variable,
+    `Pre M (SD)`      = mapply(format_mean_sd, results$pre_M,  results$pre_var),
+    `Post M (SD)`     = mapply(format_mean_sd, results$post_M, results$post_var),
+    `Mean difference` = sprintf("%.2f", results$diff_est),
+    `Cohen's d [95% CI]` = mapply(format_mean_ci, results$d_est, results$d_lci, results$d_uci),
+    `Chi-square`      = sprintf("%.2f", results$chi_sq),
+    p                 = results$p_raw,
+    `p (FDR)`         = results$p_adj_BH,
+    `p (Bonf)`        = results$p_adj_bonferroni,
+    check.names = FALSE, stringsAsFactors = FALSE
+  )
+}
+```
+
+**What this is doing:**
+
+-   This function turns the raw numeric results into publication-ready formatted text — e.g. combining a mean and its variance into a single `"3.45 (1.02)"` style string (converting variance to SD first, via `sqrt(var)`, since SD rather than variance is the conventional format for reporting), and combining Cohen's d with its confidence interval into `"0.32 [0.18, 0.46]"` style APA formatting.
+
+-   `check.names = FALSE` stops R from automatically mangling your deliberately spaced/punctuated column names (like `"Pre M (SD)"`) into syntactically "safe" but ugly names (like `"Pre.M..SD."`).
+
+``` r
+nice_formatted_table_controlled <- nice_table(
+  formatted_table_controlled,
+  col.format.p = 7:9,
+  spacing      = 1,
+  title        = c("Table S3", "Pre-post comparisons controlling for age, education, and conservatism, with raw, BH-corrected, and Bonferroni-corrected p-values.")
+)
+
+sect_properties <- prop_section(
+  page_size    = page_size(orient = "landscape"),
+  page_margins = page_mar(top = 0.5, bottom = 0.5, left = 0.5, right = 0.5),
+  type         = "continuous"
+)
+
+save_as_docx(
+  nice_formatted_table_controlled,
+  path       = "Tables/Table 3 Pre-post comparisons AGE EDUC CONS STATE_2 controlled.docx",
+  pr_section = sect_properties
+)
+```
+
+**What this is doing:**
+
+-   Using `nice_table()` from the **rempsyc** package, APA styling has been applied to the finished dataframe.
+
+-   `col.format.p = 7:9` tells it specifically which columns (7 through 9 — the raw, FDR, and Bonferroni p-value columns) should be formatted using APA's p-value conventions (e.g. `p < .001` rather than a long decimal).
+
+-   `title` adds a table number and caption directly into the exported table.
+
+-   `prop_section()` (from the **officer** package) defines a landscape page layout with tight margins, needed here because this table is unusually wide (nine columns).
+
+-   `save_as_docx()` is **rempsyc's** own direct Word export function.

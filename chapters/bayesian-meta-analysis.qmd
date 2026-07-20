@@ -1,0 +1,10 @@
+---
+title: "Bayesian Meta Analysis"
+format: html
+---
+
+This page is under construction... 🚧
+
+In the meantime, here is a vignette for a package I found to run Bayesian meta-analysis: <https://cran.r-project.org/web//packages/bayesmeta/vignettes/bayesmeta.html>
+
+And a link to a paper about Bayesian meta-analysis: <https://link.springer.com/content/pdf/10.1007/s40273-025-01510-2.pdf>

@@ -1,0 +1,30 @@
+---
+title: "Renaming Variables"
+format: html
+---
+
+Rename variables using the **dplyr** package from **tidyverse** [@tidyverse2019]. This is useful for tidying up cryptic export names (e.g., Q1_1 from Qualtrics) into something more meaningful.
+
+``` r
+library(tidyverse)
+data <- data %>% 
+  rename(A = q, B = e)
+```
+
+**What this is doing:**
+
+-   `rename()` changes column names without touching any of the data inside them.
+
+-   The syntax is always **new name = old name** — so `A = q` renames the column currently called `q` to `A`, and `B = e` renames `e` to `B`.
+
+You can rename as many columns as you like in one call by adding more `new_name = old_name` pairs, separated by commas:
+
+``` r
+data <- data %>%
+  rename(A = q,
+         B = e,
+         C = f,
+         D = z)
+```
+
+## References

@@ -1,0 +1,63 @@
+---
+title: "Selecting/Deselecting Variables"
+format: html
+---
+
+## Loading full dataset from file
+
+Using **haven** for .sav files [@haven2025]:
+
+``` r
+library(haven)
+data <- read_sav("data/my_qualtrics_export.sav")
+```
+
+Using **readr** from **tidyverse** for .csv files [@tidyverse2019]:
+
+``` r
+library(tidyverse)
+data <- readr::read_csv("data/my_qualtrics_export.csv")
+```
+
+Using base R for R files.
+
+``` r
+data <- readRDS("data/my_data.RDS")
+```
+
+## Loading reduced dataset
+
+Perhaps your data contains many variables that are not relevant to the current project, you can load your data with specific variables only.
+
+You can use the select() function from **tidyverse** to specify which variables you would like.
+
+``` r
+data <- read_csv("data/my_data.csv") %>%
+  dplyr::select(var1, var2, var3)
+```
+
+::: callout-warning
+## Common Error
+
+I often find that R produces errors when I do not include `dplyr::` before the `select()` function. I'm not really sure why this is – perhaps there is a conflict between two packages I often have loaded at the same time – but whatever the reason, my recommendation is to always make sure you're specifying that you're calling the `select()` function from the **dplyr** package in this way: `dplyr::select()`
+:::
+
+## Deleting specific variables
+
+Perhaps you want most of the variables, but there are a select few that you would like to drop. You can use the tidyverse package to drop specific variables
+
+### When loading the data
+
+``` r
+data <- read_csv("data/my_data.csv") %>%
+  dplyr::select(-var1, -var2, -var3)
+```
+
+### In an already loaded dataframe
+
+``` r
+data <- data %>%
+  dplyr::select(-var1)
+```
+
+## References

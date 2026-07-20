@@ -1,0 +1,11 @@
+# Preface {.unnumbered}
+
+This is an ongoing collection of functions/workflows/code snippets to run analyses in R, with a psychological science twist.
+
+I learned how to do many of these things from other people's generously developed guides, which I have cited and linked throughout. Some particularly helpful guides are [linked here](guides.qmd).
+
+The initial goal of this project was to provide a [workflow for data cleaning](data-cleaning-overview.qmd) for psychology researchers, as I was unable to find something similar when I was a PhD student. It has expanded to be a living repository of all of the R code I have collected over the years, with working syntax taken directly from my own projects.
+
+If you find new packages or better processes, please let me know:
+
+-   📧 [charlie.pittaway\@flinders.edu.au](mailto:charlie.pittaway@flinders.edu.au)

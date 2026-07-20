@@ -1,0 +1,312 @@
+---
+title: "Recoding Variables"
+format: html
+---
+
+A collection of common recoding situations you'll run into when preparing survey data for analysis.
+
+**Packages required:**
+
+-   **tidyverse**: All examples on this page use **dplyr** (part of the tidyverse)
+
+------------------------------------------------------------------------
+
+## **Situation 1: Shifting a scale's starting point**
+
+In this first example, I have three items coded as 1–4, but I need them to be coded 0–3.
+
+``` r
+# Recode variables from 1-4 to 0-3
+data <- data %>%
+  mutate(across(c(var1, var2, var3), ~ .x - 1, .names = "{.col}_r"))
+```
+
+**What this is doing:**
+
+-   `across(c(var1, var2, var3),...)` applies the same transformation to all three variables at once
+
+-   `~ .x - 1` is the transformation itself: `.x` stands in for "whatever variable is currently being processed," and this subtracts 1 from every value in it.
+
+-   `.names = "{.col}_r"` tells R to create new columns named var1_r, var2_r, and var3_r, rather than overwriting the original variables.
+
+------------------------------------------------------------------------
+
+## **Situation 2: Reverse coding**
+
+In this second example, I have items coded 1–7 that need to be reverse-coded — i.e. a response of 1 should become 7, a response of 7 should become 1, and so on.
+
+The formula for this is (n + 1) − original_value, where n is the highest point on the scale. For a 1–7 scale, that's 8 − .x, because:
+
+-   Original 1 becomes 8 − 1 = 7
+-   Original 2 becomes 8 − 2 = 6
+-   Original 3 becomes 8 − 3 = 5
+-   Original 4 becomes 8 − 4 = 4 (midpoint stays the same)
+-   Original 5 becomes 8 − 5 = 3
+-   Original 6 becomes 8 − 6 = 2
+-   Original 7 becomes 8 − 7 = 1
+
+**For multiple items at once:**
+
+``` r
+data <- data %>%
+  mutate(across(var1, var2, var3), ~ 8 - .x, .names = "{.col}_r"))
+```
+
+**For a single item:**
+
+``` r
+data <- data %>%
+  mutate(var1_r = 8 - var1)
+```
+
+**What this is doing:**
+
+This follows the same logic as the first example.
+
+-   `across(c(var1, var2, var3),...)` applies the same transformation to all three variables at once
+
+-   `~ .x - 1` is the transformation itself: `.x` stands in for "whatever variable is currently being processed," and this subtracts 1 from every value in it.
+
+-   `.names = "{.col}_r"` tells R to create new columns named var1_r, var2_r, and var3_r, rather than overwriting the original variables.
+
+The single item just skips `across()` since there's only one variable to transform.
+
+**Adjusting the formula for other scale lengths:**
+
+To reverse-code for any scale, the formula is simply `(highest scale point + 1) - original value`.
+
+------------------------------------------------------------------------
+
+## **Situation 3: Recoding factors/levels**
+
+### Character variables to factors
+
+Categorical variables are often stored as **character** (text) strings when they're first imported — e.g. `"control"` and `"treatment"`, or `"low"`, `"medium"`, `"high"`. For most analyses, you'll want these as a **factor** instead, since factors carry information about the category *levels* and their *order*, which R uses when running models or drawing legends.
+
+**Check the unique values first:**
+
+Before recoding, it's worth checking exactly what values currently exist in the column — this catches typos, inconsistent capitalisation (`"Control"` vs `"control"`), or unexpected values before they cause problems downstream.
+
+``` r
+unique(data$condition)
+```
+
+**What this is doing:** `unique()` returns every distinct value present in `data$condition`, with duplicates removed — so you get a quick list of exactly what you're working with.
+
+::: callout-tip
+## Tip
+
+If you have a lot of variables to check, `table(data$condition)` is often more useful than `unique()` — it shows you the same distinct values, but also how many times each one appears, which makes typos and rare stray values (e.g. a single row with "contorl") much easier to spot.
+:::
+
+#### Converting to a factor — the default (alphabetical) behavior
+
+If you convert a character variable straight to a factor without specifying anything else, R will order the levels alphabetically by default.
+
+``` r
+data <- data %>%
+  mutate(condition = factor(condition))
+```
+
+**What this is doing:**
+
+-   `factor()` converts the character column into a factor, but since no level order was specified, R falls back to sorting the distinct values alphabetically.
+
+-   So `"control"` and `"treatment"` would end up ordered as control = 1, treatment = 2. This becomes a problem when you have something like `"low"`, `"medium"`, `"high"`, which would end up being ordered high = 1, low = 2, medium = 3, which is probably not what you want.
+
+-   This matters because the first level of a factor becomes the reference/baseline category in regression models by default. If R has chosen this alphabetically rather than by your intended design, your mode output and coefficient interpretation could be wrong.
+
+#### Converting to a factor — with your own level order
+
+To control the order (and therefore which level is treated as the reference/baseline), specify it explicitly using `levels =`:
+
+``` r
+data <- data %>%
+  mutate(condition = factor(condition, levels = c("control", "treatment")))
+```
+
+**What this is doing:** the `levels = c(...)` argument tells R exactly which order to use, overriding the alphabetical default. Whatever value you list **first** becomes the reference level in models.
+
+For a naturally ordered scale (like low/medium/high), the same approach applies:
+
+``` r
+data <- data %>%
+  mutate(condition = factor(condition, levels = c("low", "medium", "high")))
+```
+
+If the variable has a genuine order (not just categories, but a rank — like low/medium/high), you can also mark it as an **ordered factor** using `ordered = TRUE`. This tells R the levels are not just labels, but have a true ranked order.
+
+``` r
+data <- data %>%
+  mutate(condition = factor(condition, levels = c("low", "medium", "high"), ordered = TRUE))
+```
+
+## Situation 4: Dummy coding
+
+Perhaps you want to recode your descriptive or factor variable to a numeric variable, e.g., 0 and 1.
+
+``` r
+data <- data %>%
+  mutate(new_variable = case_when(
+    old_variable == "control" ~ 0,
+    TRUE ~ 1
+  ))
+```
+
+**What this is doing**:
+
+-   `case_when()` checks each row against a series of conditions, in order, and assigns a value based on the first one that matches.
+
+-   `old_variable == "control" ~ 0` is the first condition: wherever `old_variable` equals `"control"`, assign `0` to the new column.
+
+-   `TRUE ~ 1` acts as the catch-all/default: for any row that didn't match the condition above, assign `1`. Since `TRUE` is always true, this line always matches whatever's left over — so in a two-group variable like control/treatment, everything that isn't "control" (i.e. \`"treatment"\`) gets coded as `1`.
+
+-   The result, `new_variable`, is a plain numeric column (not a factor) — useful when a function or model specifically expects 0/1 numeric input rather than a labeled factor.
+
+### Using the FastDummies package
+
+**fastDummies** [@fastdummies2026] is a package which you can quickly dummy-code multiple variables at once. You could create dummy variables individually with `case_when()` (as above), but that means writing one line per level, per variable — a tedious and error-prone process once you have several categorical variables with multiple levels each. The `dummy_cols()` function in **fastDummies** does this for as many variables as you like, at any number of levels, in a single function call.
+
+``` r
+library(fastDummies)
+
+data <- dummy_cols(data, select_columns = c("gender", "state", "age_bracket", "ethnicity"))
+```
+
+**What this is doing:**
+
+-   `dummy_cols()` takes a dataframe and one or more categorical columns, and creates a new binary (0/1) column for every leve**l** found in each of those columns.
+
+-   `select_columns = c("gender", "state", "age_bracket", "ethnicity")` tells it exactly which columns to dummy-code at once.
+
+-   By default, `dummy_cols()` keeps the original columns and just adds the new dummy columns alongside them — so `data` ends up with both `gender`(original) and new columns like `gender_male`, `gender_female` (or `gender_1`, `gender_2`; one per level found in `gender`), plus the same pattern repeated for the other four variables.
+
+There's also a function to drop the first level of a variable, if necessary:
+
+``` r
+data <- dummy_cols(data, select_columns = c("gender", "state", "age_bracket", "ethnicity", remove_first_dummy = TRUE))
+```
+
+-   Turn this feature on if you're using dummy-coded variables in regression models, as including a dummy column for **every** level of a variable, alongside an intercept, creates perfect multicollinearity (known as the "[dummy variable trap](https://www.statology.org/dummy-variable-trap/)"). Dropping one level resolves this: the dropped level becomes your implicit reference/baseline category, and every other dummy column's coefficient is interpreted relative to it.
+-   Levels are dropped alphabetically by default.
+
+## Situation 5: Effect coding
+
+Effect coding (also called contrast coding) uses −1 and +1 instead of 0/1 to represent a two-level categorical variable. This changes how the coefficient in a regression model is interpreted: with effect coding, the coefficient represents the deviation from the grand mean, rather than the difference from a reference group (as with standard 0/1 dummy coding; [@cohen2013applied].
+
+The same process is applied to create effect coded variables as above:
+
+``` r
+data <- data %>%
+  mutate(condition_effect = case_when(
+    condition == "control" ~ -1,
+    condition == "treatment" ~ 1
+  ))
+```
+
+The result, `condition_effect`, can be dropped straight into a regression model in place of the original grouping variable, giving you effect-coded coefficients.
+
+**When to use this**:
+
+-   When you're running ANOVA-style designs through the `lm()` function. When you have a factorial design and want to run it as a regression rather than through `aov()`, effect coding makes the intercept represent the grand mean across all conditions, matching how ANOVA output is typically interpreted [@kugler2018coding].
+
+    -   With standard dummy coding (0/1), the intercept instead represents the mean of whichever group happens to be coded 0, which usually isn't what you want to report.
+
+    -   Dummy coding and effect coding will yield the same omnibus F statistic, but can produce different estimates, test statistics, and p-values for main and interaction effects.
+
+-   When you're interpreting main effects in the presence of interactions. In models with interaction terms, effect-coded main effects can be interpreted as averaged across the levels of the other factor(s).
+
+    -   With dummy coding, the coefficient represents the effect only within the reference group, which changes the interpretation substantially once an interaction is in the model [@cohen2013applied].
+
+-   When you're comparing coefficient magnitudes across multiple categorical predictors, because effect-coded predictors are more directly comparable to one another than dummy coded coefficients would be.
+
+-   However, if your research question is specifically about comparing every other group back to one meaningful reference group (e.g., every treatment conditions vs a single control condition), then standard 0/1 dummy coding is usually more interpretable.
+
+### **Situation 5: Converting NAs to 0**
+
+#### For one variable
+
+Using base R:
+
+``` r
+data$variable[is.na(data$variable)] <- 0
+```
+
+**What this is doing:**
+
+-   `is.na(data$variable)` checks every value in the column and returns `TRUE` wherever it's missing, `FALSE` otherwise.
+-   `data$variable[...]` uses that TRUE/FALSE result to select only the missing entries.
+-   `<- 0` assigns 0 to just those selected (missing) entries, leaving every other value in the column untouched.
+
+#### For multiple, specific variables
+
+Using tidyverse syntax:
+
+``` r
+data <- data %>%
+  mutate(across(c(var1, var2, var3), ~ replace_na(.x, 0)))
+```
+
+**What this is doing:**
+
+-   `across(c(var1, var2, var3), ...)` applies the same transformation to each of the three named variables in turn, rather than writing a separate line for each one.
+
+-   `~ replace_na(.x, 0)` is the transformation: `.x` stands in for whichever variable is currently being processed, and `replace_na(.x, 0)` replaces any `NA` in it with `0`.
+
+-   This overwrites `var1`, `var2`, and `var3` in place. If you'd rather keep the originals and create new columns instead, add `.names = "{.col}_r"` as in earlier examples.
+
+#### For the whole dataframe
+
+Using tidyverse syntax:
+
+``` r
+data <- data %>%
+  mutate(across(everything(), ~ replace_na(.x, 0)))
+```
+
+**What this is doing:**
+
+-   `across(everything(), ...)` applies the transformation to **every** column in the dataframe, rather than a specified subset.
+
+-   `~ replace_na(.x, 0)` replaces any `NA` with `0`, the same as above, just run across all columns instead of a chosen few.
+
+::: callout-important
+## Important
+
+Applying this to the whole dataframe will also affect any character or factor columns that happen to contain `NA`, not just numeric ones. `replace_na(.x, 0)` on a character column will throw an error (since `0` isn't a valid character value), so this whole-dataframe version really only works cleanly if every column is numeric. If your dataframe has a mix of column types, it's safer to either subset to just the numeric columns first (`across(where(is.numeric), ...)`) or stick with the named-variable version above.
+:::
+
+## Situation 6: Replacing a specific value with another
+
+### Special missing to NA
+
+Sometimes a placeholder value has been used during data collection (e.g. \`-99\` for "not applicable" or "prefer not to say") and needs to be converted to a proper NA before analysis.
+
+#### For a single variable
+
+Using base R:
+
+``` r
+data$variable[data$variable == -99] <- NA
+```
+
+#### For every column in the dataframe at once
+
+Using tidyverse syntax:
+
+``` r
+data <- data %>%
+  mutate(across(everything(), ~ na_if(.x, -99)))
+```
+
+Or, if you'd rather use base R:
+
+``` r
+data[data == -99] <- NA
+```
+
+### SPSS special missing
+
+If special missing values have been used in SPSS (e.g., -99 or 999 tagged as missing, but different from NA), there is a function in the **haven** package to quickly convert them all to NA. I have not used this myself, but you can find out about this function [here](https://haven.tidyverse.org/reference/zap_missing.html) [@haven2025].
+
+## References

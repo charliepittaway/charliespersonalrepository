@@ -1,0 +1,14 @@
+---
+title: "Row/ID Numbers"
+format: html
+---
+
+If you want to add a sequential numbered variable for the number of rows in the dataframe, such as an ID code, use the following code using base R:
+
+```{r}
+#| eval: false
+
+data$id <1:nrow(data)
+```
+
+This will add a variable to your dataframe called 'id', which numbers your participants sequentially.

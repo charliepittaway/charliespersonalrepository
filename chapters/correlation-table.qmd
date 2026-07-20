@@ -1,0 +1,31 @@
+---
+title: "Table of Correlations"
+format: html
+---
+
+The second table you will probably create in your manuscript is the table of intercorrelations. I use the **apaTables** package to do this.
+
+-   apaTables [@apaTables2026]
+
+``` r
+library(apaTables)
+corr_table <- apa.cor.table(data[, c("var1", "var2", "var3", "var4")], 
+                        table.number = 2, 
+                        show.sig.stars = TRUE, 
+                        landscape = TRUE,
+                        filename = "output/Table 2 Correlations pooled sample.doc")
+```
+
+**What this is doing:**
+
+-   `corr_table <-` saves the created table to an object in your R environment.
+
+-   `data[, c("var1", "var2", "var3", "var4")]` selects the variables to include, otherwise it will produce a correlations table for every variable in the dataframe.
+
+-   `table.number = 2` allows you to set the number of the table in the produced artifact.
+
+-   `landscape = TRUE` is pretty self-explanatory, it creates the table in a landscape oriented Word document. This might not be necessary if you only have a few variables; in this case, set this to `FALSE`.
+
+-   `filename = "output/Table 2 Correlations pooled sample.doc"` saves the table to a word document in your 'outputs' folder in your R project.
+
+You can then call it in your R environment using the code `corr_table`.

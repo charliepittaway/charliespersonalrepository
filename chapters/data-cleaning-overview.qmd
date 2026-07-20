@@ -1,0 +1,577 @@
+---
+title: "Data Cleaning: Step-by-Step"
+format: html
+---
+
+Researchers have different processes for preparing their data for analysis, often which appears to be by convention. On this page, I will set out my process and reasoning—take what works, leave what doesn't. Notably, I conduct my reliability analysis and scale creation during my data cleaning process, as this makes the most sense for me.
+
+## Step 1: Participant exclusions
+
+The first step I like to do is exclude participants based on my pre-registered criteria. One example is filtering out likely bot responses using Qualtrics' built-in reCAPTCHA score.
+
+**Q_RecaptchaScore values \< 0.5:** this is one of Qualtrics' built-in measures. Scores range from 0 to 1; scores less than 0.5 are likely a bot, whereas scores greater than or equal to 0.5 are likely to be human.
+
+``` r
+library(tidyverse)
+data <- data %>%
+  filter(Q_RecaptchaScore >= 0.5)
+```
+
+**What this is doing:**
+
+-   `filter()` keeps only the rows that meet the condition you give it, and drops every row that doesn't — here, that condition is `Q_RecaptchaScore >= 0.5`.
+-   `Q_RecaptchaScore >= 0.5` checks each row's score and evaluates to `TRUE` for anyone at or above the 0.5 threshold, `FALSE` for anyone below it. Only the `TRUE` rows are kept in the resulting `data`.
+-   The result overwrites `data`, so from this point onward in your script, every subsequent step is working with the filtered sample rather than the original raw import. If you wanted to save this into a new dataframe, you would run the code `data_filtered <- data %>% filter(Q_RecaptchaScore >= 0.5)`
+
+You can also exclude participants using the following code template:
+
+``` r
+data <- data %>%
+  filter(participant_type != "exclude")
+```
+
+**What this is doing:**
+
+-   In this example, I have a character variable called `participant_type` in which I have already flagged participants I wanted to exclude. The operators `!=` indicate "does not equal," so we are *not* retaining participants coded "exclude."
+
+## Step 2: Drop, rename, and check variable types
+
+Next, I like to clean up my datafile and [drop any unnecessary variables](load-specific-variables.qmd), [rename them](renaming-variables.qmd), and [ensure that no variables which should be numeric are being read as character variables](check-variable-types.qmd).
+
+## Step 3: Basic item-level descriptives
+
+I then like to make sure there are no glaringly obvious issues with the data; for example, I haven't accidentally mapped two scale response options to the same number. In that case, I would go back into Qualtrics and recode that response and then redownload my data.
+
+I use the `describe()` function from the **psych** package [@psych2026] to quickly investigate: do the min/max values make sense? Are special missing data codes present (e.g., -99)? I will [recode if necessary](recoding.qmd).
+
+## Step 4: Reliability and scale creation
+
+Scale by scale, I conduct reliability analysis and create my scales. I use functions from the **psych** package [@psych2026] for scales with 3 or more items, and spearman_brown() from the **splithalfr** package [@splithalfr2025] for scales with only 2 items.
+
+### Cronbach's alpha
+
+``` r
+library(psych)
+alpha(data[, c("var1", "var2", "var3")], na.rm = T)
+```
+
+**What this is doing:**
+
+-   `dat[, c("var1", "var2", "var3")]` selects just the columns making up your scale.
+
+-   `alpha()` computes Cronbach's alpha across those items, along with the fuller diagnostic output: item-total correlations, "alpha if item dropped," and both raw and standardised alpha.
+
+-   `na.rm = TRUE` tells `alpha()` to exclude missing values when calculating, rather than letting a single `NA` in any item cause the whole calculation to fail. Internally, this uses pairwise deletion for the correlation matrix `alpha()` relies on — meaning each pair of items is correlated using whatever rows have data for *both* of them, not just the rows that are complete across *every* item in the scale.
+
+::: callout-note
+## Reading the output
+
+The value you'll usually want to report is **`raw_alpha`**, which is the standard Cronbach's alpha. The `std.alpha` value (standardised alpha) is relevant if your items are on notably different scales. The "alpha if item dropped" section shows what `raw_alpha` would be if that specific row's item were removed from the scale. This is the most practically useful part of the output for scale refinement; e.g., if the reliability is below the acceptable threshold, perhaps this is due to one pesky item which should be dropped from the scale.
+:::
+
+### McDonald's omega
+
+Another measure of internal consistency is *McDonald's omega*. Omega estimates the reliability of a scale using a factor-analytic model rather than a simple summed score (as with alpha).
+
+Cronbach's alpha assumes that all the items measure the underlying construct equally well, but in practice this assumption is rarely met—some items just measure a construct better than others! When this assumption is violated, Cronbach's alpha tends to underestimate the scale reliability.
+
+McDonald's omega, on the other hand, run a factor analysis on the items first, then calculates reliability based on actual factor loadings so that items which load more strongly onto the factor are weighted more heavily than weaker items.
+
+``` r
+library(psych)
+omega(data[, c("var1", "var2", "var3")], na.rm = T)
+```
+
+The output includes several different reliability coefficients, but the two most commonly reported are:
+
+-   **`omega_h`** (omega hierarchical): this is the proportion of variance in total scores attributable to a single general factor underlying all items. This is the closest omega equivalent to "how much of this scale is measuring one coherent thing."
+
+    -   This is typically what you want to report if using omega.
+
+-   **`omega_t`** (omega total): this is the reliability of the total score treating all common variance (general factor plus any group/sub-factors) as true score. This is generally closer to what `alpha()` is estimating, but calculated via the factor model rather than raw covariances.
+
+To my understanding, omega looks like it will be the way forward for new scales/psychometric development, or at least that it will be reported alongside alpha. However, it's not really useful for short scales, in which case alpha (if 3 items) or the Spearman Brown coefficient (for 2 item scales) are more appropriate.
+
+### Spearman Brown Coefficient
+
+@eisinga2013 compared Pearson r, Cronbach's alpha, and the Spearman-Brown coefficient for assessing the reliability of two-item scales. They concluded that Pearson r is not appropriate (in fact, were quite sassy about it: they said "one may rather call that the reliability of a one-item test," p. 641), and nor is Cronbach's alpha. Instead, they recommended using the Spearman-Brown coefficient, which is generally higher than alpha and less biased on average.
+
+You can calculate the Spearman-Brown coefficient using the **splithalfr** package [@splithalfr2025].
+
+``` r
+library(splithalfr)
+spearman_brown(data$var1, data$var2,
+               use = "pairwise.complete.obs")
+```
+
+**What this is doing:**
+
+-   `use = "pairwise.complete.obs"` is necessary if you have any missing data; without this, if missing data is present, the result will be NA.
+
+### Scale creation
+
+If reliability is sufficient, I create my scales using the **tidyverse** package [@tidyverse2019].
+
+``` r
+library(tidyverse)
+
+data <- data %>%
+  mutate(scale = rowMeans(across(c(var1, var2, var3)), na.rm = TRUE),
+         scale = ifelse(is.nan(scale), NA, scale))
+```
+
+**What's happening here:**
+
+-   The first line creates `scale` and assigns it as a new column in `dat`.
+
+    -   `across(c(var1, var2, var3))` selects the three items that make up the scale.
+
+    -   `rowMeans(..., na.rm = TRUE)` calculates the average of those three columns per row (i.e. per participant), rather than a single average across the whole column. `na.rm = TRUE` tells it to ignore any missing values when averaging, so a participant who answered 2 out of 3 items still gets a scale score based on those 2, rather than automatically becoming `NA`.
+
+-   The second line, `scale = ifelse(is.nan(scale), NA, scale)`, is a cleanup step: `rowMeans()` with `na.rm = TRUE` has a quirk where a row with **no** valid responses at all (all three items missing) doesn't return `NA` like you'd expect — it returns `NaN` ("Not a Number", R's result for an undefined calculation like averaging zero values). This line checks for that specific case with `is.nan()` and converts it to a proper `NA`, so downstream functions (which generally know how to handle `NA`, but may not handle `NaN` the same way) treat it correctly as missing.
+
+### Alternatively... reliability and scale creation in one step
+
+I have recently discovered that the **psych** package has a function called scoreItems() which allows you to calculate reliability and create multiple scales in one step. First, you define the variables that make up each scale and prefix any reverse-scored items with a minus sign. Next, you score all scales at once. Finally, you can print the reliability and descriptives for every scale at the same time.
+
+``` r
+library(psych)
+
+# Define each scale's items, prefixing reverse-scored items with a minus sign
+scale_keys <- list(
+  scale_1 = c("var1", "var2", "-var3", "var4"), # In this scale, var3 is reverse-coded
+  scale_2 = c("var5", "-var6", "var7"), # var6 is reverse-coded
+  scale_3 = c("var8", "var9", "var10", "-var11", "var12") # var11 is reverse-coded
+)
+
+# Score all scales at once
+scores <- scoreItems(scale_keys, data)
+
+# Check reliability and descriptives for every scale together
+summary(scores)
+
+# Attach the scale scores back onto your main dataframe
+data <- cbind(data, scores$scores)
+```
+
+**What this is doing:**
+
+-   `scale_keys` is a named list, where each element defines one scale. The name you give each element (`scale_1`, `scale_2`, `scale_3`) becomes that scale's column name in the output.
+
+-   Within each scale's item vector, a `-` prefix (e.g. `"-var3"`) tells `scoreItems()` to automatically reverse-code that specific item before combining it with the rest — no need to manually create `_r` columns beforehand.
+
+-   `scoreItems(scale_keys, data)` scores every scale defined in `scale_keys` in one call.
+
+-   `summary(scores)` prints reliability (alpha) and basic descriptives for all three scales at once.
+
+-   `scores$scores` is a matrix with one column per scale, each row matching the corresponding row in `data`. `cbind(dat, scores$scores)` binds these new columns onto your existing dataframe, so all three scale scores become permanent columns in `data`, ready to use in later analysis.
+
+::: callout-note
+## Note
+
+It goes without saying, but if using this approach, don't reverse-code your items manually before hand, otherwise they will be double reverse-coded and just end up forward-coded again.
+:::
+
+## Step 6: Univariate Outliers
+
+Some researchers like to transform univariate outliers, and some do not. Both options introduce different forms of bias (transforming that distort the underlying distribution and relationships between variables, while leaving outliers untouched can influence means, correlations, and model estimates). If you are the kind of researcher who would like to transform your univariate outliers, this is the approach that worked for me in the past.
+
+::: callout-note
+## Note
+
+Sometimes you might want to check for univariate outliers on individual items (e.g., for factor analysis, where the assumption is that outliers are not present); but generally, I would conduct this analysis on the scales rather than the items.
+:::
+
+### Identify scales with outliers
+
+First, I developed a function to identify scales on which outliers were present, with outliers defined as those more than 3 standard deviations below or above the mean.
+
+``` r
+detect_outliers <- function(df) {
+  outlier_flags <sapply(df, function(x) {
+    if (is.numeric(x)) {
+      any(x > (mean(x, na.rm = TRUE) + 3 * sd(x, na.rm = TRUE)) |
+            x < (mean(x, na.rm = TRUE) - 3 * sd(x, na.rm = TRUE)),
+          na.rm = TRUE)  # <-- added here
+    } else {
+      FALSE
+    }
+  })
+  
+  outlier_results <- tibble(
+    Variable = names(outlier_flags),
+    Has_Outliers = outlier_flags
+  )
+  
+  return(outlier_results)
+}
+
+# Run univariate outlier analysis
+detect_outlers(data[, c(var1, var2, var3, var4)])
+```
+
+**What this is doing:**
+
+-   `detect_outliers <- function(df) { ... }` defines a custom function — rather than checking each variable one at a time, this packages the whole outlier-detection process so it can be reused on any set of columns, in this workbook or future projects, just by calling `detect_outliers()` on a new dataframe.
+
+-   `sapply(df, function(x) { ... })` runs the inner function on every column in `df` in turn, with `x` standing in for whichever column is currently being processed.
+
+-   `if (is.numeric(x)) { ... } else { FALSE }` — this ensures that the function is only run on numeric variables. Any character, factor, or other non-numeric column just gets flagged `FALSE` (no outliers checked) automatically.
+
+-   Inside the numeric branch, the outlier rule is: `x > (mean + 3*sd) | x < (mean - 3*sd)`. This is the standard "3 SDs from the mean" definition of a univariate outlier — anything further than 3 standard deviations above or below the mean (the `|` means "or") is flagged. `mean(x, na.rm = TRUE)` and `sd(x, na.rm = TRUE)` both ignore missing values when calculating, so a few `NA`s in a column don't distort the threshold.
+
+-   `any(..., na.rm = TRUE)` collapses that row-by-row `TRUE`/`FALSE` result down to a single answer per column: `TRUE` if *any* value in that column meets the outlier criteria, `FALSE` if none do. The `na.rm = TRUE` here (on `any()`, not the inner mean/sd calls) makes sure that a missing value in the comparison itself doesn't cause the whole `any()` check to return `NA` instead of a real `TRUE`/`FALSE`.
+
+-   `tibble(Variable = names(outlier_flags), Has_Outliers = outlier_flags)` takes the results — a named vector, one `TRUE`/`FALSE` per column — and turns it into a tidy two-column table: which variable, and whether it has any outliers.
+
+-   `df[, c("var1", "var2", "var3", "var4")]` selects just the specific columns you want to check (your scale variables, say), rather than running the function on your entire dataframe.
+
+The result is a small table listing every variable you checked and a `TRUE`/`FALSE` for whether it contains at least one outlier by this definition.
+
+### Winsorise outliers
+
+If outliers are present, one technique is to Winsorise the items so that responses that are greater than three standard deviations above or below the mean are replaced with **exactly** 3 standard deviations above or below the mean. Again, I created a function to do this across multiple variables at once. The code below creates a new variable identifiable by a suffix 'win'.
+
+``` r
+winsorise_outliers <- function(data, var_name, na.rm = TRUE) {
+  # Get mean
+  var_m <- mean(data[[var_name]], na.rm = na.rm)
+  # Get sd
+  var_sd <- sd(data[[var_name]], na.rm = na.rm)
+  # Get lower and upper thresholds
+  var_lower <- var_m - 3 * var_sd
+  var_upper <- var_m + 3 * var_sd
+  
+  # Create new variable name with _win suffix
+  new_var_name <- paste0(var_name, "_win")
+  
+  # Create new variable with suffix _win, replacing values beyond the thresholds with the threshold
+  data[[new_var_name]] <- case_when(
+    data[[var_name]] > var_upper ~ var_upper,
+    data[[var_name]] < var_lower ~ var_lower,
+    TRUE ~ data[[var_name]]
+  )
+  
+  return(data)
+}
+
+df <- winsorise_outliers(df, "variable name") # For one variable
+```
+
+To winsorise several outliers at once, create a list of variables and then loop over.
+
+``` r
+# Create list of variables to loop over
+vars_to_winsorise <- c("var1", "var2", "var3")
+
+# Run the loop
+for(var in vars_to_winsorise) {
+  df <- winsorise_outliers(df, var)
+}
+```
+
+## Step 7: Normality
+
+Next, check for normality. If you have Winsorised scales with outliers, make sure to check the normality of the *Winsorised* scales rather than the raw scales.
+
+::: callout-note
+## Why outliers before normality?
+
+Outliers inflate skewness and kurtosis statistics. Most normality checks are sensitive to extreme values. A handful of outliers can make an otherwise normal-ish distribution look meaningfully skewed. If you check normality first, you might conclude a variable is non-normal and needs transforming, when really it's a few outliers doing the damage.
+:::
+
+### Skew and kurtosis
+
+**Skew** measures asymmetry — whether one tail of the distribution is longer than the other.
+
+-   A skew of **0** indicates a perfectly symmetric distribution.
+
+-   **Positive skew** (a long tail stretching to the right) means most scores cluster at the lower end, with a few high outlying scores pulling the tail out.
+
+-   **Negative skew** (a long tail stretching to the left) means most scores cluster at the higher end, with a few low outlying scores — common in ceiling-effect items.
+
+**Kurtosis** measures "tailedness" — how heavy or light a distribution's tails are relative to a normal distribution.
+
+-   A kurtosis of **0** (using the *excess* kurtosis convention, which is what `psych::describe()` reports) indicates tails similar to a normal distribution.
+
+-   **Positive kurtosis** (leptokurtic) means heavier tails and a sharper peak than normal — more extreme values than you'd expect under normality.
+
+-   **Negative kurtosis** (platykurtic) means lighter tails and a flatter peak — fewer extreme values than expected, a more "spread out," uniform-looking distribution.
+
+Use the **psych** package [@psych2026] to check the skew and kurtosis.
+
+``` r
+library(psych) describe(dat[, c(var1, var2, var3)]) #Describe specific variables describe(dat) # Describe every variable in the dataset
+```
+
+**What this is doing:**
+
+-   `describe()` produces a table of descriptive statistics for each variable — including `mean`, `sd`, `min`, `max`, and, importantly here, **`skew`** and **`kurtosis`** columns.
+
+**Interpreting the output:**
+
+There's no single universally agreed cutoff, but a commonly used rule of thumb is that skew or kurtosis values beyond ±2 suggest a meaningful departure from normality.
+
+### Formal test of normality
+
+The Shapiro-Wilk test gives you a formal statistical test of whether one variable's distribution differs significantly from normal.
+
+``` r
+shapiro.test(dat$var1)
+```
+
+The output gives you a test statistic (`W`) and a p-value. If significant, you reject the null hypothesis (i.e. your data significantly deviates from normal).
+
+::: callout-caution
+## Sensitive to sample size
+
+Shapiro-Wilk is notoriously sensitive to sample size [@yazici2007comparison][@razali2011]. With a large sample (roughly N \> 300–500), even tiny, practically trivial deviations from normality will return a significant p-value.
+:::
+
+### Visual checks
+
+#### Histogram/Density plot
+
+A histogram gives you an intuitive sense of a variable's shape, and is often more informative than a single test statistic, since you can actually *see* where any skew or unusual clustering is coming from.
+
+You can do this really quickly using base R:
+
+``` r
+hist(dat$var)
+```
+
+Or using **ggplot2** from **tidyverse** [@tidyverse2019]. The code below shows a normal curve on the graph – this means it is actually a density plot (rather than a histogram).
+
+``` r
+ggplot(dat, aes(var1)) +
+  theme(legend.position = "none") +
+  geom_histogram(aes(y = after_stat(density)), colour = "black", fill = "skyblue", binwidth = 1) +
+  labs(x = "Item Responses", y = "Density") +
+  stat_function(fun = dnorm, args = list(mean = mean(dat$var1, na.rm = TRUE), sd = sd(dat$var1, na.rm = TRUE)), colour = "black", linewidth = 1) +
+  theme_classic() +
+  scale_x_continuous(breaks = seq(1, 7, 1)) + # First number = min scale, second number = max scale, last number leave as 1
+  theme(text = element_text(size = 25))
+```
+
+**What this is doing:**
+
+-   `ggplot(dat, aes(var1))` sets up the plot, telling ggplot which dataframe and variable to use.
+
+<!-- -->
+
+-   `theme(legend.position = "none")` removes the plot legend. Since this plot only has one histogram and one line (no grouping variable), there's nothing a legend would usefully explain.
+
+<!-- -->
+
+-   `geom_histogram(aes(y = after_stat(density)), ...)` draws the histogram.
+
+    -   Normally a histogram's y-axis shows **raw counts** (how many participants fell in each bin), but that can't be directly compared to a normal curve, which is a probability density, not a count. In this code, `aes(y = after_stat(density))`. `after_stat(density)` tells ggplot to rescale the histogram bars so the total area under them sums to 1 — the same scale a density curve uses — so that a normal curve can be overlaid.
+
+    -   `colour = "black"` outlines each bar, `fill = "skyblue"` colors them in, and `binwidth = 1` sets each bar to span 1 unit (sensible for a Likert-type item).
+
+<!-- -->
+
+-   `labs(x = "Item Responses", y = "Density")` sets axis labels.
+
+<!-- -->
+
+-   `stat_function(fun = dnorm, args = list(mean = ..., sd = ...), ...)` draws the actual normal curve.
+
+-   `theme_classic()` applies a clean, minimal ggplot theme (removes the default grey background and gridlines).
+
+<!-- -->
+
+-   `scale_x_continuous(breaks = seq(1, 7, 1))` controls where the tick marks appear on the x-axis. `seq(1, 7, 1)` generates the sequence 1, 2, 3, 4, 5, 6, 7 — matching a 1–7 response scale, so every scale point gets its own labeled tick mark rather than R choosing arbitrary breaks. If your scale was scored differently, you'd adjust the first two numbers to match your actual scale's minimum and maximum (e.g. `seq(1, 5, 1)` for a 1–5 scale).
+
+#### Q-Q plot
+
+A Q-Q ("quantile-quantile") plot compares the data's distribution directly against a theoretical normal distribution — points falling along the diagonal reference line indicate normality; systematic deviation from that line indicates non-normality, and the *shape* of the deviation tells you what kind.
+
+``` r
+ggplot(dat, aes(sample = var1)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Q-Q Plot of Variable 1")
+```
+
+**What this is doing:**
+
+-   `stat_qq()` plots the data's quantiles against the quantiles you'd expect if the data were perfectly normally distributed.
+
+<!-- -->
+
+-   `stat_qq_line()` draws the reference diagonal line representing "perfect normality" — the closer your points hug this line, the closer your data is to normal.
+
+<!-- -->
+
+-   Points curving away from the line at the ends ("tails") typically indicate skew or heavy/light tails — the same issue skew and kurtosis values are picking up numerically, but here you can see exactly *where* in the distribution (upper end, lower end, or both) the deviation is occurring.
+
+### So what...?
+
+None of these three checks — skew/kurtosis, Shapiro-Wilk, and visual plots — is sufficient on its own. A sensible workflow is: use skew/kurtosis as a fast first-pass screen across many variables at once (as in the previous section), then for any variable that looks borderline or concerning, follow up with a Shapiro-Wilk test **and** a histogram/Q-Q plot together, since the visual check will often explain *why* the formal test came back significant (e.g. "ah, it's these three outlying values," rather than a genuinely non-normal underlying shape).
+
+### Transforming skewed data
+
+If you have determined that your data *is* skewed and you wish to transform it, here is some helpful code.
+
+Which transformation to use depends on two things: **how severe** the skew is, and **which direction** it goes (positive or negative). For more detail on choosing between these approaches, see [rcompanion's handbook on transforming skewed data](https://rcompanion.org/handbook/I_12.html) and [Datanovia's guide to normal distribution transformations](https://www.datanovia.com/en/lessons/transform-data-to-normal-distribution-in-r/).
+
+As a general starting point: try a **log transformation** first if your DV increases more rapidly as your IV increases. Try a **square transformation** instead if your DV decreases more rapidly as your IV increases. The three options below (square root, log, inverse) are ordered from mildest to strongest — start with the mildest transformation that resolves the skew, rather than jumping straight to the strongest one available.
+
+#### Square root transformation for moderately skewed data
+
+``` r
+# For positive skew
+dat <- dat %>%
+  mutate(variable_sqrt = sqrt(variable))
+
+# For negative skew
+dat <- dat %>%
+  mutate(variable_sqrt = sqrt(max(variable + 1) - variable))
+```
+
+**What this is doing:**
+
+-   For **positive skew**, `sqrt(variable)` takes the square root of every value. Since square roots compress large values more than small ones, this pulls in the long right tail characteristic of positive skew, bringing the distribution closer to symmetric.
+
+-   For **negative skew**, the transformation is first **reflected** before taking the square root: `max(variable + 1) - variable` flips the distribution's direction (turning a left-skewed tail into a right-skewed one), and adding `1` to the max ensures no value in the result becomes exactly 0, since a square root transformation can't meaningfully handle 0 or negative values sitting right at the boundary. `sqrt(...)` is then applied to that reflected version.
+
+#### Log transformation for highly skewed data
+
+``` r
+# For positive skew
+dat <- dat %>%
+  mutate(variable_log = log10(variable))
+
+# For negative skew
+dat <- dat %>%
+  mutate(variable_log = log10(max(variable + 1) - variable))
+```
+
+**What this is doing:**
+
+-   `log10(variable)` applies a base-10 logarithm to every value. Logs compress large values far more aggressively than a square root does, which is why this is the next step up when a square root transformation isn't sufficient to resolve stronger skew.
+
+-   Same reflection logic as above applies for negative skew: `max(variable + 1) - variable` flips the distribution's direction before the log is applied, and the `+ 1` again avoids taking the log of 0 (which is mathematically undefined and would return `-Inf`).
+
+::: callout-warning
+## Warning
+
+`log10()` (and `log()`) will return `NaN` for any negative value, and `-Inf` for exactly 0. If your variable can genuinely contain 0 or negative values (not just as an artifact of the reflection step above), you'll need to shift the whole variable to be positive first — e.g. `log10(variable + 1)` — before transforming, or the function will silently produce unusable values for those rows.
+:::
+
+#### Inverse transformation for severely skewed data
+
+``` r
+# For positive skew
+dat <- dat %>%
+  mutate(variable_inverse = 1 / variable)
+
+# For negative skew
+dat <- dat %>%
+  mutate(variable_inverse = 1 / (max(variable + 1) - variable))
+```
+
+**What this is doing:**
+
+-   `1 / variable` takes the reciprocal of every value — the strongest of the three transformations here, and the most aggressive at compressing extreme values. This is generally reserved for cases where square root and log transformations have both been tried and haven't sufficiently resolved the skew.
+
+-   Same reflection approach applies for negative skew, flipping the distribution's direction with `max(variable + 1) - variable` before taking the reciprocal.
+
+::: callout-warning
+## Warning
+
+I would recommend against the inverse transformation, to be honest. It reverses the order of your values, which makes the transformed variable much harder to interpret.
+:::
+
+#### After transforming
+
+Whichever transformation you use, re-run the skew/kurtosis check, Shapiro-Wilk test, and histogram/Q-Q plot on the new transformed variable to confirm whether the transformation actually resolved the normality issue.
+
+### Should you transform?
+
+Some data is genuinely, meaningfully non-normal by nature. Social change and collective action data is a common example in this space (e.g., measures like willingness to protest, donation behavior, or petition-signing frequently show floor effects with a long right tail of highly engaged responders). This is often a real, substantive feature of the underlying phenomenon, not a data quality issue [@ferr2025].
+
+Rather than defaulting straight to transformation, a few approaches are designed to handle non-normal data directly:
+
+-   Non-parametric tests (e.g. Mann-Whitney U instead of an independent-samples t-test, Spearman's rho instead of Pearson's r) don't assume normality in the first place, and handle skewed or ordinal data well.
+
+<!-- -->
+
+-   Bootstrapping/resampling methods estimate variability empirically from your actual data, rather than relying on distributional assumptions — a flexible option when the shape of your data doesn't map onto standard textbook methods.
+
+<!-- -->
+
+-   Robust regression estimators (e.g. M-estimators, or the Satorra-Bentler scaled correction commonly used in structural equation modeling) can produce more accurate standard errors and significance tests under non-normality, without requiring you to transform the variable itself first.
+
+## Step 8: Multivariate outlier analysis
+
+This identifies participants who are unusual in their *pattern* of responses and flags them. This coded uses all base r functions. Run this on the raw scores, not the Winsorised/transformed scores.
+
+``` r
+# Multivariate outlier detection
+dat$mahal_d <- mahalanobis(
+  dat[, c("var1", "var2", "var3", "var4")], 
+  colMeans(dat[, c("var1", "var2", "var3", "var4")], na.rm=T), 
+  cov(dat[, c("var1", "var2", "var3", "var4")], use = "pairwise.complete.obs")
+)
+
+dat$mahal_p <- pchisq(dat$mahal_d, df = numberofvariables, lower.tail = FALSE) #Note that you need to insert your number of variables included in the mahalanobis distance calculation above.
+
+# Flag multivariate outliers
+dat <- dat %>%
+  mutate(mv_outlier = ifelse(mahal_p < 0.001, 1, 0))
+```
+
+**What this is doing:**
+
+-   `mahalanobis(...)` calculates the **Mahalanobis distance** for every participant — a single number representing how far that participant's overall pattern of responses across `var1`–`var4` is from the "average" pattern, accounting for how those variables typically relate to each other. This is different from checking each variable separately: a participant could have entirely unremarkable individual scores, but still be a multivariate outlier if that particular *combination* of scores is unusual given how the variables normally correlate.
+
+-   The function needs three pieces, matching its three arguments here:
+
+    -   `dat[, c("var1", "var2", "var3", "var4")]` — the set of variables you're checking.
+
+    -   `colMeans(..., na.rm = TRUE)` — the average score for each variable, which acts as the "center" that every participant's pattern is compared against.
+
+    -   `cov(..., use = "pairwise.complete.obs")` — the covariance matrix, capturing how the variables relate to and vary with each other. `use = "pairwise.complete.obs"` handles missing data.
+
+-   The result, stored in `dat$mahal_d`, is one Mahalanobis distance value per participant — larger values mean a more unusual overall response pattern.
+
+-   `pchisq(dat$mahal_d, df = numberofvariables, lower.tail = FALSE)` converts each distance into a p-value. `lower.tail = FALSE` gives you the probability of a distance *at least this extreme* occurring by chance — so a very small p-value means that participant's response pattern would be highly unlikely to occur under normal, expected variation.
+
+-   `mutate(mv_outlier = ifelse(mahal_p < 0.001, 1, 0))` applies a conventional threshold — `p < .001` is a commonly used cutoff for flagging multivariate outliers — and creates a simple 0/1 flag column, making it easy to filter, count, or review flagged cases afterward.
+
+Typically, you would run your analysis on the full sample and then run sensitivity analyses excluding people with `mv_outlier == 1` to see if the pattern of results holds without unusual participants.
+
+## Step 9: Missing value analysis
+
+Next, run a missing value analysis to determine whether your data are missing completely at random. This uses the package **naniar**, and has a hold bunch of useful functions that are documented [here](https://naniar.njtierney.com/).
+
+For the most part, I only check the proportion of missing data on each variable, and use the Little's MCAR test, unless I need to do some exploring.
+
+First, run this code to determine the proportion of each variable which is missing data. Variables missing more than 30% are usually cause for concern.
+
+``` r
+install.packages("naniar")
+library(naniar)
+
+miss_var_summary(data[, c("var1", "var2", "var3", "var4", "var5")]) 
+```
+
+**What this is doing:**
+
+-   This provides a summary for each variable of the number, percentage, and cumulative sum of missings, ordered by the most missing.
+
+If there is no missing data on any of your key variables, there is no need to run Little's MCAR test [@little1988a]. If there is missing data, run the following code:
+
+``` r
+mcar_test(data[, c("var1", "var2", "var3")])
+```
+
+**What this is doing:**
+
+-   Use Little's (1988) test statistic to assess if data is missing completely at random (MCAR). The null hypothesis in this test is that the data is MCAR, and the test statistic is a chi-squared value.
+
+## Next Steps...
+
+Once you have cleaned your data, created your scales, you might want to generate [sample demographics](sample-descriptives.qmd) and [correlations](correlation-table.qmd) tables.

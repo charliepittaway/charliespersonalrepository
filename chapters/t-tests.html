@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>T-Tests</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="t-tests_files/libs/clipboard/clipboard.min.js"></script>
+<script src="t-tests_files/libs/quarto-html/quarto.js"></script>
+<script src="t-tests_files/libs/quarto-html/popper.min.js"></script>
+<script src="t-tests_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="t-tests_files/libs/quarto-html/anchor.min.js"></script>
+<link href="t-tests_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="t-tests_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="t-tests_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="t-tests_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="t-tests_files/libs/bootstrap/bootstrap-1bc8a17f135ab3d594c857e9f48e611b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">T-Tests</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>I use the <strong>rempsyc</strong> package to run t-tests, which is a “wrapper” on top of other functions designed to produce APA-formatted t-test tables directly. Rather than running a t-test, then manually formatting the output into a table, <strong>rempsyc</strong> does both in two function calls.</p>
+<p><strong>Packages required:</strong></p>
+<ul>
+<li>rempsych <span class="citation" data-cites="rempsyc">[@rempsyc]</span></li>
+</ul>
+<section id="running-a-single-t-test" class="level2">
+<h2 class="anchored" data-anchor-id="running-a-single-t-test">Running a single t-test</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rempsyc)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>t_test_results <span class="ot">&lt;-</span> <span class="fu">nice_t_test</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dat,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">response =</span> <span class="st">"dependent_variable"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="st">"grouping_variable"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>t_test_table <span class="ot">&lt;-</span> <span class="fu">nice_table</span>(t_test_results)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>t_test_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li><p><code>nice_t_test()</code> runs the actual t-test. Unlike base R’s <code>t.test()</code>, it returns results already formatted for reporting, including the test statistic, degrees of freedom, p-value, and an effect size (Cohen’s d), all in one output.</p></li>
+<li><p><code>response = "dependent_variable"</code> and <code>group = "grouping_variable"</code> are given as <strong>character strings</strong> (in quotes) rather than bare column names.</p></li>
+<li><p><code>nice_table()</code> takes the results from <code>nice_t_test()</code> and converts them into a polished, APA-styled table, with leading zeros dropped.</p></li>
+</ul>
+</section>
+<section id="running-multiple-t-tests-at-once" class="level2">
+<h2 class="anchored" data-anchor-id="running-multiple-t-tests-at-once">Running multiple t-tests at once</h2>
+<p>The function accepts either a single variable or a vector of several variables (e.g.&nbsp;<code>response = c("var1", "var2", "var3")</code>) to run multiple t-tests at once, all formatted consistently in the same output.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>t_test_results <span class="ot">&lt;-</span> <span class="fu">nice_t_test</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> dat,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">response =</span> <span class="fu">c</span>(<span class="st">"var1"</span>, <span class="st">"var2"</span>, <span class="st">"var3"</span>, <span class="st">"var4"</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="st">"grouping_variable"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">correction =</span> <span class="st">"bonferroni"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>t_test_table <span class="ot">&lt;-</span> <span class="fu">nice_table</span>(t_test_results)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>t_test_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li><p><code>correction = "bonferroni"</code> applies a <strong>Bonferroni correction</strong> to the p-values across the four tests.</p></li>
+<li><p>Bonferroni is, of course, the most conservative correction for multiple tests. You can select the <strong>Holm</strong> correction (<code>correction = "holm"</code>) or <strong>false discovery rate</strong> methods (<code>correction = "fdr"</code>) for less conservative corrections that are also supported by <code>nice_t_test()</code>.</p>
+<ul>
+<li><span class="citation" data-cites="Perneger1998">@Perneger1998</span> discusses when Bonferroni adjustments might be the wrong choice, and <span class="citation" data-cites="BenjaminiHochberg1995">@BenjaminiHochberg1995</span> explain the false discovery rate method.</li>
+</ul></li>
+</ul>
+</section>
+<section id="running-t-tests-using-lavaansem-frameworks" class="level2">
+<h2 class="anchored" data-anchor-id="running-t-tests-using-lavaansem-frameworks">Running t-tests using lavaan/SEM frameworks</h2>
+<p>I can’t imagine this being particularly useful to anyone but me, but I once had to figure out how to fit a t-test but using full information maximum likelihood (FIML). For background, a large representative survey contained around 50% missingness by design (to reduce questionnaire completion time and cognitive load for participants). Running standard t-tests would therefore require lisewise deletion of a devastatingly large amount of data.</p>
+<p>My supervisor asked me to devise a way to run t-tests using FIML estimation, which allows partially missing cases to be retained and contribute to the overall model estimation, reducing bias.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> However, FIML is an estimation method used in structural equation modelling and is not something that has been widely incorporated into other statistical analyses. As such, I had to figure out how to run the <em>equivalent</em> of a t-test using the SEM framework.</p>
+<p>In order to run a t-test equivalent with FIML in R, the following packages are required:</p>
+<ul>
+<li>lavaan [<span class="citation" data-cites="lavaanpackage">@lavaanpackage</span>]<span class="citation" data-cites="lavaanarticle">[@lavaanarticle]</span></li>
+</ul>
+<section id="building-the-models" class="level3">
+<h3 class="anchored" data-anchor-id="building-the-models">Building the models</h3>
+<p>Essentially what I wanted to do was compare two different models: one in which the mean of the variable of interest is constrained to be equal (equivalent to the null hypothesis) and one in which the mean is able to vary (alternative hypothesis). I used the multigroups function in <strong>lavaan</strong>, which allowed me to specify the grouping variable. Variance in the dependent variables is freely estimated across groups to approximate a Welch t-test when group sizes are unequal. The models are then compared. A significant likelihood ratio test indicates that the unconstrained model fit the data better than the constrained model; therefore, the groups differed significantly.</p>
+<p>The code below shows a full workflow in which I listed all the variables I wanted to run t-tests on (in this case, many!), created an analysis function, looped it over all the dependent variables, and exported the results to a table with correction applied for multiple testing.</p>
+</section>
+<section id="step-1-list-dependent-variables" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-list-dependent-variables">Step 1: List dependent variables</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">%||%</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(a, b) <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(a)) a <span class="cf">else</span> b</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>dv_config_controlled <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"stress"</span>,                  <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"dangerous"</span>,               <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"emotional_wb"</span>,            <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"psych_wb"</span>,                <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"swb_contribution"</span>,        <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"swb_acceptance"</span>,          <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"swb_integration"</span>,         <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"swb_own_actualisation"</span>,   <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"swb_other_actualisation"</span>, <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"swb_coherence"</span>,           <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"anomie"</span>,                  <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"prej_immigrant_s"</span>,        <span class="at">scale_factor =</span> <span class="dv">10</span>),</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"prej_muslim_s"</span>,           <span class="at">scale_factor =</span> <span class="dv">10</span>),</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"prej_jewish_s"</span>,           <span class="at">scale_factor =</span> <span class="dv">10</span>),</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"collangst"</span>,               <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"fear_immigrants"</span>,         <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"norms_immigration_s"</span>,     <span class="at">scale_factor =</span> <span class="dv">10</span>),</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"norms_racism_s"</span>,          <span class="at">scale_factor =</span> <span class="dv">10</span>),</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"norms_demo_s"</span>,            <span class="at">scale_factor =</span> <span class="dv">10</span>),</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"poleff"</span>,                  <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"sysjust"</span>,                 <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"demo_indecisive"</span>,         <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"demo_best_option"</span>,        <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"undemo"</span>,                  <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"polviol"</span>,                 <span class="at">scale_factor =</span> <span class="cn">NULL</span>),</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">dv =</span> <span class="st">"anger_govt"</span>,              <span class="at">scale_factor =</span> <span class="cn">NULL</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li><p><code>%||% &lt;- function(a, b) if (!is.null(a)) a else b</code> defines a custom operator, <code>%||%</code>, borrowed from a common pattern in other languages. It returns <code>a</code> if <code>a</code> isn’t <code>NULL</code>, and falls back to <code>b</code> otherwise. It’s used later as a shorthand: <code>dv_config_controlled[[i]]$scale_factor %||% 1</code> means “use this DV’s specified scale_factor, or default to 1 if none was given” — this is exactly what lets you leave <code>scale_factor = NULL</code> for any DV that doesn’t need rescaling, without writing a separate <code>if</code>/<code>else</code> check for every single variable.</p></li>
+<li><p><code>dv_config_controlled</code> is a list of DVs to run the models over (equivalent to running multiple t-tests). In this particular case, most of my variables ranged from 1-7 but a select few were on 0-100 scales. Estimating a model with variables on wildly different numeric scales can cause convergence problems in SEM software, since parameters for the larger-scale variables end up many times bigger than parameters for the smaller-scale ones. Dividing the 0–100 variables by 10 brings them onto a comparable 0–10 range, closer to the other DVs, which helps the model estimate more reliably.</p></li>
+<li><p>If every variable is already on a comparable scale, you can simply set <code>scale_factor = NULL</code> for every entry (or omit it entirely and let <code>%||%</code> default to 1 throughout).</p></li>
+</ul>
+</section>
+<section id="step-2-created-scaled-variables" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-created-scaled-variables">Step 2: Created scaled variables</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Scale prejudice and norms variables from 0-100 to 0-10 ────────────────────</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>group_comparisons <span class="ot">&lt;-</span> group_comparisons <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">prej_jewish_s        =</span> prej_jewish <span class="sc">/</span> <span class="dv">10</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">prej_immigrant_s     =</span> prej_immigrant <span class="sc">/</span> <span class="dv">10</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">prej_muslim_s        =</span> prej_muslim <span class="sc">/</span> <span class="dv">10</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">norms_immigration_s  =</span> norms_immigration <span class="sc">/</span> <span class="dv">10</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">norms_racism_s       =</span> norms_racism <span class="sc">/</span> <span class="dv">10</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">norms_demo_s         =</span> norms_demo <span class="sc">/</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li>Created the rescaled variables referred to in <code>dv_config_controlled</code></li>
+</ul>
+</section>
+<section id="step-3-define-auxiliary-variables" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-define-auxiliary-variables">Step 3: Define auxiliary variables</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>COMMON_AUXILIARY <span class="ot">&lt;-</span> <span class="st">"gender_r"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li><p>FIML estimates model parameters using all available data, including partially missing cases.</p></li>
+<li><p>An auxiliary variable is a variable that isn’t part of your substantive hypothesis (it’s not a DV or a theoretically important predictor), but is included in the model purely to improve the plausibility of that assumption and increase estimation precision. You want to include a variable that has very little missing data, thereby giving FIML more information to work with when handling the missing cases.</p></li>
+</ul>
+<p>This code is written for <strong>one</strong> common auxiliary variable, applied to every DV. You can adapt it either direction:</p>
+<ul>
+<li><p><strong>For zero auxiliary variables:</strong> just set <code>COMMON_AUXILIARY &lt;- NULL</code>. The <code>use_auxiliary</code> check inside the function (below) already handles this — if <code>common_auxiliary</code> is <code>NULL</code>, the auxiliary syntax is simply left blank, and the model runs without one.</p></li>
+<li><p><strong>For multiple auxiliary variables:</strong> you’d adjust the <code>aux_syntax</code> construction to loop over a vector of auxiliary variables instead of a single one:</p></li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>COMMON_AUXILIARIES <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"gender_r"</span>, <span class="st">"AGE"</span>, <span class="st">"EDUC"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">length</span>(common_auxiliaries) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  aux_lines <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">lapply</span>(common_auxiliaries, <span class="cf">function</span>(aux) {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste0</span>(</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\n</span><span class="st">  "</span>, aux, <span class="st">" ~ 1"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\n</span><span class="st">  "</span>, dv_name, <span class="st">" ~~ "</span>, aux</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  }))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  aux_syntax <span class="ot">&lt;-</span> <span class="fu">paste</span>(aux_lines, <span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  aux_syntax <span class="ot">&lt;-</span> <span class="st">""</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="step-4-mean-centring-covariates" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-mean-centring-covariates">Step 4: Mean-centring covariates</h3>
+<p>If you wanted to add controls/covariates to the model, you must mean-centre continuous variables and ensure that dichotomous variables are effect-coded.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>group_comparisons <span class="ot">&lt;-</span> group_comparisons <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">AGE_c  =</span> AGE  <span class="sc">-</span> <span class="fu">mean</span>(AGE,  <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">EDUC_c =</span> EDUC <span class="sc">-</span> <span class="fu">mean</span>(EDUC, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">CONS_c =</span> CONS <span class="sc">-</span> <span class="fu">mean</span>(CONS, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>group_comparisons <span class="ot">&lt;-</span> group_comparisons <span class="sc">%&gt;%</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">VIC =</span> <span class="fu">case_when</span>(</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    STATE_2 <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">1</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li><p><code>AGE_c</code>, <code>EDUC_c</code>, and <code>CONS_c</code> are mean-centered versions of the covariates (subtracting each variable’s own mean from every value), which makes the model’s intercept interpretable as the predicted value at the <em>average</em> level of these covariates, rather than at a covariate value of zero (which is often meaningless — e.g.&nbsp;an age of 0).</p></li>
+<li><p><code>VIC</code> is created using effect coding (covered earlier in this chapter) rather than standard 0/1 dummy coding, so this covariate’s coefficient reflects deviation from the grand mean rather than from an arbitrary reference group.</p></li>
+</ul>
+</section>
+<section id="step-5-the-analysis-function" class="level3">
+<h3 class="anchored" data-anchor-id="step-5-the-analysis-function">Step 5: The analysis function</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>run_group_comparison_controlled <span class="ot">&lt;-</span> <span class="cf">function</span>(dv_name, <span class="at">common_auxiliary =</span> <span class="cn">NULL</span>, data,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">scale_factor =</span> <span class="dv">1</span>) {</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Build auxiliary syntax — a single common auxiliary variable used for every DV</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># (skip it if the DV itself happens to be the common auxiliary)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  use_auxiliary <span class="ot">&lt;-</span> <span class="sc">!</span><span class="fu">is.null</span>(common_auxiliary) <span class="sc">&amp;&amp;</span> common_auxiliary <span class="sc">!=</span> dv_name</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (use_auxiliary) {</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    aux_syntax <span class="ot">&lt;-</span> <span class="fu">paste0</span>(</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\n</span><span class="st">  # Auxiliary variable - estimate its mean</span><span class="sc">\n</span><span class="st">  "</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>      common_auxiliary, <span class="st">" ~ 1"</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\n\n</span><span class="st">  # Covariance between DV and auxiliary</span><span class="sc">\n</span><span class="st">  "</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>      dv_name, <span class="st">" ~~ "</span>, common_auxiliary</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    aux_syntax <span class="ot">&lt;-</span> <span class="st">""</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Unconstrained model</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  model_unconstrained <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="st">  "</span>, dv_name, <span class="st">" ~ c(mu1, mu2)*1</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="st">  "</span>, dv_name, <span class="st">" ~ AGE_c + EDUC_c + CONS_c + VIC</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="st">  "</span>, dv_name, <span class="st">" ~~ c(v1, v2)*"</span>, dv_name, aux_syntax, <span class="st">"</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="st">  diff     := mu2 - mu1</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="st">  sd_welch := sqrt((v1 + v2) / 2)</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="st">  d_welch  := diff / sd_welch</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Constrained model (means equal across groups)</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  model_constrained <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="st">  "</span>, dv_name, <span class="st">" ~ c(mu_equal, mu_equal)*1</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="st">  "</span>, dv_name, <span class="st">" ~ AGE_c + EDUC_c + CONS_c + VIC</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="st">  "</span>, dv_name, <span class="st">" ~~ c(v1, v2)*"</span>, dv_name, aux_syntax, <span class="st">"</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>  fit_unconstrained <span class="ot">&lt;-</span> <span class="fu">sem</span>(</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    model_unconstrained,</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">data          =</span> data,</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">group         =</span> <span class="st">"pre_post"</span>,</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">meanstructure =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">fixed.x       =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing       =</span> <span class="st">"FIML"</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>  fit_constrained <span class="ot">&lt;-</span> <span class="fu">sem</span>(</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>    model_constrained,</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">data          =</span> data,</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">group         =</span> <span class="st">"pre_post"</span>,</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">meanstructure =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">fixed.x       =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">missing       =</span> <span class="st">"FIML"</span></span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Verify group ordering (pre = 1, post = 2)</span></span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>  group_labels <span class="ot">&lt;-</span> <span class="fu">lavInspect</span>(fit_unconstrained, <span class="st">"group.label"</span>)</span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">identical</span>(group_labels, <span class="fu">c</span>(<span class="st">"pre"</span>, <span class="st">"post"</span>))) {</span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(</span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Unexpected group ordering for '"</span>, dv_name, <span class="st">"': "</span>,</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>      <span class="fu">paste</span>(group_labels, <span class="at">collapse =</span> <span class="st">", "</span>),</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>      <span class="st">". Expected c('pre', 'post')."</span></span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sample sizes</span></span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>  N_total <span class="ot">&lt;-</span> <span class="fu">lavInspect</span>(fit_unconstrained, <span class="st">"nobs"</span>)</span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>  n1      <span class="ot">&lt;-</span> N_total[<span class="dv">1</span>]</span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>  n2      <span class="ot">&lt;-</span> N_total[<span class="dv">2</span>]</span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Likelihood ratio test</span></span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>  lr_test <span class="ot">&lt;-</span> <span class="fu">anova</span>(fit_constrained, fit_unconstrained)</span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>  chi_sq  <span class="ot">&lt;-</span> lr_test<span class="sc">$</span><span class="st">`</span><span class="at">Chisq diff</span><span class="st">`</span>[<span class="dv">2</span>]</span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>  df      <span class="ot">&lt;-</span> lr_test<span class="sc">$</span><span class="st">`</span><span class="at">Df diff</span><span class="st">`</span>[<span class="dv">2</span>]</span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>  p_raw   <span class="ot">&lt;-</span> lr_test<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;Chisq)</span><span class="st">`</span>[<span class="dv">2</span>]</span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract parameters</span></span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>  params    <span class="ot">&lt;-</span> <span class="fu">parameterEstimates</span>(fit_unconstrained, <span class="at">ci =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>  means     <span class="ot">&lt;-</span> <span class="fu">subset</span>(params, op <span class="sc">==</span> <span class="st">"~1"</span> <span class="sc">&amp;</span> lhs <span class="sc">==</span> dv_name)</span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>  diff_row  <span class="ot">&lt;-</span> <span class="fu">subset</span>(params, label <span class="sc">==</span> <span class="st">"diff"</span>)</span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>  d_row     <span class="ot">&lt;-</span> <span class="fu">subset</span>(params, label <span class="sc">==</span> <span class="st">"d_welch"</span>)</span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>  variances <span class="ot">&lt;-</span> <span class="fu">subset</span>(params, op <span class="sc">==</span> <span class="st">"~~"</span> <span class="sc">&amp;</span> lhs <span class="sc">==</span> dv_name <span class="sc">&amp;</span> rhs <span class="sc">==</span> dv_name)</span>
+<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Back-transform scale-dependent outputs; Cohen's d is dimensionless so no transform</span></span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>    <span class="at">variable =</span> <span class="fu">sub</span>(<span class="st">"_s$"</span>, <span class="st">""</span>, dv_name),   <span class="co"># strip _s suffix for display</span></span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>    <span class="at">pre_M   =</span> <span class="fu">round</span>(means<span class="sc">$</span>est[means<span class="sc">$</span>group <span class="sc">==</span> <span class="dv">1</span>]         <span class="sc">*</span> scale_factor, <span class="dv">2</span>),</span>
+<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>    <span class="at">pre_var =</span> <span class="fu">round</span>(variances<span class="sc">$</span>est[variances<span class="sc">$</span>group <span class="sc">==</span> <span class="dv">1</span>] <span class="sc">*</span> scale_factor<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span>),</span>
+<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>    <span class="at">post_M   =</span> <span class="fu">round</span>(means<span class="sc">$</span>est[means<span class="sc">$</span>group <span class="sc">==</span> <span class="dv">2</span>]         <span class="sc">*</span> scale_factor, <span class="dv">2</span>),</span>
+<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">post_var =</span> <span class="fu">round</span>(variances<span class="sc">$</span>est[variances<span class="sc">$</span>group <span class="sc">==</span> <span class="dv">2</span>] <span class="sc">*</span> scale_factor<span class="sc">^</span><span class="dv">2</span>, <span class="dv">2</span>),</span>
+<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a>    <span class="at">diff_est =</span> <span class="fu">round</span>(diff_row<span class="sc">$</span>est      <span class="sc">*</span> scale_factor, <span class="dv">2</span>),</span>
+<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a>    <span class="at">diff_lci =</span> <span class="fu">round</span>(diff_row<span class="sc">$</span>ci.lower <span class="sc">*</span> scale_factor, <span class="dv">2</span>),</span>
+<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a>    <span class="at">diff_uci =</span> <span class="fu">round</span>(diff_row<span class="sc">$</span>ci.upper <span class="sc">*</span> scale_factor, <span class="dv">2</span>),</span>
+<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a>    <span class="at">d_est =</span> <span class="fu">round</span>(d_row<span class="sc">$</span>est,      <span class="dv">2</span>),</span>
+<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>    <span class="at">d_lci =</span> <span class="fu">round</span>(d_row<span class="sc">$</span>ci.lower, <span class="dv">2</span>),</span>
+<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a>    <span class="at">d_uci =</span> <span class="fu">round</span>(d_row<span class="sc">$</span>ci.upper, <span class="dv">2</span>),</span>
+<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a>    <span class="at">chi_sq  =</span> <span class="fu">round</span>(chi_sq, <span class="dv">2</span>),</span>
+<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a>    <span class="at">df      =</span> df,</span>
+<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_raw   =</span> p_raw,</span>
+<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_pre   =</span> n1,</span>
+<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_post  =</span> n2,</span>
+<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_total =</span> <span class="fu">sum</span>(N_total),</span>
+<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li>This is a custom function, written once, then looped over every DV in the next step.</li>
+</ul>
+<!-- -->
+<ul>
+<li><code>use_auxiliary &lt;- !is.null(common_auxiliary) &amp;&amp; common_auxiliary != dv_name</code> checks two things: that an auxiliary variable was actually specified, and that it isn’t the same variable as the DV currently being tested (which would be nonsensical). If both are true, <code>aux_syntax</code> is built (the auxiliary’s mean is estimated, and its covariance with the DV specified) — this is the lavaan syntax that actually implements the FIML auxiliary-variable approach.</li>
+</ul>
+<!-- -->
+<ul>
+<li><p><code>model_unconstrained</code> is the <strong>alternative hypothesis</strong> model: <code>c(mu1, mu2)*1</code> estimates a <strong>separate mean</strong> for each of the two groups (labeled <code>mu1</code> and <code>mu2</code>) — this is the “the groups genuinely differ” model.</p>
+<ul>
+<li><p><code>~~ c(v1, v2)*dv_name</code> estimates a <strong>separate variance</strong> per group too, which is what makes this approximate a <strong>Welch t-test</strong> (which doesn’t assume equal variances) rather than a standard Student’s t-test.</p></li>
+<li><p>The <code>diff</code>, <code>sd_welch</code>, and <code>d_welch</code> lines are lavaan’s <code>:=</code> syntax for defining new quantities <em>derived</em> from the model’s parameters — here, calculating the mean difference and a Welch-style Cohen’s d directly as part of the model, rather than needing a separate calculation step afterward.</p></li>
+</ul></li>
+</ul>
+<!-- -->
+<ul>
+<li><code>model_constrained</code> is your <strong>null hypothesis</strong> model: <code>c(mu_equal, mu_equal)*1</code> forces both groups to share the <strong>same</strong> mean — this is “the groups don’t actually differ” model, everything else kept identical.</li>
+</ul>
+<!-- -->
+<ul>
+<li><code>sem(..., missing = "FIML")</code> is what actually runs each model using full information maximum likelihood — this single argument is what allows participants with partial missing data to still contribute to parameter estimation, rather than being dropped via listwise deletion, addressing the exact problem described in your intro paragraph.</li>
+</ul>
+<!-- -->
+<ul>
+<li><p><code>group = "pre_post"</code> tells lavaan which variable defines your two comparison groups — the model is fit <strong>separately per group</strong>, which is what allows the means (and variances) to differ between them in the unconstrained model.</p></li>
+<li><p>The <code>group_labels</code> check is a safeguard: lavaan orders groups alphabetically/by factor level internally, and if that order ever didn’t match your expectation (<code>"pre"</code> first, <code>"post"</code> second), any downstream code assuming <code>group == 1</code> is “pre” would silently mislabel results. <code>stop()</code> halts execution with a clear error message the moment this happens, rather than letting a silent labeling mistake flow through to your final table.</p></li>
+</ul>
+<!-- -->
+<ul>
+<li><code>lavInspect(..., "nobs")</code> extracts the sample size used in each group.</li>
+</ul>
+<!-- -->
+<ul>
+<li><p><code>anova(fit_constrained, fit_unconstrained)</code> runs a <strong>likelihood ratio test</strong>, comparing how well the two models fit the data. This is the “t-test equivalent”: rather than a t-statistic, you get a chi-square difference test, where a significant result means the unconstrained model (means allowed to differ) fits meaningfully better than the constrained one (means forced equal) — i.e.&nbsp;the groups differ significantly.</p></li>
+<li><p>The <code>params</code> block tpulls every result out of the fitted model — group means, variances, the mean difference with its confidence interval, and Cohen’s d with its confidence interval — and assembles them into a single tidy row of output for this one DV.</p>
+<ul>
+<li><p>This is where <strong><code>scale_factor</code></strong> does its work: <code>pre_M * scale_factor</code>, <code>post_M * scale_factor</code>, and the difference/CI values are all multiplied back up, undoing the /10 rescaling, so the variables are reported back on their original, interpretable 0–100 scale.</p></li>
+<li><p><code>d_est</code>, <code>d_lci</code>, <code>d_uci</code> are <strong>not</strong> multiplied by <code>scale_factor</code> — Cohen’s d is a standardised effect size (already expressed in SD units), so it’s scale-invariant by design and doesn’t need back-transforming.</p></li>
+<li><p><code>sub("_s$", "", dv_name)</code> also strips the <code>_s</code> suffix back off the variable name for the final table, so it reads as <code>"prej_immigrant"</code> rather than the working name <code>"prej_immigrant_s"</code>.</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="step-6-running-every-comparison-in-a-loop" class="level3">
+<h3 class="anchored" data-anchor-id="step-6-running-every-comparison-in-a-loop">Step 6: Running every comparison in a loop</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>results_list_controlled <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, <span class="fu">length</span>(dv_config_controlled))</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(dv_config_controlled)) {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">#### Comparison"</span>, i, <span class="st">"of"</span>, <span class="fu">length</span>(dv_config_controlled), <span class="st">":"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>      dv_config_controlled[[i]]<span class="sc">$</span>dv, <span class="st">"####</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  results_list_controlled[[i]] <span class="ot">&lt;-</span> <span class="fu">run_group_comparison_controlled</span>(</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">dv_name           =</span> dv_config_controlled[[i]]<span class="sc">$</span>dv,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">common_auxiliary  =</span> COMMON_AUXILIARY,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">scale_factor      =</span> dv_config_controlled[[i]]<span class="sc">$</span>scale_factor <span class="sc">%||%</span> <span class="dv">1</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">data              =</span> group_comparisons</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>final_results_controlled <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, results_list_controlled)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(final_results_controlled) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li><p><code>vector("list", length(...))</code> pre-allocates an empty list of the right size — more efficient than growing a list one element at a time in a loop.</p></li>
+<li><p>The <code>for</code> loop then runs <code>run_group_comparison_controlled()</code> once per DV listed in <code>dv_config_controlled</code>, printing a progress message (<code>cat(...)</code>) each time so you can track how far through a long list of comparisons you are.</p></li>
+<li><p>The <code>scale_factor = dv_config_controlled[[i]]$scale_factor %||% 1</code> line is exactly where the Step 2 operator gets used in practice — pulling each DV’s own specified scale_factor, or defaulting to 1 if it was left <code>NULL</code>.</p></li>
+<li><p><code>do.call(rbind, results_list_controlled)</code> stacks every DV’s one-row result into a single combined dataframe, and <code>rownames(...) &lt;- NULL</code> tidies up the row numbering.</p></li>
+</ul>
+</section>
+<section id="step-7-correcting-for-multiple-comparisons" class="level3">
+<h3 class="anchored" data-anchor-id="step-7-correcting-for-multiple-comparisons">Step 7: Correcting for multiple comparisons</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>final_results_controlled<span class="sc">$</span>p_adj_BH         <span class="ot">&lt;-</span> <span class="fu">p.adjust</span>(final_results_controlled<span class="sc">$</span>p_raw, <span class="at">method =</span> <span class="st">"BH"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>final_results_controlled<span class="sc">$</span>p_adj_bonferroni <span class="ot">&lt;-</span> <span class="fu">p.adjust</span>(final_results_controlled<span class="sc">$</span>p_raw, <span class="at">method =</span> <span class="st">"bonferroni"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li><p><code>p.adjust()</code> is base R’s general-purpose function for correcting a whole vector of p-values at once.</p></li>
+<li><p>Two different methods have been applied: Bonferroni and BH (which is the false discovery rate method).</p></li>
+</ul>
+</section>
+<section id="step-8-formatting-and-exporting-the-table" class="level3">
+<h3 class="anchored" data-anchor-id="step-8-formatting-and-exporting-the-table">Step 8: Formatting and exporting the table</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>format_results_table_controlled <span class="ot">&lt;-</span> <span class="cf">function</span>(results) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  format_mean_sd <span class="ot">&lt;-</span> <span class="cf">function</span>(mean, var) <span class="fu">sprintf</span>(<span class="st">"%.2f (%.2f)"</span>, mean, <span class="fu">sqrt</span>(var))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  format_mean_ci <span class="ot">&lt;-</span> <span class="cf">function</span>(mean, lower, upper) <span class="fu">sprintf</span>(<span class="st">"%.2f [%.2f, %.2f]"</span>, mean, lower, upper)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable          =</span> results<span class="sc">$</span>variable,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Pre M (SD)</span><span class="st">`</span>      <span class="ot">=</span> <span class="fu">mapply</span>(format_mean_sd, results<span class="sc">$</span>pre_M,  results<span class="sc">$</span>pre_var),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Post M (SD)</span><span class="st">`</span>     <span class="ot">=</span> <span class="fu">mapply</span>(format_mean_sd, results<span class="sc">$</span>post_M, results<span class="sc">$</span>post_var),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Mean difference</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"%.2f"</span>, results<span class="sc">$</span>diff_est),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Cohen's d [95% CI]</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">mapply</span>(format_mean_ci, results<span class="sc">$</span>d_est, results<span class="sc">$</span>d_lci, results<span class="sc">$</span>d_uci),</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Chi-square</span><span class="st">`</span>      <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"%.2f"</span>, results<span class="sc">$</span>chi_sq),</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">p                 =</span> results<span class="sc">$</span>p_raw,</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">p (FDR)</span><span class="st">`</span>         <span class="ot">=</span> results<span class="sc">$</span>p_adj_BH,</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">p (Bonf)</span><span class="st">`</span>        <span class="ot">=</span> results<span class="sc">$</span>p_adj_bonferroni,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">check.names =</span> <span class="cn">FALSE</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li><p>This function turns the raw numeric results into publication-ready formatted text — e.g.&nbsp;combining a mean and its variance into a single <code>"3.45 (1.02)"</code> style string (converting variance to SD first, via <code>sqrt(var)</code>, since SD rather than variance is the conventional format for reporting), and combining Cohen’s d with its confidence interval into <code>"0.32 [0.18, 0.46]"</code> style APA formatting.</p></li>
+<li><p><code>check.names = FALSE</code> stops R from automatically mangling your deliberately spaced/punctuated column names (like <code>"Pre M (SD)"</code>) into syntactically “safe” but ugly names (like <code>"Pre.M..SD."</code>).</p></li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>nice_formatted_table_controlled <span class="ot">&lt;-</span> <span class="fu">nice_table</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  formatted_table_controlled,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.format.p =</span> <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">spacing      =</span> <span class="dv">1</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">title        =</span> <span class="fu">c</span>(<span class="st">"Table S3"</span>, <span class="st">"Pre-post comparisons controlling for age, education, and conservatism, with raw, BH-corrected, and Bonferroni-corrected p-values."</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>sect_properties <span class="ot">&lt;-</span> <span class="fu">prop_section</span>(</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">page_size    =</span> <span class="fu">page_size</span>(<span class="at">orient =</span> <span class="st">"landscape"</span>),</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">page_margins =</span> <span class="fu">page_mar</span>(<span class="at">top =</span> <span class="fl">0.5</span>, <span class="at">bottom =</span> <span class="fl">0.5</span>, <span class="at">left =</span> <span class="fl">0.5</span>, <span class="at">right =</span> <span class="fl">0.5</span>),</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">type         =</span> <span class="st">"continuous"</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">save_as_docx</span>(</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  nice_formatted_table_controlled,</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">path       =</span> <span class="st">"Tables/Table 3 Pre-post comparisons AGE EDUC CONS STATE_2 controlled.docx"</span>,</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">pr_section =</span> sect_properties</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li><p>Using <code>nice_table()</code> from the <strong>rempsyc</strong> package, APA styling has been applied to the finished dataframe.</p></li>
+<li><p><code>col.format.p = 7:9</code> tells it specifically which columns (7 through 9 — the raw, FDR, and Bonferroni p-value columns) should be formatted using APA’s p-value conventions (e.g.&nbsp;<code>p &lt; .001</code> rather than a long decimal).</p></li>
+<li><p><code>title</code> adds a table number and caption directly into the exported table.</p></li>
+<li><p><code>prop_section()</code> (from the <strong>officer</strong> package) defines a landscape page layout with tight margins, needed here because this table is unusually wide (nine columns).</p></li>
+<li><p><code>save_as_docx()</code> is <strong>rempsyc’s</strong> own direct Word export function.</p></li>
+</ul>
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>And can handle up to 60% missing data <span class="citation" data-cites="EndersBandalos2001">[@EndersBandalos2001]</span>!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

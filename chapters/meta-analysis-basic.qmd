@@ -1,0 +1,10 @@
+---
+title: "Meta-Analysis"
+format: html
+---
+
+Contact me for a full three-level random-effects meta-analysis workflow from start to finish. I can't upload it yet, as it uses data from a study that has not yet been published. When it has been published, I will upload it here.
+
+But in the meantime... let me know if you want me to send you the code and explanations.
+
+📧 [charlie.pittaway\@flinders.edu.au](mailto:charlie.pittaway@flinders.edu.au "Meta-analysis code")

@@ -1,0 +1,16 @@
+---
+title: "Official R Guides"
+format: html
+---
+
+Here are a collection of R cookbooks and guides that have informed my own workflows stored in this repository.
+
+-   Learning Statistics with R [@Navarro] - unbelievably helpful! ⭐⭐⭐
+
+-   The R Cookbook [@LongTeetor] - basics ⭐⭐
+
+-   The R Graphics Cookbook [@Chang] - basics of figures ⭐⭐
+
+-   Doing Meta-Analysis in R: A Hands-On Guide [@HarrerCuijpersFurukawa] - supremely useful for understanding three-level random-effects meta-analysis ⭐⭐⭐
+
+-   And [here](https://github.com/qinwf/awesome-R) you can find a list of fantastic R packages under a number of categories. For example, you might be interested in using R for text mining, or you might want to conduct Bayesian analysis.

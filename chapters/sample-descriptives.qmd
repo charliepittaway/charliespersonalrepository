@@ -1,0 +1,120 @@
+---
+title: "Sample Descriptives"
+format: html
+---
+
+The first artifact in your manuscript will probably be a table of sample descriptives.
+
+## Using the tableone package
+
+This example shows an end-to-end workflow: recoding numeric-coded demographic variables into labeled factors, building a "Table 1"-style summary table with **tableone**, converting it into a formatted **flextable** object, and exporting the result directly to a Word document.
+
+The **tableone** package is great because it's whole purpose is literally this, so no other functionality is needed. However, it does not allow exporting directly to a Word document, so I have provided a function to do this that some other fantastic, altruistic genius created and made freely available.
+
+**Packages needed:**
+
+-   dplyr (or tidyverse) [@tidyverse2019]
+
+-   tableone [@tableone]
+
+-   flextable [@flextable]
+
+-   officer [@officer]
+
+### Step 1: Recode numeric codes into labelled factors
+
+``` r
+library(dplyr)  data <- data %>%   mutate(gender_r = factor(gender,                           levels = c(1, 2, 3, 4),                           labels = c("Male", "Female", "Non-binary", "Other")),                    state_r = factor(state,                           levels = c(1, 2, 3, 4, 5, 6, 7, 8),                           labels = c("NSW", "VIC", "QLD", "SA", "WA", "TAS", "NT", "ACT")),                    education_r = factor(education,                          levels = c(1, 2, 3, 4, 5),                          labels = c("Less than high school", "High school", "TAFE",                                      "Undergraduate degree", "Postgraduate degree")))
+```
+
+**What this is doing:**
+
+-   This builds on the [factor-conversion approach](recoding.qmd), but adds a `labels =` argument alongside `levels =`. `levels` tells R the *order* and *original numeric values* to match against; `labels` tells it what *text* to display in place of each number — so `1` becomes `"Male"`, `2` becomes `"Female"`, and so on.
+
+### Step 2: Build the summary table with createTableOne()
+
+``` r
+library(tableone)  vars <- c("age", "gender_r", "education_r")  table_1 <- CreateTableOne(data = data,                             vars = vars,                             strata = "state_r",                            addOverall = TRUE,                            test = FALSE) table_1
+```
+
+**What this is doing:**
+
+-   `vars <- c("age", "gender_r", "education_r")` defines which variables should appear as rows in the table..
+
+-   `CreateTableOne()` builds the summary table itself. It automatically detects each variable's type and picks an appropriate summary: means and SDs for continuous variables like `age`, counts and percentages for factors like `gender_r`and `education_r`— you don't need to specify this manually.
+
+-   `strata = "state_r"` splits the table into separate columns, one per state, so you can see how demographics differ by state at a glance, rather than only getting one pooled summary. This is useful if you have a representative survey; however, you could also list this as another count variable like gender and education. Similarly, you could add in an ethnicity variable, if relevant.
+
+-   `addOverall = TRUE` adds an additional column showing the summary across *all* participants combined, alongside the state-by-state breakdown. This is useful if you have stratified the table, as we have done here.
+
+-   `test = FALSE` turns off tableone's default behavior of automatically running significance tests (e.g. ANOVA, chi-square) comparing groups and adding a p-value column. Turn this off if the table is meant to be purely descriptive (as Table 1s usually are). Turn this on with `TRUE` if you specifically want group comparisons included.
+
+-   Printing `table_1` on its own displays the table in your R console.
+
+### Step 3: Converting the tableone object into a flextable
+
+This is a function helpfully created by Graham Cooper [@Cooper2024] and made available on GitHub to quickly convert a **tableone** object to something that you can open in a Word document using the **flextable** and **officer** packages. Make sure you have those two packages installed and loaded to be able to run the function.
+
+``` r
+tableone2flextable <- function(tableone){   tableone <- print(tableone, quote = FALSE, noSpaces = TRUE)  # convert to matrix      rows <- nrow(tableone)   cols <- ncol(tableone)   colnames <- colnames(tableone)      listoflists <- list()      for (i in 1:cols){     start <- (i * rows + 1) - rows     end <- i * rows     listoflists[[i]] <- tableone[start:end]   }      dataframe <- as.data.frame(listoflists, col.names = colnames)   dataframe <- cbind(Variable = rownames(tableone), dataframe)     rownames(dataframe) <- NULL                                        flex <- flextable::flextable(dataframe)      return(flex) }
+```
+
+**What this is doing:**
+
+-   `print(tableone, quote = FALSE, noSpaces = TRUE)` converts the tableone object into a plain **character matrix**, stripping out quote marks and extra padding spaces that tableone normally adds for console display.
+
+-   `nrow()`, `ncol()`, and `colnames()` capture the matrix's dimensions and column headers, which are needed to correctly rebuild the table as a dataframe in the next steps.
+
+-   The `for` loop walks through the matrix column by column (`1:cols`), extracting each column's values from the matrix (which is stored internally as one long vector) using `start`/`end` index positions, and stores each column as one element of `listoflists`.
+
+-   `as.data.frame(listoflists, col.names = colnames)` combines those extracted columns into an actual dataframe, restoring the original column headers.
+
+-   `cbind(Variable = rownames(tableone), dataframe)` adds the row labels (variable names like "age," "gender_r") back in as their own proper column, since they'd otherwise just be dataframe row names rather than visible data.
+
+-   `rownames(dataframe) <- NULL` resets the dataframe's row names back to plain sequential numbers, since the row names were just used above and aren't needed anymore as actual row labels.
+
+-   `flextable::flextable(dataframe)` converts the finished dataframe into a **flextable** object — the format needed for the polished formatting and Word export in the next step. Using `flextable::` here (rather than `library(flextable)` beforehand) explicitly specifies which package the function comes from, without needing to load the whole package into your session.
+
+### Step 4: Format and export to Word
+
+``` r
+flextable2word <-function(flextab, filepath){            # Add filepath so you can specify folder and name of file   require(tidyverse)   require(flextable)   ft <-autofit(theme_apa(flextab)) %>%     align(j = 1, align = "left", part = "all") %>%        # left-align first column     line_spacing(space = 1, part = "all")                  # remove double spacing   officer::read_docx() %>%     body_add_flextable(ft) %>%     body_end_section_landscape() %>%     print(target = filepath)   browseURL(filepath) }  tab_1 <-tableone2flextable(table_1)    flextable2word(tab_1, "output/Table 1 Sample demographics.docx")  tab_1
+```
+
+**What this is doing:**
+
+-   `flextable2word` is a second custom function that takes a flextable object (from Step 3) and a `filepath` argument, letting you specify exactly where and under what filename the finished Word document should be saved.
+
+-   `require(tidyverse)` and `require(flextable)` ensure both packages are loaded whenever this function runs, even if you forgot to load them earlier in your script.
+
+-   `theme_apa(flextab)` applies flextable's built-in **APA-style formatting** preset.
+
+-   `autofit(...)` automatically adjusts column widths to fit their content, rather than leaving default widths that might cut off longer text.
+
+-   `align(j = 1, align = "left", part = "all")` left-aligns the first column (`j = 1`, i.e. your `Variable` column) across the whole table (`part = "all"` covers header and body).
+
+-   `line_spacing(space = 1, part = "all")` sets single line spacing throughout the table, overriding Word's common default of double spacing, which looks cluttered in a table context.
+
+-   `officer::read_docx()` starts a new, blank Word document object using the **officer** package (which flextable relies on for Word export) — `officer::` here again explicitly specifies the package without a separate `library()` call.
+
+-   `body_add_flextable(ft)` inserts your formatted table into that blank document.
+
+-   `body_end_section_landscape()` sets the page orientation to landscape for this section — useful for wider tables (like this one, with multiple state columns) that wouldn't fit well on a standard portrait page.
+
+-   `print(target = filepath)` writes the finished Word document out to disk, at the location and filename you specify in `filepath`.
+
+-   `browseURL(filepath)` automatically opens the newly created Word file once it's saved, so you can immediately check the result without manually navigating to find it.
+
+### Step 5: Run it
+
+``` r
+tab_1 <- tableone2flextable(table_1)    flextable2word(tab_1, "output/Table 1 Sample demographics.docx")  tab_1
+```
+
+**What this is doing:**
+
+-   `tableone2flextable(table_1)` runs the Step 3 function on the table you built in Step 2, producing the flextable version.
+
+-   `flextable2word(tab_1, "output/Table 1 Sample demographics.docx")` runs the Step 4 function, exporting the finished, formatted table straight to a Word file in your `output/` folder.
+
+-   Running `tab_1` on its own at the end displays the flextable directly in your R/RStudio viewer, letting you do a final visual check.

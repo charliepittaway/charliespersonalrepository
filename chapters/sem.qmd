@@ -1,0 +1,642 @@
+---
+title: "Structural Equation Modelling"
+format: html
+---
+
+## Covariance-based SEM
+
+The code below is taken from @PittawayFieldingLouis2024. This was a complicated model that included two observed IVs, three observed DVs, and a parallel mediation model comprising one observed and one latent variable. In order to calculate the specific indirect and total effects, you must specify names for each indirect effect and assign them an alphabetical code.
+
+*Note:* I am pasting this code here so that others can access it as needed, but I will return to tidy up this page and annotate the code more comprehensively when I have time. If you are trying to run a similar model and it's throwing errors, let me know and I can help troubleshoot.
+
+### Specify the model
+
+``` r
+library(lavaan)
+library(semTools)
+
+### M1 ###
+m1 <- '
+# LATENT VARIABLES
+ANX =~ anx_aff + anx_behav + anx_rumin + anx_pers
+
+# STRUCTURAL MODEL (Direct Effects)
+conv_private ~ e*ANX + a*ecas + l*future + o*immediate
+conv_public ~ g*ANX + c*ecas + m*future + p*immediate
+rad_public ~ h*ANX + d*ecas + n*future + q*immediate
+ecas ~ b*future + j*immediate
+ANX ~ f*future + k*immediate + i*ecas
+
+# COVARIANCES
+conv_private ~~ conv_public + rad_public
+conv_public ~~ rad_public
+
+# INDIRECT AND TOTAL EFFECTS
+
+## CFC -> PRIV
+#Indirect effect 1: cfc -> aeca -> priv
+#Indirect effect 2: cfc -> aeca -> anx -> priv
+#Indirect effect 3: cfc -> anx -> priv
+
+de_cfc_1 := l
+ie_cfc_1 := b*a
+ie_cfc_2 := b*i*e
+ie_cfc_3 := f*e
+TI_cfc_1 := ie_cfc_1 + ie_cfc_2 + ie_cfc_3
+TE_cfc_1 := l + TI_cfc_1
+
+
+## CFC -> PUB
+#Indirect effect 4: cfc -> aeca -> pub
+#Indirect effect 5: cfc -> aeca -> anx -> pub
+#Indirect effect 6: cfc -> anx -> pub
+
+de_cfc_2 := m
+ie_cfc_4 := b*c
+ie_cfc_5 := b*i*g
+ie_cfc_6 := f*g
+TI_cfc_2 := ie_cfc_4 + ie_cfc_5 + ie_cfc_6
+TE_cfc_2 := m + TI_cfc_2
+
+
+## CFC -> RAD
+#Indirect effect 7: cfc -> aeca -> rad
+#Indirect effect 8: cfc -> aeca -> anx -> rad
+#Indirect effect 9: cfc -> anx -> rad
+
+de_cfc_3 := n
+ie_cfc_7 := b*d
+ie_cfc_8 := b*i*h
+ie_cfc_9 := f*h
+TI_cfc_3 := ie_cfc_7 + ie_cfc_8 + ie_cfc_9
+TE_cfc_3 := n + TI_cfc_3
+
+
+
+## CIC -> PRIV
+#Indirect effect 1: cic -> aeca -> priv
+#Indirect effect 2: cic -> aeca -> anx -> priv
+#Indirect effect 3: cic -> anx -> priv
+
+de_cic_1 := o
+ie_cic_1 := j*a
+ie_cic_2 := j*i*e
+ie_cic_3 := k*e
+TI_cic_1 := ie_cic_1 + ie_cic_2 + ie_cic_3
+TE_cic_1 := o + TI_cic_1
+
+
+## CIC -> PUB
+#Indirect effect 4: cic -> aeca -> pub
+#Indirect effect 5: cic -> aeca -> anx -> pub
+#Indirect effect 6: cic -> anx -> pub
+
+de_cic_2 := p
+ie_cic_4 := j*c
+ie_cic_5 := j*i*g
+ie_cic_6 := k*g
+TI_cic_2 := ie_cic_4 + ie_cic_5 + ie_cic_6
+TE_cic_2 := p + TI_cic_2
+
+
+## CIC -> RAD
+#Indirect effect 7: cic -> aeca -> rad
+#Indirect effect 8: cic -> aeca -> anx -> rad
+#Indirect effect 9: cic -> anx -> rad
+
+de_cic_3 := q
+ie_cic_7 := j*d
+ie_cic_8 := j*i*h
+ie_cic_9 := k*h
+TI_cic_3 := ie_cic_7 + ie_cic_8 + ie_cic_9
+TE_cic_3 := q + TI_cic_3
+
+
+
+# AECA -> PRIV
+#Indirect effect 1: aeca -> anx -> priv
+
+de_aeca_1 := a
+ie_aeca_1 := i*e
+TE_aeca_1 := a + ie_aeca_1
+
+# AECA -> PUB
+#Indirect effect 2: aeca -> anx -> pub
+
+de_aeca_2 := c
+ie_aeca_2 := i*g
+TE_aeca_2 := c + ie_aeca_2
+
+# AECA -> RAD
+#Indirect effect 3: aeca -> anx -> rad
+
+de_aeca_3 := d
+ie_aeca_3 := i*h
+TE_aeca_3 := d + ie_aeca_3
+
+
+# CFC -> ANX
+#Indirect effect 1: cfc -> aeca -> anx
+
+de_anx_1 := f
+ie_anx_1 := b*i
+TE_anx_1 := f + ie_anx_1
+
+# CIC -> ANX
+#Indirect effect 2: cic -> aeca -> anx
+
+de_anx_2 := k
+ie_anx_2 := j*i
+TE_anx_2 := k + ie_anx_2
+'
+```
+
+### Run the model
+
+``` r
+# Run model
+fit_m1 <- sem(m1, dat_s1, missing = "fiml", se = "bootstrap")
+fitmeasures(fit_m1, fit.measures = c("chisq", "pvalue", "cfi", "tli", "rmsea", "srmr"))
+
+# Get standardized path coefficients
+summary(fit_m1, standardized = T) 
+
+# Check modification indices > 3.85
+modificationindices(fit_m1, sort. = T, minimum.value = 3.85) 
+```
+
+**What this is doing:**
+
+-   Full information maximum likelihood estimation is turned on, which means that partially missing cases are not dropped from the model and are instead used to improve the estimation of model effects.
+
+-   `se = "bootstrap"` turns on **bootstrapped standard errors** instead of the model's default (usually asymptotic, formula-based) standard errors. Bootstrapping works by repeatedly resampling your data (with replacement) many times, refitting the model on each resample, and using the spread of results across those resamples to estimate how much your parameter estimates would vary from sample to sample.
+
+    -   This is a common choice when your data doesn't meet the normality assumptions that standard SEM standard errors rely on. It makes fewer distributional assumptions, at the cost of being more computationally intensive.
+
+-   `fitmeasures(fit_m1, fit.measures = c(...))` extracts specific **model fit statistics**, rather than printing every fit measure lavaan can calculate (which is a long list by default).
+
+    -   `cfi` and `tli` (Comparative Fit Index and Tucker-Lewis Index). Both compare the model to a baseline "null" model, with values closer to 1 indicating better fit, and values above .95 conventionally considered good [@kline2015].
+
+    -   `rmsea` (Root Mean Square Error of Approximation). This is a measure of how well the model approximates the true population covariance structure, with values below .06 conventionally considered good fit [@kline2015].
+
+    -   `srmr` (Standardized Root Mean Square Residual). This is the average discrepancy between observed and model-implied correlations, with values below .08 conventionally considered acceptable [@hu1999].
+
+    -   Note that the chi-square statistic and corresponding p-value is very sensitive to sample size [@kline2015].
+
+-   `summary(fit_m1, standardized = TRUE)` prints the full model summary, including all path coefficients, variances, and covariances — `standardized = TRUE` adds an extra column showing **standardized** coefficients, which are the ones typically reported in a results write-up.
+
+-   `modificationindices(fit_m1, sort. = TRUE, minimum.value = 3.85)` checks for potential missing paths in your model — for every parameter *not* currently included, it estimates how much your model's chi-square would improve if that parameter were added.
+
+    -   `sort. = TRUE` orders the output from largest to smallest improvement, so the most impactful potential additions appear first.
+
+    -   `minimum.value = 3.85` filters out trivial suggestions, only showing modification indices above this threshold — 3.85 corresponds to roughly `p < .05` on a chi-square distribution with 1 degree of freedom, so this is filtering to changes that would represent a statistically meaningful improvement in fit if added.
+
+### Multigroup SEM
+
+To meaningfully compare across groups, measurement invariance must first be established @kline2015. A baseline model is established by estimating the parameters separately for each group, and configural invariance is met if the fit is acceptable and if the pattern of factor loadings is consistent. The baseline model is then compared to increasingly more constrained models. First, the factor loadings are constrained to be equal, and metric invariance is met if doing so does not worsen model fit compared to baseline. Then, intercepts are constrained in addition to the factor loadings, and scalar invariance is met if this more constrained model does not decrease model fit. For all measurement invariance models, the chi-square is reported; however, the practical fit indices and change in CFI and RMSEA (ΔCFI \< .01 and ΔRMSEA \< .015 for large samples; @chen2007) were used to assess changes to model fit.
+
+#### Build the multigroup model
+
+If assessing indirect effects, the model will have to be built slightly differently so that there are unique parameters for each indirect/total effect for each group. The following code is again taken from @PittawayFieldingLouis2024.
+
+``` r
+### M2 - Separate Defined Parameters ###
+m2 <- '
+# LATENT VARIABLES
+ANX =~ anx_aff + anx_behav + anx_rumin + anx_pers
+
+# STRUCTURAL MODEL (Direct Effects)
+conv_private ~ c(e1, e2)*ANX + c(a1, a2)*ecas + c(l1, l2)*future + c(o1, o2)*immediate
+conv_public ~ c(g1, g2)*ANX + c(c1, c2)*ecas + c(m1, m2)*future + c(p1, p2)*immediate
+rad_public ~ c(h1, h2)*ANX + c(d1, d2)*ecas + c(n1, n2)*future + c(q1, q2)*immediate
+ecas ~ c(b1, b2)*future + c(j1, j2)*immediate
+ANX ~ c(f1, f2)*future + c(k1, k2)*immediate + c(i1, i2)*ecas
+
+# COVARIANCES
+conv_private ~~ conv_public + rad_public
+conv_public ~~ rad_public
+
+# INDIRECT AND TOTAL EFFECTS
+
+# GROUP 1
+
+## CFC -> PRIV
+#Indirect effect 1: cfc -> aeca -> priv
+#Indirect effect 2: cfc -> aeca -> anx -> priv
+#Indirect effect 3: cfc -> anx -> priv
+
+de_cfc_1_1 := l1
+ie_cfc_1_1 := b1*a1
+ie_cfc_2_1 := b1*i1*e1
+ie_cfc_3_1 := f1*e1
+TI_cfc_1_1 := ie_cfc_1_1 + ie_cfc_2_1 + ie_cfc_3_1
+TE_cfc_1_1 := l1 + TI_cfc_1_1
+
+
+## CFC -> PUB
+#Indirect effect 4: cfc -> aeca -> pub
+#Indirect effect 5: cfc -> aeca -> anx -> pub
+#Indirect effect 6: cfc -> anx -> pub
+
+de_cfc_2_1 := m1
+ie_cfc_4_1 := b1*c1
+ie_cfc_5_1 := b1*i1*g1
+ie_cfc_6_1 := f1*g1
+TI_cfc_2_1 := ie_cfc_4_1 + ie_cfc_5_1 + ie_cfc_6_1
+TE_cfc_2_1 := m1 + TI_cfc_2_1
+
+
+## CFC -> RAD
+#Indirect effect 7: cfc -> aeca -> rad
+#Indirect effect 8: cfc -> aeca -> anx -> rad
+#Indirect effect 9: cfc -> anx -> rad
+
+de_cfc_3_1 := n1
+ie_cfc_7_1 := b1*d1
+ie_cfc_8_1 := b1*i1*h1
+ie_cfc_9_1 := f1*h1
+TI_cfc_3_1 := ie_cfc_7_1 + ie_cfc_8_1 + ie_cfc_9_1
+TE_cfc_3_1 := n1 + TI_cfc_3_1
+
+
+
+## CIC -> PRIV
+#Indirect effect 1: cic -> aeca -> priv
+#Indirect effect 2: cic -> aeca -> anx -> priv
+#Indirect effect 3: cic -> anx -> priv
+
+de_cic_1_1 := o1
+ie_cic_1_1 := j1*a1
+ie_cic_2_1 := j1*i1*e1
+ie_cic_3_1 := k1*e1
+TI_cic_1_1 := ie_cic_1_1 + ie_cic_2_1 + ie_cic_3_1
+TE_cic_1_1 := o1 + TI_cic_1_1
+
+
+## CIC -> PUB
+#Indirect effect 4: cic -> aeca -> pub
+#Indirect effect 5: cic -> aeca -> anx -> pub
+#Indirect effect 6: cic -> anx -> pub
+
+de_cic_2_1 := p1
+ie_cic_4_1 := j1*c1
+ie_cic_5_1 := j1*i1*g1
+ie_cic_6_1 := k1*g1
+TI_cic_2_1 := ie_cic_4_1 + ie_cic_5_1 + ie_cic_6_1
+TE_cic_2_1 := p1 + TI_cic_2_1
+
+
+## CIC -> RAD
+#Indirect effect 7: cic -> aeca -> rad
+#Indirect effect 8: cic -> aeca -> anx -> rad
+#Indirect effect 9: cic -> anx -> rad
+
+de_cic_3_1 := q1
+ie_cic_7_1 := j1*d1
+ie_cic_8_1 := j1*i1*h1
+ie_cic_9_1 := k1*h1
+TI_cic_3_1 := ie_cic_7_1 + ie_cic_8_1 + ie_cic_9_1
+TE_cic_3_1 := q1 + TI_cic_3_1
+
+
+
+# AECA -> PRIV
+#Indirect effect 1: aeca -> anx -> priv
+
+de_aeca_1_1 := a1
+ie_aeca_1_1 := i1*e1
+TE_aeca_1_1 := a1 + ie_aeca_1_1
+
+# AECA -> PUB
+#Indirect effect 2: aeca -> anx -> pub
+
+de_aeca_2_1 := c1
+ie_aeca_2_1 := i1*g1
+TE_aeca_2_1 := c1 + ie_aeca_2_1
+
+# AECA -> RAD
+#Indirect effect 3: aeca -> anx -> rad
+
+de_aeca_3_1 := d1
+ie_aeca_3_1 := i1*h1
+TE_aeca_3_1 := d1 + ie_aeca_3_1
+
+
+# CFC -> ANX
+#Indirect effect 1: cfc -> aeca -> anx
+
+de_anx_1_1 := f1
+ie_anx_1_1 := b1*i1
+TE_anx_1_1 := f1 + ie_anx_1_1
+
+# CIC -> ANX
+#Indirect effect 2: cic -> aeca -> anx
+
+de_anx_2_1 := k1
+ie_anx_2_1 := j1*i1
+TE_anx_2_1 := k1 + ie_anx_2_1
+
+
+
+
+# GROUP 2
+
+## CFC -> PRIV
+#Indirect effect 1: cfc -> aeca -> priv
+#Indirect effect 2: cfc -> aeca -> anx -> priv
+#Indirect effect 3: cfc -> anx -> priv
+
+de_cfc_1_2 := l2
+ie_cfc_1_2 := b2*a2
+ie_cfc_2_2 := b2*i2*e2
+ie_cfc_3_2 := f2*e2
+TI_cfc_1_2 := ie_cfc_1_2 + ie_cfc_2_2 + ie_cfc_3_2
+TE_cfc_1_2 := l2 + TI_cfc_1_2
+
+
+## CFC -> PUB
+#Indirect effect 4: cfc -> aeca -> pub
+#Indirect effect 5: cfc -> aeca -> anx -> pub
+#Indirect effect 6: cfc -> anx -> pub
+
+de_cfc_2_2 := m2
+ie_cfc_4_2 := b2*c2
+ie_cfc_5_2 := b2*i2*g2
+ie_cfc_6_2 := f2*g2
+TI_cfc_2_2 := ie_cfc_4_2 + ie_cfc_5_2 + ie_cfc_6_2
+TE_cfc_2_2 := m2 + TI_cfc_2_2
+
+
+## CFC -> RAD
+#Indirect effect 7: cfc -> aeca -> rad
+#Indirect effect 8: cfc -> aeca -> anx -> rad
+#Indirect effect 9: cfc -> anx -> rad
+
+de_cfc_3_2 := n2
+ie_cfc_7_2 := b2*d2
+ie_cfc_8_2 := b2*i2*h2
+ie_cfc_9_2 := f2*h2
+TI_cfc_3_2 := ie_cfc_7_2 + ie_cfc_8_2 + ie_cfc_9_2
+TE_cfc_3_2 := n2 + TI_cfc_3_2
+
+
+
+## CIC -> PRIV
+#Indirect effect 1: cic -> aeca -> priv
+#Indirect effect 2: cic -> aeca -> anx -> priv
+#Indirect effect 3: cic -> anx -> priv
+
+de_cic_1_2 := o2
+ie_cic_1_2 := j2*a2
+ie_cic_2_2 := j2*i2*e2
+ie_cic_3_2 := k2*e2
+TI_cic_1_2 := ie_cic_1_2 + ie_cic_2_2 + ie_cic_3_2
+TE_cic_1_2 := o2 + TI_cic_1_2
+
+
+## CIC -> PUB
+#Indirect effect 4: cic -> aeca -> pub
+#Indirect effect 5: cic -> aeca -> anx -> pub
+#Indirect effect 6: cic -> anx -> pub
+
+de_cic_2_2 := p2
+ie_cic_4_2 := j2*c2
+ie_cic_5_2 := j2*i2*g2
+ie_cic_6_2 := k2*g2
+TI_cic_2_2 := ie_cic_4_2 + ie_cic_5_2 + ie_cic_6_2
+TE_cic_2_2 := p2 + TI_cic_2_2
+
+
+## CIC -> RAD
+#Indirect effect 7: cic -> aeca -> rad
+#Indirect effect 8: cic -> aeca -> anx -> rad
+#Indirect effect 9: cic -> anx -> rad
+
+de_cic_3_2 := q2
+ie_cic_7_2 := j2*d2
+ie_cic_8_2 := j2*i2*h2
+ie_cic_9_2 := k2*h2
+TI_cic_3_2 := ie_cic_7_2 + ie_cic_8_2 + ie_cic_9_2
+TE_cic_3_2 := q2 + TI_cic_3_2
+
+
+
+# AECA -> PRIV
+#Indirect effect 1: aeca -> anx -> priv
+
+de_aeca_1_2 := a2
+ie_aeca_1_2 := i2*e2
+TE_aeca_1_2 := a2 + ie_aeca_1_2
+
+# AECA -> PUB
+#Indirect effect 2: aeca -> anx -> pub
+
+de_aeca_2_2 := c2
+ie_aeca_2_2 := i2*g2
+TE_aeca_2_2 := c2 + ie_aeca_2_2
+
+# AECA -> RAD
+#Indirect effect 3: aeca -> anx -> rad
+
+de_aeca_3_2 := d2
+ie_aeca_3_2 := i2*h2
+TE_aeca_3_2 := d2 + ie_aeca_3_2
+
+
+# CFC -> ANX
+#Indirect effect 1: cfc -> aeca -> anx
+
+de_anx_1_2 := f2
+ie_anx_1_2 := b2*i2
+TE_anx_1_2 := f2 + ie_anx_1_2
+
+# CIC -> ANX
+#Indirect effect 2: cic -> aeca -> anx
+
+de_anx_2_2 := k2
+ie_anx_2_2 := j2*i2
+TE_anx_2_2 := k2 + ie_anx_2_2
+'
+```
+
+#### Measurement invariance
+
+First, establish the baseline model by estimating the parameters separately for each group.
+
+``` r
+# Establish baseline model by estimating parameters separately for each group
+baseline_1 <- sem(m2, dat_s1, group = "counterbalancing", missing = "fiml") 
+
+fitmeasures(baseline_1, fit.measures = c("chisq", "pvalue", "cfi", "tli", "rmsea", "srmr"))
+
+summary(baseline_1)
+```
+
+-   Configural invariance is met if the model fits and the pattern of factor loadings is the same for each group.
+
+Next, establish metric invariance by constraining the factor loadings to be equal.
+
+``` r
+# Establish metric invariance by constraining the factor loadings to be equal
+metric_1 <- sem(m2, dat_s1, group = "counterbalancing", group.equal = "loadings", missing = "fiml", se = "bootstrap")
+
+fitmeasures(metric_1, fit.measures = c("chisq", "pvalue", "cfi", "tli", "rmsea", "srmr"))
+```
+
+Next, establish scalar invariance by constraining factor loadings + observed means to be equal.
+
+``` r
+# Establish scalar invariance by constraining factor loadings + observed means to be equal
+scalar_1 <- sem(m2, dat_s1, group = "counterbalancing", group.equal = c("loadings", "intercepts"), se = "bootstrap", missing = "fiml")
+
+fitmeasures(scalar_1, fit.measures = c("chisq", "pvalue", "cfi", "tli", "rmsea", "srmr")) 
+
+# Compare models
+summary(compareFit(baseline_1, metric_1, scalar_1))
+```
+
+-   Metric invariance is established if the change in CFI and RMSEA are below the recommended thresholds.
+
+-   Scalar invariance is established if the change in CFI and RMSEA are below the recommended thresholds.
+
+If scalar invariance is established, then the model is appropriately measurement-invariant across groups which means you can meaningfully compare the pathways and effect sizes. At this point, you can get the standardised coefficients for the scalar model. If you were creating a new scale, however, and you would feasibly expect that the groups SHOULD be the same, you would have to establish one final level of invariance (the strictest level ever), which I cannot currently remember. If it becomes relevant to me, I'll update this page.
+
+::: callout-note
+## Note
+
+If running complicated models with bootstrapping, expect the models to take a long time to estimate. This is normal!
+:::
+
+#### Get multigroup model coefficients
+
+``` r
+# Get standardised coefficients
+summary(scalar_1, standardized = T)
+```
+
+## Partial-least-squares SEM
+
+Regular SEM, as outlined above, is *covariance-based SEM* (CB-SEM). CB-SEM is primarily used to confirm or reject theories and their underlying hypotheses. It works by determining how closely a proposed theoretical model can reproduce the covariance matrix for an observed sample dataset.
+
+*Partial least squares SEM* (PLS-SEM) is a second method of conducting SEM. It was introduced more as a 'causal-predictive' approach to SEM, and focuses on explaining the variance in the model's DVs. It's also better at coping with smaller samples and complex models. Another good thing about PLS-SEM is that it is non-parametric, meaning that non-normally distributed data is not a problem.
+
+It uses a different approach to analysis that is explained in detail in the following sources:
+
+-   Hair, J. F., Ringle, C. M., & Sarstedt, M. (2011). PLS-SEM: Indeed a silver bullet. *Journal of Marketing Theory and Practice*, *19*(2), 139–152. <https://doi.org/10.2753/MTP1069-6679190202>
+
+-   Hair, J. F., Hult, G. T. M., Ringle, C. M., Sarstedt, M., Danks, N. P., & Ray, S. (2021). *Partial Least Squares Structural Equation Modeling (PLS-SEM) Using R: A Workbook*. Springer International Publishing. <https://doi.org/10.1007/978-3-030-80519-7>
+
+-   Hair, J. F., Hult, G. T. M., Ringle, C. M., Sarstedt, M., Danks, N. P., & Ray, S. (2021). *Partial Least Squares Structural Equation Modeling (PLS-SEM) Using R: A Workbook*. Springer International Publishing. <https://doi.org/10.1007/978-3-030-80519-7>
+
+The one downside is that there are no established goodness-of-fit indicators, so its use for theory testing and confirmation is pretty limited. But, if you have already run confirmatory analyses showing support for your model (e.g., in an earlier paper), then PLS-SEM can overcome sample size/distributional issues.
+
+**Packages required**:
+
+-   cSEM (<https://cran.r-project.org/web/packages/cSEM/vignettes/cSEM.html>)
+
+-   lavaan (<https://lavaan.ugent.be/tutorial/>)
+
+The cSEM package uses lavaan syntax to run the PLS-SEM.
+
+### Build the model using lavaan
+
+The following code is taken from @Pittaway_Louis_Fielding2025. This tests practically the same model as in the example above, except with additional longer indirect pathways to the three DVs.
+
+``` r
+### M1 ###
+m1_csem <- '
+ANX <~ anx_aff_w1 + anx_behav_w1 + anx_rumin_w1 + anx_pers_w1
+CFC <~ cfc_w1
+CIC <~ cic_w1
+PRIV <~ conv_priv_w1
+PUB <~ conv_pub_w1
+RAD <~ rad_pub_w1
+ECAS <~ ecas_w1
+aPRIV <~ act_conv_priv_w2
+aPUB <~ act_conv_pub_w2
+aRAD <~ act_rad_pub_w2
+
+# STRUCTURAL MODEL 
+PRIV ~ ANX + ECAS + CFC + CIC
+PUB ~ ANX + ECAS + CFC + CIC
+RAD ~ ANX + ECAS + CFC + CIC
+ECAS ~ CFC + CIC
+ANX ~ CFC + CIC + ECAS
+aPRIV ~ PRIV
+aPUB ~ PUB
+aRAD ~ RAD
+'
+```
+
+**Note:** Unlike regular SEM, the cSEM package cannot handle the separate indirect effects.
+
+### Implement PLS-SEM
+
+``` r
+# Basic implementation
+results_csem <- csem(
+  .data = dat, 
+  .model = m1_csem, 
+  .approach_weights = "PLS-PM",
+  .approach_paths = "OLS"
+  )
+
+bootstrap_results <- resamplecSEMResults(
+  .object = results_csem,
+  .resample_method = "bootstrap",
+  .R = 1000,
+  .seed = 123456
+)
+
+# Assess measurement model
+results_csem
+
+# View results
+summarize(bootstrap_results)
+results_csem$Estimates$R2
+verify(results_csem)
+
+assess(bootstrap_results)
+predict(bootstrap_results, .approach_predict = "direct")
+```
+
+### Evaluate + interpret the model
+
+First, assess the variance inflation factors (VIFs) to ensure they are all below the recommended threshold of 3, which indicates that collinearity that would otherwise bias the regression results is not a problem in the present data [@hair2019].
+
+Evaluation of the structural model is done in the following ways:
+
+1.  Significance of the hypothesised paths
+
+2.  The size of the effects
+
+3.  The explanatory power of the model (R2): *R2* values greater than .75, .50, and .25 denoted substantial, moderate, and weak power, respectively (Hair et al., 2011).
+
+4.  The predictive relevance of the model (Q2): *Q2* values of greater than 0, .25, and .50 indicated small, medium, and large predictive relevance, while negative values indicated no predictive relevance (Hair et al., 2011).
+
+### Manually calculate indirect effects
+
+The total indirect effects and total effects are generated in the initial output, but you have to write a function to generate the specific indirect pathways if you have multiple. This code was adapted from <https://github.com/FloSchuberth/cSEM/issues/457>.
+
+A separate function is created for every unique indirect pathway in the model. This is an example for one unique indirect pathway.
+
+``` r
+# Define function to calculate the specific indirect effect CFC -> PRIV -> aPRIV
+indirectCFC_PRIV_aPRIV <- function(.object) {
+  .object$Estimates$Path_estimates['PRIV', 'CFC'] * .object$Estimates$Path_estimates['aPRIV', 'PRIV']
+}
+
+# Run cSEM with the user-defined function
+result_indirectCFC_PRIV_aPRIV <- csem(
+  .data = dat,
+  .model = m1_csem,
+  .resample_method = "bootstrap",
+  .R = 100,
+  .seed = 147150973,
+  .user_funs = indirectCFC_PRIV_aPRIV
+)
+
+# Get the coefficient of the indirect effect
+result_indirectCFC_PRIV_aPRIV$Estimates$Estimates_resample$Estimates1
+infer(result_indirectCFC_PRIV_aPRIV, .quantity = 'CI_percentile')
+```

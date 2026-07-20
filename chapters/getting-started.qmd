@@ -1,0 +1,67 @@
+---
+title: "Getting Started"
+format: html
+---
+
+So, you've finished collecting data in Qualtrics. Now what?
+
+## Setting up your R project
+
+Before you import anything, it's worth spending five minutes setting up a proper R Project. This keeps your files organised and makes it much easier to upload a clean, self-contained folder to OSF later, since everything the project needs lives in one place with relative (not absolute) file paths.[^getting-started-1]
+
+[^getting-started-1]: An *absolute path* is the full file location starting from the root of your computer's file system, e.g. `"C:/Users/yourname/Documents/study1_analysis/data/my_data.sav"` on Windows. This works fine on your machine, but breaks the moment the folder is moved, renamed, or opened by someone else. A *relative path*, like `"data/my_data.sav"`, is defined relative to wherever the `.Rproj` file lives, so it keeps working no matter who opens the folder or where it's saved.
+
+1.  In RStudio: **File → New Project → New Directory → New Project**.
+2.  Give it a sensible name that represents the study or package of studies (e.g. `Longitudinal analysis of temporal orientation`) and choose where to save it.
+3.  Inside that project folder, create a few subfolders to keep things tidy. My standard folders are: **data** (where the raw and cleaned data files live), **scripts** (where data cleaning and analysis code lives), and **outputs** (figures, tables, and exported results).
+
+::: callout-important
+## Important
+
+Save your raw Qualtrics export into `data/` as soon as you download it, and don't edit it directly — treat it as read-only. Any cleaning should happen in a script, not in the file itself, so you (or anyone else) can always trace exactly what was done to the data and reproduce it.
+:::
+
+## Installing R packages
+
+R has a completely bonkers amount of versatility. There is a custom built package for most things. To install a package, select **Tools** from the toolbar along the top of the window, then "Install packages" and then search for the package you are looking for. You can also install using code, as below. Once you have installed a package, you must load it before using it.
+
+``` r
+install.packages("package_name") #Load package
+library(package_name) # Install package
+```
+
+## Importing data into R
+
+You're probably familiar with downloading your data from Qualtrics in `.sav` format to import into SPSS, or `.csv` format to open in Excel. Both of these file types ([and many more](https://rfaqs.com/r-language-basics/files-in-r/)) can be used in R.
+
+My recommendation is to save as an `.sav` file for the utility of having the item wording retained, which you lose in `.csv` format. To do this, you'll need to install the **haven** package [@haven2025].
+
+```{r}
+#| eval: false
+install.packages("haven")
+library(haven)
+
+# Import your data into R, using the relative file path
+dat <- read_sav("data/my_qualtrics_export.sav")
+```
+
+If you don't care about retaining the item stem and `.csv` is sufficient, you'll need the **readr** package instead [@readr2026].
+
+```{r}
+#| eval: false
+install.packages("readr")
+library(readr)
+
+# Import your data into R, using the relative file path
+dat <- read_csv("data/my_qualtrics_export.csv")
+```
+
+::: callout-warning
+## Common error
+
+If `read_sav()` throws an error about the file not being found, double check you're working inside your `.Rproj` (look for the project name in the top-right corner of RStudio) and that the file path matches your actual folder structure, e.g. `"data/filename.sav"` not just `"filename.sav"`.
+:::
+
+Now that you have your data saved and your R project structure set up, you are ready to move on to [data cleaning](data-cleaning.qmd)...
+
+## References
