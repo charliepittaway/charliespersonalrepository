@@ -1,11 +1,17 @@
-# Preface {.unnumbered}
+# Overview {.unnumbered}
 
-This is an ongoing collection of functions/workflows/code snippets to run analyses in R, with a psychological science twist.
+This is an ongoing collection of functions/workflows/code snippets to run analyses in R, as per psychological science conventions. The initial goal of this project was to provide a workflow for data cleaning for psychology researchers, as I was unable to find something similar when I was a PhD student. I'm now expanding it to be a living repository of all of the R code I collect over the years.
 
-I learned how to do many of these things from other people's generously developed guides, which I have cited and linked throughout. Some particularly helpful guides are [linked here](guides.qmd).
+I learned how to do many of these things from other people's generously developed guides, which I have cited and linked throughout.
 
-The initial goal of this project was to provide a [workflow for data cleaning](data-cleaning-overview.qmd) for psychology researchers, as I was unable to find something similar when I was a PhD student. It has expanded to be a living repository of all of the R code I have collected over the years, with working syntax taken directly from my own projects.
+## Do you have code to share?
 
-If you find new packages or better processes, please let me know:
+📧 [charlie.pittaway\@flinders.edu.au](mailto:charlie.pittaway@flinders.edu.au)
 
--   📧 [charlie.pittaway\@flinders.edu.au](mailto:charlie.pittaway@flinders.edu.au)
+⭐ If you find new packages, or better processes, please let me know!
+
+⭐ If you have R code, and you're happy to share it, I will add it to the page.
+
+-   If the code relates to **published** data, it would be handy if you sent through the analysis code along with the data (as you would upload to OSF) so that I can run executable code and show examples of the output alongside a link to the publication.
+
+-   If the data are **not yet published**, the analysis code is sufficient, and I can update the page when the data are published. Thank you for contributing!
