@@ -24,7 +24,7 @@
     "href": "index.html#roadmap",
     "title": "Charlie’s R for Psychological Science Repository",
     "section": "Roadmap 🚧",
-    "text": "Roadmap 🚧\nWork-in-progress pages are:\n\nHierarchical regression\nMediation, moderated mediation\nAppending data sets\nFactor analyses: PCA, EFA, CFA, and which to use for what.\nRegression discontinuity designs\nBasic sentiment analysis\nPapers that cite the same papers package\nBayesian moderated mediation (thanks to Emily Haines for providing the code)\nStructural topic modelling (thanks to Emily Haines for providing the code)",
+    "text": "Roadmap 🚧\nWork-in-progress pages are:\n\nHierarchical regression\nMediation, moderated mediation\nFactor analyses: PCA, EFA, CFA, and which to use for what.\nRegression discontinuity designs\nBasic sentiment analysis\nPapers that cite the same papers package\nBayesian moderated mediation (thanks to Emily Haines for providing the code)\nStructural topic modelling (thanks to Emily Haines for providing the code)",
     "crumbs": [
       "Overview"
     ]
