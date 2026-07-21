@@ -16,6 +16,9 @@ book:
         - chapters/renaming-variables.qmd
         - chapters/recoding.qmd
         - chapters/row-id-numbers.qmd
+        - chapters/standardising.qmd
+        - chapters/deleting-rows.qmd
+        - chapters/appending-data.qmd
         - chapters/saving-files.qmd
     - part: Data Cleaning
       chapters: 

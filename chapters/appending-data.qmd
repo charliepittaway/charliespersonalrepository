@@ -1,0 +1,76 @@
+---
+title: "Appending Data"
+format: html
+---
+
+## Combining data frames
+
+For whatever reason, you might have ended up with multiple separate data frames that need to be combined.
+
+Using the **dplyr** package from the tidyverse [@tidyverse2019], append using the function `bindrows()`.
+
+```         
+data_master <- bind_rows(dataset_1, dataset_2, dataset_3) 
+```
+
+This code will:
+
+-   Keep all variables from all datasets
+
+-   Fill in NA for variables that don't exist in a particular version
+
+-   Stack the rows on top of each other
+
+You can also add some specifications that might be helpful; for example, you can order by date and flag second+ occurrences of a particular participant ID.
+
+``` r
+data_full_t1 <- bind_rows(data_t1_v1, data_t1_v2, data_t1_v3, data_t1_v4) %>% 
+  dplyr::select(-Q_TotalDuration) %>% mutate(ui_duplicate = duplicated(ui))
+```
+
+**Why might this be helpful?**
+
+-   During a soft launch of a survey, we found that the survey was far too long and needed to create a shorter version. However, creating a shorter version meant substantially changing the structure of the survey, so we needed to create a whole new Qualtrics questionnaire rather than amending the active one.
+
+-   This resulted in separate data frames that we needed to combine, but we also wanted to make sure that we only included the first instance of every participant ID, as launching a second survey meant that Qualtrics' in-built ballot stuffing prevention measures wouldn't apply and participants could legitimately take our study twice.
+
+-   In order to keep only the first case of every participant ID (called `ui` in our data), we needed to order the data by date and then flag any subsequent instances, which we did so with the variable `ui_duplicate`
+
+## Combining longitudinal data
+
+First, and crucially, you must make sure there are **no duplicates** in the separate waves.
+
+Second, make sure you have created a variable that indicates which waves participants have completed (e.g., `w1_sample == 1 or 0`, and so on). Third, add a timepoint suffix to the variables in each wave. Fourth, combine the data frames, linking by participant ID. You can do these three steps at the same time.
+
+``` r
+data_wide <- data_t1 %>%
+  mutate(w1_sample = 1) %>%
+  rename_with(~ paste0(.x, "_t1"), -ui) %>%
+  full_join(
+    data_t2 %>%
+      mutate(w2_sample = 1) %>%
+      rename_with(~ paste0(.x, "_t2"), -ui),
+    by = "ui"
+  ) %>%
+  full_join(
+    data_t3 %>%
+      mutate(w3_sample = 1) %>%
+      rename_with(~ paste0(.x, "_t3"), -ui),
+    by = "ui"
+  ) %>%
+  mutate(
+    across(starts_with("w"), ~ replace_na(.x, 0))
+  )
+```
+
+**What this is doing:**
+
+-   Creates wave-completion indicators (`w1_sample`, `w2_sample`, `w3_sample`), where a value of 1 indicates that a participant completed that wave.
+
+<!-- -->
+
+-   Adds timepoint suffixes to all variables (e.g., `stress_t1`, `stress_t2`, `stress_t3`) while leaving the participant ID (`ui`) unchanged.
+
+<!-- -->
+
+-   Merges the datasets by participant ID using `full_join()`, retaining all participants regardless of whether they completed every wave.

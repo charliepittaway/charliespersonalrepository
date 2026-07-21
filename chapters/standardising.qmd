@@ -1,0 +1,50 @@
+---
+title: "Mean-Centring and Standardising"
+format: html
+---
+
+## Mean-Centring
+
+Mean centering is the process of subtracting the mean of a variable from each of its values, effectively shifting the data so that the new mean is zero. Variables involved in interaction terms are often mean-centred before the interaction is calculated. This helps reduce the correlation between the interaction term and its component variables (i.e., reduces multicollinearity), which can improve the stability and interpretability of the regression coefficients [@iacobucci2015]. Mean-centring does not change the distribution of a variable (i.e., the standard deviation remains the same), which means it does not change the overall fit of the model or the significance of the interaction.
+
+This is particularly useful when interpreting interactions [@goldstein2023]. In a regression model, the main effect of a predictor is interpreted as its effect when the interacting variable equals 0. Because a score of 0 is often impossible or not meaningful on psychological scales, these main effects can be difficult to interpret. After mean-centring, a value of 0 corresponds to the average score on the variable. As a result, the main effects can be interpreted as the effects of a predictor when the interacting variable is at its average level, and the intercept represents the predicted outcome for a person with average scores on all centred predictors.
+
+There is no point to mean-centring a variable when:
+
+-   There is no interaction terms containing that variable
+
+-   The variable has a meaningful 0 value
+
+### How to mean-centre variables in R
+
+You can mean-centre variables using a base R function:
+
+``` r
+data$variable_mc <- scale(data$variable, center = TRUE, scale = FALSE)
+```
+
+Or, if you wanted to mean-centre multiple variables at once:
+
+``` r
+data <- data %>%
+  mutate(variable_1_mc = scale(variable_1, center = TRUE, scale = FALSE),
+         variable_2_mc = scale(variable_2, center = TRUE, scale = FALSE),
+         variable_3_mc = scale(variable_3, center = TRUE, scale = FALSE))
+```
+
+## Standardising
+
+Standardising a variable also centres a variable (sets the mean to 0), but it additionally sets the standard deviation to 1. This means that coefficients relating to standardised variables are now interpreted differently; a one-unit difference in the standardised variable equals a one-standard deviation difference.
+
+Variables are standardised if there are many variables included in a model that are measured on different scales – standardisation allows the magnitudes of coefficients to be compared.
+
+### How to standardise variables in R
+
+The same base R function is used to standardise as to mean centre.
+
+``` r
+data$variable_z <- scale(variable, center = FALSE, scale = TRUE) # One variable
+data <- data %>%
+  mutate(variable_1_z = scale(variable_1, center = FALSE, scale = TRUE),
+         variable_2_z = scale(variable_2, center = FALSE, scale = TRUE))
+```

@@ -16,23 +16,15 @@ I learned how to do many of these things from other people's generously develope
 
 -   If the data are **not yet published**, the analysis code is sufficient, and I can update the page when the data are published. Thank you for contributing!
 
-## Roadmap
+## Roadmap 🚧
 
 Work-in-progress pages are:
 
--   Data quality assessments
-
 -   Hierarchical regression
 
--   Simple mediation
+-   Mediation, moderated mediation
 
--   Moderated mediation
-
--   Mean centreing and standardising
-
--   How to remove a specific row from a dataframe
-
--   Appending datasets
+-   Appending data sets
 
 -   Factor analyses: PCA, EFA, CFA, and which to use for what.
 
@@ -40,7 +32,7 @@ Work-in-progress pages are:
 
 -   Basic sentiment analysis
 
--   Papers that cite the same papers
+-   Papers that cite the same papers package
 
 -   Bayesian moderated mediation (thanks to Emily Haines for providing the code)
 

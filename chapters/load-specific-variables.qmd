@@ -59,5 +59,3 @@ data <- read_csv("data/my_data.csv") %>%
 data <- data %>%
   dplyr::select(-var1)
 ```
-
-## References

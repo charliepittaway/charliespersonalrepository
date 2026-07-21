@@ -1,0 +1,30 @@
+---
+title: "Deleting Rows and Columns"
+format: html
+---
+
+## Deleting rows
+
+To remove a row in R, use the **dplyr** package from the tidyverse [@tidyverse2019] with the `slice()` function. Each row in R is assigned a number, so just subtract the row number that you want to delete.
+
+For example, if you have imported a .csv file into R and you didn't remove the first row of data (which is often whack when downloading from Qualtrics), you would use the following code to remove that row:
+
+``` r
+library(tidyverse) #Load dplyr package
+data <- data %>%
+slice(-1) #Minus the row number you're trying to remove
+```
+
+## Deleting columns
+
+To remove columns (i.e., variables) from a data frame, use the `select()` function with a minus sign before each variable to remove.
+
+``` r
+data <- data %>%   dplyr::select(-var1)
+```
+
+::: callout-tip
+## Error Message
+
+I can never run `select()` without also specifying that I'm pulling this function from the **dplyr** package. I'm not sure why this is, but now my general practice is to always specify `dplyr::select()`.
+:::
