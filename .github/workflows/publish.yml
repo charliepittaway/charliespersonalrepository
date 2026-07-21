@@ -45,6 +45,7 @@ jobs:
             any::QuantPsyc
             any::apaTables
             any::corrplot
+            any::rempsyc
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2

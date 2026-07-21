@@ -7,6 +7,8 @@ format: html
 
 The code below is taken from @PittawayFieldingLouis2024. This was a complicated model that included two observed IVs, three observed DVs, and a parallel mediation model comprising one observed and one latent variable. In order to calculate the specific indirect and total effects, you must specify names for each indirect effect and assign them an alphabetical code.
 
+![The theoretical model being tested in Pittaway et al. (2024).](/images/Pittaway et al 2024 model.jpg)
+
 *Note:* I am pasting this code here so that others can access it as needed, but I will return to tidy up this page and annotate the code more comprehensively when I have time. If you are trying to run a similar model and it's throwing errors, let me know and I can help troubleshoot.
 
 ### Specify the model
@@ -541,6 +543,8 @@ The cSEM package uses lavaan syntax to run the PLS-SEM.
 ### Build the model using lavaan
 
 The following code is taken from @Pittaway_Louis_Fielding2025. This tests practically the same model as in the example above, except with additional longer indirect pathways to the three DVs.
+
+![The theoretical model being tested in Pittaway et al. (2025.](/images/Pittaway et al 2025 model.jpg)
 
 ``` r
 ### M1 ###
