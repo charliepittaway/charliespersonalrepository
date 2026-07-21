@@ -3,7 +3,7 @@ project:
   execute-dir: project
 
 book:
-  title: "Charlie's R for Psychological Science Repository"
+  title: "Charlie's Personal R for Psychology Repository"
   author: "Charlie Pittaway"
   date: last-modified
   date-format: "D MMMM YYYY"
