@@ -1,0 +1,12 @@
+---
+title: "Data Quality"
+format: html
+---
+
+There are lots of different ways to assess data quality, and different strategies for what to do with this information.
+
+## Measures of response quality
+
+-   Speeding: Participants complete the study too quickly, indicating they may not have provided meaningful answers [@zhang2014].
+
+-   Straightlining: Participants have selected the same answer repeatedly across a series of questions, indicating they may not have provided meaningful answers. This measure tends to be associated with speeding behaviour [@zhang2014].

@@ -15,3 +15,33 @@ I learned how to do many of these things from other people's generously develope
 -   If the code relates to **published** data, it would be handy if you sent through the analysis code along with the data (as you would upload to OSF) so that I can run executable code and show examples of the output alongside a link to the publication.
 
 -   If the data are **not yet published**, the analysis code is sufficient, and I can update the page when the data are published. Thank you for contributing!
+
+## Roadmap
+
+Work-in-progress pages are:
+
+-   Data quality assessments
+
+-   Hierarchical regression
+
+-   Simple mediation
+
+-   Moderated mediation
+
+-   Mean centreing and standardising
+
+-   How to remove a specific row from a dataframe
+
+-   Appending datasets
+
+-   Factor analyses: PCA, EFA, CFA, and which to use for what.
+
+-   Regression discontinuity designs
+
+-   Basic sentiment analysis
+
+-   Papers that cite the same papers
+
+-   Bayesian moderated mediation (thanks to Emily Haines for providing the code)
+
+-   Structural topic modelling (thanks to Emily Haines for providing the code)

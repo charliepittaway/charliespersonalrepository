@@ -20,6 +20,7 @@ book:
     - part: Data Cleaning
       chapters: 
         - chapters/data-cleaning-overview.qmd
+        - chapters/data-quality.qmd
     - part: Reproducible Tables
       chapters:
         - chapters/reproducible-tables.qmd
