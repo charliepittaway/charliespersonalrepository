@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; Data Cleaning: Step-by-Step – Charlie's R for Psychological Science Repository</title>
+<title>10&nbsp; Data Cleaning: Step-by-Step – Charlie's R for Psychological Science Repository</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -140,7 +140,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/data-cleaning-overview.html">Data Cleaning</a></li><li class="breadcrumb-item"><a href="../chapters/data-cleaning-overview.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data Cleaning: Step-by-Step</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/data-cleaning-overview.html">Data Cleaning</a></li><li class="breadcrumb-item"><a href="../chapters/data-cleaning-overview.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Cleaning: Step-by-Step</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -212,8 +212,26 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../chapters/standardising.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Mean-Centring and Standardising</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/deleting-rows.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Deleting Rows and Columns</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/appending-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Appending Data</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../chapters/saving-files.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Saving Data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Saving Data</span></span></a>
   </div>
 </li>
       </ul>
@@ -230,13 +248,13 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/data-cleaning-overview.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data Cleaning: Step-by-Step</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Cleaning: Step-by-Step</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/data-quality.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Data Quality</span></span></a>
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Quality</span></span></a>
   </div>
 </li>
       </ul>
@@ -253,19 +271,19 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/reproducible-tables.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Overview</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Overview</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/sample-descriptives.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sample Descriptives</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Sample Descriptives</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/correlation-table.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Table of Correlations</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Table of Correlations</span></span></a>
   </div>
 </li>
       </ul>
@@ -282,31 +300,31 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/t-tests.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">T-Tests</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">T-Tests</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/anova.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Analysis of Variance</span></span></a>
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Analysis of Variance</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/sem.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Structural Equation Modelling</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Structural Equation Modelling</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/meta-analysis-basic.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Meta-Analysis</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Meta-Analysis</span></span></a>
   </div>
 </li>
       </ul>
@@ -323,7 +341,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/themes-colours.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Themes and Plot Colouring</span></span></a>
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Themes and Plot Colouring</span></span></a>
   </div>
 </li>
       </ul>
@@ -340,7 +358,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/bayesian-meta-analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Bayesian Meta Analysis</span></span></a>
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Bayesian Meta Analysis</span></span></a>
   </div>
 </li>
       </ul>
@@ -357,13 +375,13 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/package-index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Index of R Packages</span></span></a>
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Index of R Packages</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/guides.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Official R Guides</span></span></a>
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Official R Guides</span></span></a>
   </div>
 </li>
       </ul>
@@ -395,43 +413,43 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#step-1-participant-exclusions" id="toc-step-1-participant-exclusions" class="nav-link active" data-scroll-target="#step-1-participant-exclusions"><span class="header-section-number">7.1</span> Step 1: Participant exclusions</a></li>
-  <li><a href="#step-2-drop-rename-and-check-variable-types" id="toc-step-2-drop-rename-and-check-variable-types" class="nav-link" data-scroll-target="#step-2-drop-rename-and-check-variable-types"><span class="header-section-number">7.2</span> Step 2: Drop, rename, and check variable types</a></li>
-  <li><a href="#step-3-basic-item-level-descriptives" id="toc-step-3-basic-item-level-descriptives" class="nav-link" data-scroll-target="#step-3-basic-item-level-descriptives"><span class="header-section-number">7.3</span> Step 3: Basic item-level descriptives</a></li>
-  <li><a href="#step-4-reliability-and-scale-creation" id="toc-step-4-reliability-and-scale-creation" class="nav-link" data-scroll-target="#step-4-reliability-and-scale-creation"><span class="header-section-number">7.4</span> Step 4: Reliability and scale creation</a>
+  <li><a href="#step-1-participant-exclusions" id="toc-step-1-participant-exclusions" class="nav-link active" data-scroll-target="#step-1-participant-exclusions"><span class="header-section-number">10.1</span> Step 1: Participant exclusions</a></li>
+  <li><a href="#step-2-drop-rename-and-check-variable-types" id="toc-step-2-drop-rename-and-check-variable-types" class="nav-link" data-scroll-target="#step-2-drop-rename-and-check-variable-types"><span class="header-section-number">10.2</span> Step 2: Drop, rename, and check variable types</a></li>
+  <li><a href="#step-3-basic-item-level-descriptives" id="toc-step-3-basic-item-level-descriptives" class="nav-link" data-scroll-target="#step-3-basic-item-level-descriptives"><span class="header-section-number">10.3</span> Step 3: Basic item-level descriptives</a></li>
+  <li><a href="#step-4-reliability-and-scale-creation" id="toc-step-4-reliability-and-scale-creation" class="nav-link" data-scroll-target="#step-4-reliability-and-scale-creation"><span class="header-section-number">10.4</span> Step 4: Reliability and scale creation</a>
   <ul class="collapse">
-  <li><a href="#cronbachs-alpha" id="toc-cronbachs-alpha" class="nav-link" data-scroll-target="#cronbachs-alpha"><span class="header-section-number">7.4.1</span> Cronbach’s alpha</a></li>
-  <li><a href="#mcdonalds-omega" id="toc-mcdonalds-omega" class="nav-link" data-scroll-target="#mcdonalds-omega"><span class="header-section-number">7.4.2</span> McDonald’s omega</a></li>
-  <li><a href="#spearman-brown-coefficient" id="toc-spearman-brown-coefficient" class="nav-link" data-scroll-target="#spearman-brown-coefficient"><span class="header-section-number">7.4.3</span> Spearman Brown Coefficient</a></li>
-  <li><a href="#scale-creation" id="toc-scale-creation" class="nav-link" data-scroll-target="#scale-creation"><span class="header-section-number">7.4.4</span> Scale creation</a></li>
-  <li><a href="#alternatively-reliability-and-scale-creation-in-one-step" id="toc-alternatively-reliability-and-scale-creation-in-one-step" class="nav-link" data-scroll-target="#alternatively-reliability-and-scale-creation-in-one-step"><span class="header-section-number">7.4.5</span> Alternatively… reliability and scale creation in one step</a></li>
+  <li><a href="#cronbachs-alpha" id="toc-cronbachs-alpha" class="nav-link" data-scroll-target="#cronbachs-alpha"><span class="header-section-number">10.4.1</span> Cronbach’s alpha</a></li>
+  <li><a href="#mcdonalds-omega" id="toc-mcdonalds-omega" class="nav-link" data-scroll-target="#mcdonalds-omega"><span class="header-section-number">10.4.2</span> McDonald’s omega</a></li>
+  <li><a href="#spearman-brown-coefficient" id="toc-spearman-brown-coefficient" class="nav-link" data-scroll-target="#spearman-brown-coefficient"><span class="header-section-number">10.4.3</span> Spearman Brown Coefficient</a></li>
+  <li><a href="#scale-creation" id="toc-scale-creation" class="nav-link" data-scroll-target="#scale-creation"><span class="header-section-number">10.4.4</span> Scale creation</a></li>
+  <li><a href="#alternatively-reliability-and-scale-creation-in-one-step" id="toc-alternatively-reliability-and-scale-creation-in-one-step" class="nav-link" data-scroll-target="#alternatively-reliability-and-scale-creation-in-one-step"><span class="header-section-number">10.4.5</span> Alternatively… reliability and scale creation in one step</a></li>
   </ul></li>
-  <li><a href="#step-6-univariate-outliers" id="toc-step-6-univariate-outliers" class="nav-link" data-scroll-target="#step-6-univariate-outliers"><span class="header-section-number">7.5</span> Step 6: Univariate Outliers</a>
+  <li><a href="#step-6-univariate-outliers" id="toc-step-6-univariate-outliers" class="nav-link" data-scroll-target="#step-6-univariate-outliers"><span class="header-section-number">10.5</span> Step 6: Univariate Outliers</a>
   <ul class="collapse">
-  <li><a href="#identify-scales-with-outliers" id="toc-identify-scales-with-outliers" class="nav-link" data-scroll-target="#identify-scales-with-outliers"><span class="header-section-number">7.5.1</span> Identify scales with outliers</a></li>
-  <li><a href="#winsorise-outliers" id="toc-winsorise-outliers" class="nav-link" data-scroll-target="#winsorise-outliers"><span class="header-section-number">7.5.2</span> Winsorise outliers</a></li>
+  <li><a href="#identify-scales-with-outliers" id="toc-identify-scales-with-outliers" class="nav-link" data-scroll-target="#identify-scales-with-outliers"><span class="header-section-number">10.5.1</span> Identify scales with outliers</a></li>
+  <li><a href="#winsorise-outliers" id="toc-winsorise-outliers" class="nav-link" data-scroll-target="#winsorise-outliers"><span class="header-section-number">10.5.2</span> Winsorise outliers</a></li>
   </ul></li>
-  <li><a href="#step-7-normality" id="toc-step-7-normality" class="nav-link" data-scroll-target="#step-7-normality"><span class="header-section-number">7.6</span> Step 7: Normality</a>
+  <li><a href="#step-7-normality" id="toc-step-7-normality" class="nav-link" data-scroll-target="#step-7-normality"><span class="header-section-number">10.6</span> Step 7: Normality</a>
   <ul class="collapse">
-  <li><a href="#skew-and-kurtosis" id="toc-skew-and-kurtosis" class="nav-link" data-scroll-target="#skew-and-kurtosis"><span class="header-section-number">7.6.1</span> Skew and kurtosis</a></li>
-  <li><a href="#formal-test-of-normality" id="toc-formal-test-of-normality" class="nav-link" data-scroll-target="#formal-test-of-normality"><span class="header-section-number">7.6.2</span> Formal test of normality</a></li>
-  <li><a href="#visual-checks" id="toc-visual-checks" class="nav-link" data-scroll-target="#visual-checks"><span class="header-section-number">7.6.3</span> Visual checks</a></li>
-  <li><a href="#so-what" id="toc-so-what" class="nav-link" data-scroll-target="#so-what"><span class="header-section-number">7.6.4</span> So what…?</a></li>
-  <li><a href="#transforming-skewed-data" id="toc-transforming-skewed-data" class="nav-link" data-scroll-target="#transforming-skewed-data"><span class="header-section-number">7.6.5</span> Transforming skewed data</a></li>
-  <li><a href="#should-you-transform" id="toc-should-you-transform" class="nav-link" data-scroll-target="#should-you-transform"><span class="header-section-number">7.6.6</span> Should you transform?</a></li>
+  <li><a href="#skew-and-kurtosis" id="toc-skew-and-kurtosis" class="nav-link" data-scroll-target="#skew-and-kurtosis"><span class="header-section-number">10.6.1</span> Skew and kurtosis</a></li>
+  <li><a href="#formal-test-of-normality" id="toc-formal-test-of-normality" class="nav-link" data-scroll-target="#formal-test-of-normality"><span class="header-section-number">10.6.2</span> Formal test of normality</a></li>
+  <li><a href="#visual-checks" id="toc-visual-checks" class="nav-link" data-scroll-target="#visual-checks"><span class="header-section-number">10.6.3</span> Visual checks</a></li>
+  <li><a href="#so-what" id="toc-so-what" class="nav-link" data-scroll-target="#so-what"><span class="header-section-number">10.6.4</span> So what…?</a></li>
+  <li><a href="#transforming-skewed-data" id="toc-transforming-skewed-data" class="nav-link" data-scroll-target="#transforming-skewed-data"><span class="header-section-number">10.6.5</span> Transforming skewed data</a></li>
+  <li><a href="#should-you-transform" id="toc-should-you-transform" class="nav-link" data-scroll-target="#should-you-transform"><span class="header-section-number">10.6.6</span> Should you transform?</a></li>
   </ul></li>
-  <li><a href="#step-8-multivariate-outlier-analysis" id="toc-step-8-multivariate-outlier-analysis" class="nav-link" data-scroll-target="#step-8-multivariate-outlier-analysis"><span class="header-section-number">7.7</span> Step 8: Multivariate outlier analysis</a></li>
-  <li><a href="#step-9-missing-value-analysis" id="toc-step-9-missing-value-analysis" class="nav-link" data-scroll-target="#step-9-missing-value-analysis"><span class="header-section-number">7.8</span> Step 9: Missing value analysis</a></li>
-  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">7.9</span> Next Steps…</a></li>
+  <li><a href="#step-8-multivariate-outlier-analysis" id="toc-step-8-multivariate-outlier-analysis" class="nav-link" data-scroll-target="#step-8-multivariate-outlier-analysis"><span class="header-section-number">10.7</span> Step 8: Multivariate outlier analysis</a></li>
+  <li><a href="#step-9-missing-value-analysis" id="toc-step-9-missing-value-analysis" class="nav-link" data-scroll-target="#step-9-missing-value-analysis"><span class="header-section-number">10.8</span> Step 9: Missing value analysis</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">10.9</span> Next Steps…</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/data-cleaning-overview.html">Data Cleaning</a></li><li class="breadcrumb-item"><a href="../chapters/data-cleaning-overview.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data Cleaning: Step-by-Step</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/data-cleaning-overview.html">Data Cleaning</a></li><li class="breadcrumb-item"><a href="../chapters/data-cleaning-overview.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Cleaning: Step-by-Step</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data Cleaning: Step-by-Step</span></h1>
+<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Cleaning: Step-by-Step</span></h1>
 </div>
 
 
@@ -449,8 +467,8 @@ div.csl-indent {
 
 
 <p>Researchers have different processes for preparing their data for analysis, often which appears to be by convention. On this page, I will set out my process and reasoning—take what works, leave what doesn’t. Notably, I conduct my reliability analysis and scale creation during my data cleaning process, as this makes the most sense for me.</p>
-<section id="step-1-participant-exclusions" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="step-1-participant-exclusions"><span class="header-section-number">7.1</span> Step 1: Participant exclusions</h2>
+<section id="step-1-participant-exclusions" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="step-1-participant-exclusions"><span class="header-section-number">10.1</span> Step 1: Participant exclusions</h2>
 <p>The first step I like to do is exclude participants based on my pre-registered criteria. One example is filtering out likely bot responses using Qualtrics’ built-in reCAPTCHA score.</p>
 <p><strong>Q_RecaptchaScore values &lt; 0.5:</strong> this is one of Qualtrics’ built-in measures. Scores range from 0 to 1; scores less than 0.5 are likely a bot, whereas scores greater than or equal to 0.5 are likely to be human.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -470,20 +488,20 @@ div.csl-indent {
 <li>In this example, I have a character variable called <code>participant_type</code> in which I have already flagged participants I wanted to exclude. The operators <code>!=</code> indicate “does not equal,” so we are <em>not</em> retaining participants coded “exclude.”</li>
 </ul>
 </section>
-<section id="step-2-drop-rename-and-check-variable-types" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="step-2-drop-rename-and-check-variable-types"><span class="header-section-number">7.2</span> Step 2: Drop, rename, and check variable types</h2>
+<section id="step-2-drop-rename-and-check-variable-types" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="step-2-drop-rename-and-check-variable-types"><span class="header-section-number">10.2</span> Step 2: Drop, rename, and check variable types</h2>
 <p>Next, I like to clean up my datafile and <a href="../chapters/load-specific-variables.html">drop any unnecessary variables</a>, <a href="../chapters/renaming-variables.html">rename them</a>, and <a href="check-variable-types.qmd">ensure that no variables which should be numeric are being read as character variables</a>.</p>
 </section>
-<section id="step-3-basic-item-level-descriptives" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="step-3-basic-item-level-descriptives"><span class="header-section-number">7.3</span> Step 3: Basic item-level descriptives</h2>
+<section id="step-3-basic-item-level-descriptives" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="step-3-basic-item-level-descriptives"><span class="header-section-number">10.3</span> Step 3: Basic item-level descriptives</h2>
 <p>I then like to make sure there are no glaringly obvious issues with the data; for example, I haven’t accidentally mapped two scale response options to the same number. In that case, I would go back into Qualtrics and recode that response and then redownload my data.</p>
 <p>I use the <code>describe()</code> function from the <strong>psych</strong> package <span class="citation" data-cites="psych2026">(<a href="../references.html#ref-psych2026" role="doc-biblioref">William Revelle, 2026</a>)</span> to quickly investigate: do the min/max values make sense? Are special missing data codes present (e.g., -99)? I will <a href="../chapters/recoding.html">recode if necessary</a>.</p>
 </section>
-<section id="step-4-reliability-and-scale-creation" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="step-4-reliability-and-scale-creation"><span class="header-section-number">7.4</span> Step 4: Reliability and scale creation</h2>
+<section id="step-4-reliability-and-scale-creation" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="step-4-reliability-and-scale-creation"><span class="header-section-number">10.4</span> Step 4: Reliability and scale creation</h2>
 <p>Scale by scale, I conduct reliability analysis and create my scales. I use functions from the <strong>psych</strong> package <span class="citation" data-cites="psych2026">(<a href="../references.html#ref-psych2026" role="doc-biblioref">William Revelle, 2026</a>)</span> for scales with 3 or more items, and spearman_brown() from the <strong>splithalfr</strong> package <span class="citation" data-cites="splithalfr2025">(<a href="../references.html#ref-splithalfr2025" role="doc-biblioref">Pronk, 2025</a>)</span> for scales with only 2 items.</p>
-<section id="cronbachs-alpha" class="level3" data-number="7.4.1">
-<h3 data-number="7.4.1" class="anchored" data-anchor-id="cronbachs-alpha"><span class="header-section-number">7.4.1</span> Cronbach’s alpha</h3>
+<section id="cronbachs-alpha" class="level3" data-number="10.4.1">
+<h3 data-number="10.4.1" class="anchored" data-anchor-id="cronbachs-alpha"><span class="header-section-number">10.4.1</span> Cronbach’s alpha</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">alpha</span>(data[, <span class="fu">c</span>(<span class="st">"var1"</span>, <span class="st">"var2"</span>, <span class="st">"var3"</span>)], <span class="at">na.rm =</span> T)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>What this is doing:</strong></p>
@@ -506,8 +524,8 @@ div.csl-indent {
 </div>
 </div>
 </section>
-<section id="mcdonalds-omega" class="level3" data-number="7.4.2">
-<h3 data-number="7.4.2" class="anchored" data-anchor-id="mcdonalds-omega"><span class="header-section-number">7.4.2</span> McDonald’s omega</h3>
+<section id="mcdonalds-omega" class="level3" data-number="10.4.2">
+<h3 data-number="10.4.2" class="anchored" data-anchor-id="mcdonalds-omega"><span class="header-section-number">10.4.2</span> McDonald’s omega</h3>
 <p>Another measure of internal consistency is <em>McDonald’s omega</em>. Omega estimates the reliability of a scale using a factor-analytic model rather than a simple summed score (as with alpha).</p>
 <p>Cronbach’s alpha assumes that all the items measure the underlying construct equally well, but in practice this assumption is rarely met—some items just measure a construct better than others! When this assumption is violated, Cronbach’s alpha tends to underestimate the scale reliability.</p>
 <p>McDonald’s omega, on the other hand, run a factor analysis on the items first, then calculates reliability based on actual factor loadings so that items which load more strongly onto the factor are weighted more heavily than weaker items.</p>
@@ -523,8 +541,8 @@ div.csl-indent {
 </ul>
 <p>To my understanding, omega looks like it will be the way forward for new scales/psychometric development, or at least that it will be reported alongside alpha. However, it’s not really useful for short scales, in which case alpha (if 3 items) or the Spearman Brown coefficient (for 2 item scales) are more appropriate.</p>
 </section>
-<section id="spearman-brown-coefficient" class="level3" data-number="7.4.3">
-<h3 data-number="7.4.3" class="anchored" data-anchor-id="spearman-brown-coefficient"><span class="header-section-number">7.4.3</span> Spearman Brown Coefficient</h3>
+<section id="spearman-brown-coefficient" class="level3" data-number="10.4.3">
+<h3 data-number="10.4.3" class="anchored" data-anchor-id="spearman-brown-coefficient"><span class="header-section-number">10.4.3</span> Spearman Brown Coefficient</h3>
 <p><span class="citation" data-cites="eisinga2013">Eisinga et al. (<a href="../references.html#ref-eisinga2013" role="doc-biblioref">2013</a>)</span> compared Pearson r, Cronbach’s alpha, and the Spearman-Brown coefficient for assessing the reliability of two-item scales. They concluded that Pearson r is not appropriate (in fact, were quite sassy about it: they said “one may rather call that the reliability of a one-item test,” p.&nbsp;641), and nor is Cronbach’s alpha. Instead, they recommended using the Spearman-Brown coefficient, which is generally higher than alpha and less biased on average.</p>
 <p>You can calculate the Spearman-Brown coefficient using the <strong>splithalfr</strong> package <span class="citation" data-cites="splithalfr2025">(<a href="../references.html#ref-splithalfr2025" role="doc-biblioref">Pronk, 2025</a>)</span>.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(splithalfr)</span>
@@ -535,8 +553,8 @@ div.csl-indent {
 <li><code>use = "pairwise.complete.obs"</code> is necessary if you have any missing data; without this, if missing data is present, the result will be NA.</li>
 </ul>
 </section>
-<section id="scale-creation" class="level3" data-number="7.4.4">
-<h3 data-number="7.4.4" class="anchored" data-anchor-id="scale-creation"><span class="header-section-number">7.4.4</span> Scale creation</h3>
+<section id="scale-creation" class="level3" data-number="10.4.4">
+<h3 data-number="10.4.4" class="anchored" data-anchor-id="scale-creation"><span class="header-section-number">10.4.4</span> Scale creation</h3>
 <p>If reliability is sufficient, I create my scales using the <strong>tidyverse</strong> package <span class="citation" data-cites="tidyverse2019">(<a href="../references.html#ref-tidyverse2019" role="doc-biblioref">Wickham et al., 2019</a>)</span>.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -553,8 +571,8 @@ div.csl-indent {
 <li><p>The second line, <code>scale = ifelse(is.nan(scale), NA, scale)</code>, is a cleanup step: <code>rowMeans()</code> with <code>na.rm = TRUE</code> has a quirk where a row with <strong>no</strong> valid responses at all (all three items missing) doesn’t return <code>NA</code> like you’d expect — it returns <code>NaN</code> (“Not a Number”, R’s result for an undefined calculation like averaging zero values). This line checks for that specific case with <code>is.nan()</code> and converts it to a proper <code>NA</code>, so downstream functions (which generally know how to handle <code>NA</code>, but may not handle <code>NaN</code> the same way) treat it correctly as missing.</p></li>
 </ul>
 </section>
-<section id="alternatively-reliability-and-scale-creation-in-one-step" class="level3" data-number="7.4.5">
-<h3 data-number="7.4.5" class="anchored" data-anchor-id="alternatively-reliability-and-scale-creation-in-one-step"><span class="header-section-number">7.4.5</span> Alternatively… reliability and scale creation in one step</h3>
+<section id="alternatively-reliability-and-scale-creation-in-one-step" class="level3" data-number="10.4.5">
+<h3 data-number="10.4.5" class="anchored" data-anchor-id="alternatively-reliability-and-scale-creation-in-one-step"><span class="header-section-number">10.4.5</span> Alternatively… reliability and scale creation in one step</h3>
 <p>I have recently discovered that the <strong>psych</strong> package has a function called scoreItems() which allows you to calculate reliability and create multiple scales in one step. First, you define the variables that make up each scale and prefix any reverse-scored items with a minus sign. Next, you score all scales at once. Finally, you can print the reliability and descriptives for every scale at the same time.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -596,8 +614,8 @@ div.csl-indent {
 </div>
 </section>
 </section>
-<section id="step-6-univariate-outliers" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="step-6-univariate-outliers"><span class="header-section-number">7.5</span> Step 6: Univariate Outliers</h2>
+<section id="step-6-univariate-outliers" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="step-6-univariate-outliers"><span class="header-section-number">10.5</span> Step 6: Univariate Outliers</h2>
 <p>Some researchers like to transform univariate outliers, and some do not. Both options introduce different forms of bias (transforming that distort the underlying distribution and relationships between variables, while leaving outliers untouched can influence means, correlations, and model estimates). If you are the kind of researcher who would like to transform your univariate outliers, this is the approach that worked for me in the past.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -612,8 +630,8 @@ div.csl-indent {
 <p>Sometimes you might want to check for univariate outliers on individual items (e.g., for factor analysis, where the assumption is that outliers are not present); but generally, I would conduct this analysis on the scales rather than the items.</p>
 </div>
 </div>
-<section id="identify-scales-with-outliers" class="level3" data-number="7.5.1">
-<h3 data-number="7.5.1" class="anchored" data-anchor-id="identify-scales-with-outliers"><span class="header-section-number">7.5.1</span> Identify scales with outliers</h3>
+<section id="identify-scales-with-outliers" class="level3" data-number="10.5.1">
+<h3 data-number="10.5.1" class="anchored" data-anchor-id="identify-scales-with-outliers"><span class="header-section-number">10.5.1</span> Identify scales with outliers</h3>
 <p>First, I developed a function to identify scales on which outliers were present, with outliers defined as those more than 3 standard deviations below or above the mean.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>detect_outliers <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  outlier_flags <span class="sc">&lt;</span><span class="fu">sapply</span>(df, <span class="cf">function</span>(x) {</span>
@@ -648,8 +666,8 @@ div.csl-indent {
 </ul>
 <p>The result is a small table listing every variable you checked and a <code>TRUE</code>/<code>FALSE</code> for whether it contains at least one outlier by this definition.</p>
 </section>
-<section id="winsorise-outliers" class="level3" data-number="7.5.2">
-<h3 data-number="7.5.2" class="anchored" data-anchor-id="winsorise-outliers"><span class="header-section-number">7.5.2</span> Winsorise outliers</h3>
+<section id="winsorise-outliers" class="level3" data-number="10.5.2">
+<h3 data-number="10.5.2" class="anchored" data-anchor-id="winsorise-outliers"><span class="header-section-number">10.5.2</span> Winsorise outliers</h3>
 <p>If outliers are present, one technique is to Winsorise the items so that responses that are greater than three standard deviations above or below the mean are replaced with <strong>exactly</strong> 3 standard deviations above or below the mean. Again, I created a function to do this across multiple variables at once. The code below creates a new variable identifiable by a suffix ‘win’.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>winsorise_outliers <span class="ot">&lt;-</span> <span class="cf">function</span>(data, var_name, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) {</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get mean</span></span>
@@ -684,8 +702,8 @@ div.csl-indent {
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
-<section id="step-7-normality" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="step-7-normality"><span class="header-section-number">7.6</span> Step 7: Normality</h2>
+<section id="step-7-normality" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="step-7-normality"><span class="header-section-number">10.6</span> Step 7: Normality</h2>
 <p>Next, check for normality. If you have Winsorised scales with outliers, make sure to check the normality of the <em>Winsorised</em> scales rather than the raw scales.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -700,8 +718,8 @@ div.csl-indent {
 <p>Outliers inflate skewness and kurtosis statistics. Most normality checks are sensitive to extreme values. A handful of outliers can make an otherwise normal-ish distribution look meaningfully skewed. If you check normality first, you might conclude a variable is non-normal and needs transforming, when really it’s a few outliers doing the damage.</p>
 </div>
 </div>
-<section id="skew-and-kurtosis" class="level3" data-number="7.6.1">
-<h3 data-number="7.6.1" class="anchored" data-anchor-id="skew-and-kurtosis"><span class="header-section-number">7.6.1</span> Skew and kurtosis</h3>
+<section id="skew-and-kurtosis" class="level3" data-number="10.6.1">
+<h3 data-number="10.6.1" class="anchored" data-anchor-id="skew-and-kurtosis"><span class="header-section-number">10.6.1</span> Skew and kurtosis</h3>
 <p><strong>Skew</strong> measures asymmetry — whether one tail of the distribution is longer than the other.</p>
 <ul>
 <li><p>A skew of <strong>0</strong> indicates a perfectly symmetric distribution.</p></li>
@@ -723,8 +741,8 @@ div.csl-indent {
 <p><strong>Interpreting the output:</strong></p>
 <p>There’s no single universally agreed cutoff, but a commonly used rule of thumb is that skew or kurtosis values beyond ±2 suggest a meaningful departure from normality.</p>
 </section>
-<section id="formal-test-of-normality" class="level3" data-number="7.6.2">
-<h3 data-number="7.6.2" class="anchored" data-anchor-id="formal-test-of-normality"><span class="header-section-number">7.6.2</span> Formal test of normality</h3>
+<section id="formal-test-of-normality" class="level3" data-number="10.6.2">
+<h3 data-number="10.6.2" class="anchored" data-anchor-id="formal-test-of-normality"><span class="header-section-number">10.6.2</span> Formal test of normality</h3>
 <p>The Shapiro-Wilk test gives you a formal statistical test of whether one variable’s distribution differs significantly from normal.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(dat<span class="sc">$</span>var1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The output gives you a test statistic (<code>W</code>) and a p-value. If significant, you reject the null hypothesis (i.e.&nbsp;your data significantly deviates from normal).</p>
@@ -742,10 +760,10 @@ div.csl-indent {
 </div>
 </div>
 </section>
-<section id="visual-checks" class="level3" data-number="7.6.3">
-<h3 data-number="7.6.3" class="anchored" data-anchor-id="visual-checks"><span class="header-section-number">7.6.3</span> Visual checks</h3>
-<section id="histogramdensity-plot" class="level4" data-number="7.6.3.1">
-<h4 data-number="7.6.3.1" class="anchored" data-anchor-id="histogramdensity-plot"><span class="header-section-number">7.6.3.1</span> Histogram/Density plot</h4>
+<section id="visual-checks" class="level3" data-number="10.6.3">
+<h3 data-number="10.6.3" class="anchored" data-anchor-id="visual-checks"><span class="header-section-number">10.6.3</span> Visual checks</h3>
+<section id="histogramdensity-plot" class="level4" data-number="10.6.3.1">
+<h4 data-number="10.6.3.1" class="anchored" data-anchor-id="histogramdensity-plot"><span class="header-section-number">10.6.3.1</span> Histogram/Density plot</h4>
 <p>A histogram gives you an intuitive sense of a variable’s shape, and is often more informative than a single test statistic, since you can actually <em>see</em> where any skew or unusual clustering is coming from.</p>
 <p>You can do this really quickly using base R:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(dat<span class="sc">$</span>var)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -788,8 +806,8 @@ div.csl-indent {
 <li><code>scale_x_continuous(breaks = seq(1, 7, 1))</code> controls where the tick marks appear on the x-axis. <code>seq(1, 7, 1)</code> generates the sequence 1, 2, 3, 4, 5, 6, 7 — matching a 1–7 response scale, so every scale point gets its own labeled tick mark rather than R choosing arbitrary breaks. If your scale was scored differently, you’d adjust the first two numbers to match your actual scale’s minimum and maximum (e.g.&nbsp;<code>seq(1, 5, 1)</code> for a 1–5 scale).</li>
 </ul>
 </section>
-<section id="q-q-plot" class="level4" data-number="7.6.3.2">
-<h4 data-number="7.6.3.2" class="anchored" data-anchor-id="q-q-plot"><span class="header-section-number">7.6.3.2</span> Q-Q plot</h4>
+<section id="q-q-plot" class="level4" data-number="10.6.3.2">
+<h4 data-number="10.6.3.2" class="anchored" data-anchor-id="q-q-plot"><span class="header-section-number">10.6.3.2</span> Q-Q plot</h4>
 <p>A Q-Q (“quantile-quantile”) plot compares the data’s distribution directly against a theoretical normal distribution — points falling along the diagonal reference line indicate normality; systematic deviation from that line indicates non-normality, and the <em>shape</em> of the deviation tells you what kind.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">sample =</span> var1)) <span class="sc">+</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq</span>() <span class="sc">+</span></span>
@@ -809,17 +827,17 @@ div.csl-indent {
 </ul>
 </section>
 </section>
-<section id="so-what" class="level3" data-number="7.6.4">
-<h3 data-number="7.6.4" class="anchored" data-anchor-id="so-what"><span class="header-section-number">7.6.4</span> So what…?</h3>
+<section id="so-what" class="level3" data-number="10.6.4">
+<h3 data-number="10.6.4" class="anchored" data-anchor-id="so-what"><span class="header-section-number">10.6.4</span> So what…?</h3>
 <p>None of these three checks — skew/kurtosis, Shapiro-Wilk, and visual plots — is sufficient on its own. A sensible workflow is: use skew/kurtosis as a fast first-pass screen across many variables at once (as in the previous section), then for any variable that looks borderline or concerning, follow up with a Shapiro-Wilk test <strong>and</strong> a histogram/Q-Q plot together, since the visual check will often explain <em>why</em> the formal test came back significant (e.g.&nbsp;“ah, it’s these three outlying values,” rather than a genuinely non-normal underlying shape).</p>
 </section>
-<section id="transforming-skewed-data" class="level3" data-number="7.6.5">
-<h3 data-number="7.6.5" class="anchored" data-anchor-id="transforming-skewed-data"><span class="header-section-number">7.6.5</span> Transforming skewed data</h3>
+<section id="transforming-skewed-data" class="level3" data-number="10.6.5">
+<h3 data-number="10.6.5" class="anchored" data-anchor-id="transforming-skewed-data"><span class="header-section-number">10.6.5</span> Transforming skewed data</h3>
 <p>If you have determined that your data <em>is</em> skewed and you wish to transform it, here is some helpful code.</p>
 <p>Which transformation to use depends on two things: <strong>how severe</strong> the skew is, and <strong>which direction</strong> it goes (positive or negative). For more detail on choosing between these approaches, see <a href="https://rcompanion.org/handbook/I_12.html">rcompanion’s handbook on transforming skewed data</a> and <a href="https://www.datanovia.com/en/lessons/transform-data-to-normal-distribution-in-r/">Datanovia’s guide to normal distribution transformations</a>.</p>
 <p>As a general starting point: try a <strong>log transformation</strong> first if your DV increases more rapidly as your IV increases. Try a <strong>square transformation</strong> instead if your DV decreases more rapidly as your IV increases. The three options below (square root, log, inverse) are ordered from mildest to strongest — start with the mildest transformation that resolves the skew, rather than jumping straight to the strongest one available.</p>
-<section id="square-root-transformation-for-moderately-skewed-data" class="level4" data-number="7.6.5.1">
-<h4 data-number="7.6.5.1" class="anchored" data-anchor-id="square-root-transformation-for-moderately-skewed-data"><span class="header-section-number">7.6.5.1</span> Square root transformation for moderately skewed data</h4>
+<section id="square-root-transformation-for-moderately-skewed-data" class="level4" data-number="10.6.5.1">
+<h4 data-number="10.6.5.1" class="anchored" data-anchor-id="square-root-transformation-for-moderately-skewed-data"><span class="header-section-number">10.6.5.1</span> Square root transformation for moderately skewed data</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For positive skew</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable_sqrt =</span> <span class="fu">sqrt</span>(variable))</span>
@@ -833,8 +851,8 @@ div.csl-indent {
 <li><p>For <strong>negative skew</strong>, the transformation is first <strong>reflected</strong> before taking the square root: <code>max(variable + 1) - variable</code> flips the distribution’s direction (turning a left-skewed tail into a right-skewed one), and adding <code>1</code> to the max ensures no value in the result becomes exactly 0, since a square root transformation can’t meaningfully handle 0 or negative values sitting right at the boundary. <code>sqrt(...)</code> is then applied to that reflected version.</p></li>
 </ul>
 </section>
-<section id="log-transformation-for-highly-skewed-data" class="level4" data-number="7.6.5.2">
-<h4 data-number="7.6.5.2" class="anchored" data-anchor-id="log-transformation-for-highly-skewed-data"><span class="header-section-number">7.6.5.2</span> Log transformation for highly skewed data</h4>
+<section id="log-transformation-for-highly-skewed-data" class="level4" data-number="10.6.5.2">
+<h4 data-number="10.6.5.2" class="anchored" data-anchor-id="log-transformation-for-highly-skewed-data"><span class="header-section-number">10.6.5.2</span> Log transformation for highly skewed data</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For positive skew</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable_log =</span> <span class="fu">log10</span>(variable))</span>
@@ -861,8 +879,8 @@ div.csl-indent {
 </div>
 </div>
 </section>
-<section id="inverse-transformation-for-severely-skewed-data" class="level4" data-number="7.6.5.3">
-<h4 data-number="7.6.5.3" class="anchored" data-anchor-id="inverse-transformation-for-severely-skewed-data"><span class="header-section-number">7.6.5.3</span> Inverse transformation for severely skewed data</h4>
+<section id="inverse-transformation-for-severely-skewed-data" class="level4" data-number="10.6.5.3">
+<h4 data-number="10.6.5.3" class="anchored" data-anchor-id="inverse-transformation-for-severely-skewed-data"><span class="header-section-number">10.6.5.3</span> Inverse transformation for severely skewed data</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For positive skew</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">%&gt;%</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">variable_inverse =</span> <span class="dv">1</span> <span class="sc">/</span> variable)</span>
@@ -889,13 +907,13 @@ div.csl-indent {
 </div>
 </div>
 </section>
-<section id="after-transforming" class="level4" data-number="7.6.5.4">
-<h4 data-number="7.6.5.4" class="anchored" data-anchor-id="after-transforming"><span class="header-section-number">7.6.5.4</span> After transforming</h4>
+<section id="after-transforming" class="level4" data-number="10.6.5.4">
+<h4 data-number="10.6.5.4" class="anchored" data-anchor-id="after-transforming"><span class="header-section-number">10.6.5.4</span> After transforming</h4>
 <p>Whichever transformation you use, re-run the skew/kurtosis check, Shapiro-Wilk test, and histogram/Q-Q plot on the new transformed variable to confirm whether the transformation actually resolved the normality issue.</p>
 </section>
 </section>
-<section id="should-you-transform" class="level3" data-number="7.6.6">
-<h3 data-number="7.6.6" class="anchored" data-anchor-id="should-you-transform"><span class="header-section-number">7.6.6</span> Should you transform?</h3>
+<section id="should-you-transform" class="level3" data-number="10.6.6">
+<h3 data-number="10.6.6" class="anchored" data-anchor-id="should-you-transform"><span class="header-section-number">10.6.6</span> Should you transform?</h3>
 <p>Some data is genuinely, meaningfully non-normal by nature. Social change and collective action data is a common example in this space (e.g., measures like willingness to protest, donation behavior, or petition-signing frequently show floor effects with a long right tail of highly engaged responders). This is often a real, substantive feature of the underlying phenomenon, not a data quality issue <span class="citation" data-cites="ferr2025">(<a href="../references.html#ref-ferr2025" role="doc-biblioref">Ferr, 2025</a>)</span>.</p>
 <p>Rather than defaulting straight to transformation, a few approaches are designed to handle non-normal data directly:</p>
 <ul>
@@ -911,8 +929,8 @@ div.csl-indent {
 </ul>
 </section>
 </section>
-<section id="step-8-multivariate-outlier-analysis" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="step-8-multivariate-outlier-analysis"><span class="header-section-number">7.7</span> Step 8: Multivariate outlier analysis</h2>
+<section id="step-8-multivariate-outlier-analysis" class="level2" data-number="10.7">
+<h2 data-number="10.7" class="anchored" data-anchor-id="step-8-multivariate-outlier-analysis"><span class="header-section-number">10.7</span> Step 8: Multivariate outlier analysis</h2>
 <p>This identifies participants who are unusual in their&nbsp;<em>pattern</em>&nbsp;of responses and flags them. This coded uses all base r functions. Run this on the raw scores, not the Winsorised/transformed scores.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multivariate outlier detection</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>mahal_d <span class="ot">&lt;-</span> <span class="fu">mahalanobis</span>(</span>
@@ -941,8 +959,8 @@ div.csl-indent {
 </ul>
 <p>Typically, you would run your analysis on the full sample and then run sensitivity analyses excluding people with <code>mv_outlier == 1</code> to see if the pattern of results holds without unusual participants.</p>
 </section>
-<section id="step-9-missing-value-analysis" class="level2" data-number="7.8">
-<h2 data-number="7.8" class="anchored" data-anchor-id="step-9-missing-value-analysis"><span class="header-section-number">7.8</span> Step 9: Missing value analysis</h2>
+<section id="step-9-missing-value-analysis" class="level2" data-number="10.8">
+<h2 data-number="10.8" class="anchored" data-anchor-id="step-9-missing-value-analysis"><span class="header-section-number">10.8</span> Step 9: Missing value analysis</h2>
 <p>Next, run a missing value analysis to determine whether your data are missing completely at random. This uses the package <strong>naniar</strong>, and has a hold bunch of useful functions that are documented <a href="https://naniar.njtierney.com/">here</a>.</p>
 <p>For the most part, I only check the proportion of missing data on each variable, and use the Little’s MCAR test, unless I need to do some exploring.</p>
 <p>First, run this code to determine the proportion of each variable which is missing data. Variables missing more than 30% are usually cause for concern.</p>
@@ -961,8 +979,8 @@ div.csl-indent {
 <li>Use Little’s (1988) test statistic to assess if data is missing completely at random (MCAR). The null hypothesis in this test is that the data is MCAR, and the test statistic is a chi-squared value.</li>
 </ul>
 </section>
-<section id="next-steps" class="level2" data-number="7.9">
-<h2 data-number="7.9" class="anchored" data-anchor-id="next-steps"><span class="header-section-number">7.9</span> Next Steps…</h2>
+<section id="next-steps" class="level2" data-number="10.9">
+<h2 data-number="10.9" class="anchored" data-anchor-id="next-steps"><span class="header-section-number">10.9</span> Next Steps…</h2>
 <p>Once you have cleaned your data, created your scales, you might want to generate <a href="../chapters/sample-descriptives.html">sample demographics</a> and <a href="../chapters/correlation-table.html">correlations</a> tables.</p>
 
 
@@ -1398,12 +1416,12 @@ Yazici, B., &amp; Yolacan, S. (2007). A comparison of various tests of normality
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../chapters/saving-files.html" class="pagination-link" aria-label="Saving Data">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Saving Data</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Saving Data</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../chapters/data-quality.html" class="pagination-link" aria-label="Data Quality">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Data Quality</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Quality</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>References – Charlie’s R for Psychological Science Repository</title>
+<title>8&nbsp; Appending Data – Charlie's R for Psychological Science Repository</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,10 +23,46 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -45,24 +81,25 @@ div.csl-indent {
 }</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./chapters/guides.html" rel="prev">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-41230449efae31f530751339145997e9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/saving-files.html" rel="next">
+<link href="../chapters/deleting-rows.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-41230449efae31f530751339145997e9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -103,7 +140,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./references.html">References</a></li><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/getting-started.html">Data Wrangling &amp; Basics</a></li><li class="breadcrumb-item"><a href="../chapters/appending-data.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Appending Data</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -118,7 +155,7 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Charlie’s R for Psychological Science Repository</a> 
+      <a href="../">Charlie’s R for Psychological Science Repository</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -130,7 +167,7 @@ div.csl-indent {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Overview</span></a>
   </div>
 </li>
@@ -145,55 +182,55 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/getting-started.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/getting-started.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Getting Started</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/load-specific-variables.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/load-specific-variables.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Selecting/Deselecting Variables</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/renaming-variables.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/renaming-variables.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Renaming Variables</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/recoding.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/recoding.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Recoding Variables</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/row-id-numbers.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/row-id-numbers.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Row/ID Numbers</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/standardising.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/standardising.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Mean-Centring and Standardising</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/deleting-rows.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/deleting-rows.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Deleting Rows and Columns</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/appending-data.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/appending-data.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Appending Data</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/saving-files.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/saving-files.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Saving Data</span></span></a>
   </div>
 </li>
@@ -210,13 +247,13 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/data-cleaning-overview.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/data-cleaning-overview.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Cleaning: Step-by-Step</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/data-quality.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/data-quality.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Quality</span></span></a>
   </div>
 </li>
@@ -233,19 +270,19 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/reproducible-tables.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/reproducible-tables.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Overview</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/sample-descriptives.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/sample-descriptives.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Sample Descriptives</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/correlation-table.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/correlation-table.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Table of Correlations</span></span></a>
   </div>
 </li>
@@ -262,31 +299,31 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/t-tests.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/t-tests.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">T-Tests</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/regression.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/regression.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Regression</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/anova.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/anova.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Analysis of Variance</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/sem.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/sem.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Structural Equation Modelling</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/meta-analysis-basic.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/meta-analysis-basic.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Meta-Analysis</span></span></a>
   </div>
 </li>
@@ -303,7 +340,7 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/themes-colours.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/themes-colours.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Themes and Plot Colouring</span></span></a>
   </div>
 </li>
@@ -320,7 +357,7 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/bayesian-meta-analysis.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/bayesian-meta-analysis.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Bayesian Meta Analysis</span></span></a>
   </div>
 </li>
@@ -337,13 +374,13 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/package-index.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/package-index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Index of R Packages</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/guides.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/guides.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Official R Guides</span></span></a>
   </div>
 </li>
@@ -360,7 +397,7 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link active">
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
@@ -371,15 +408,22 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#combining-data-frames" id="toc-combining-data-frames" class="nav-link active" data-scroll-target="#combining-data-frames"><span class="header-section-number">8.1</span> Combining data frames</a></li>
+  <li><a href="#combining-longitudinal-data" id="toc-combining-longitudinal-data" class="nav-link" data-scroll-target="#combining-longitudinal-data"><span class="header-section-number">8.2</span> Combining longitudinal data</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./references.html">References</a></li><li class="breadcrumb-item"><a href="./references.html">References</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/getting-started.html">Data Wrangling &amp; Basics</a></li><li class="breadcrumb-item"><a href="../chapters/appending-data.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Appending Data</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">References</h1>
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Appending Data</span></h1>
 </div>
 
 
@@ -396,249 +440,69 @@ div.csl-indent {
 </header>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-BenjaminiHochberg1995" class="csl-entry" role="listitem">
-Benjamini, Y., &amp; Hochberg, Y. (1995). Controlling the false
-discovery rate: A practical and powerful approach to multiple testing.
-<em>Journal of the Royal Statistical Society: Series B
-(Methodological)</em>, <em>57</em>(1), 289–300. <a href="https://doi.org/10.1111/j.2517-6161.1995.tb02031.x">https://doi.org/10.1111/j.2517-6161.1995.tb02031.x</a>
-</div>
-<div id="ref-berinsky2013" class="csl-entry" role="listitem">
-Berinsky, A. J., Margolis, M. F., &amp; Sances, M. W. (2013). Separating
-the shirkers from the workers? Making sure respondents pay attention on
-self<span>-</span>administered surveys. <em>American Journal of
-Political Science</em>, <em>58</em>(3), 739–753. <a href="https://doi.org/10.1111/ajps.12081">https://doi.org/10.1111/ajps.12081</a>
-</div>
-<div id="ref-mirt" class="csl-entry" role="listitem">
-Chalmers, R. P. (2012). <span class="nocase">mirt</span>: A
-multidimensional item response theory package for the <span>R</span>
-environment. <em>Journal of Statistical Software</em>, <em>48</em>(6),
-1–29. <a href="https://doi.org/10.18637/jss.v048.i06">https://doi.org/10.18637/jss.v048.i06</a>
-</div>
-<div id="ref-Chang" class="csl-entry" role="listitem">
-Chang, W. (2026). <em>R graphics cookbook, 2nd edition</em>. <a href="https://r-graphics.org/">https://r-graphics.org/</a>
-</div>
-<div id="ref-chen2007" class="csl-entry" role="listitem">
-Chen, F. F. (2007). Sensitivity of goodness of fit indices to lack of
-measurement invariance. <em>Structural Equation Modeling: A
-Multidisciplinary Journal</em>, <em>14</em>(3), 464–504. <a href="https://doi.org/10.1080/10705510701301834">https://doi.org/10.1080/10705510701301834</a>
-</div>
-<div id="ref-cohen2013applied" class="csl-entry" role="listitem">
-Cohen, J., Cohen, P., West, S. G., &amp; Aiken, L. S. (2013).
-<em>Applied multiple regression/correlation analysis for the behavioral
-sciences</em>. Routledge.
-</div>
-<div id="ref-Cooper2024" class="csl-entry" role="listitem">
-Cooper, G. (2024). <em>CoopG/tableone2flextable</em>. <a href="https://github.com/CoopG/tableone2flextable">https://github.com/CoopG/tableone2flextable</a>
-</div>
-<div id="ref-dunn2018intra" class="csl-entry" role="listitem">
-Dunn, A. M., Heggestad, E. D., Shanock, L. R., &amp; Theilgard, N.
-(2018). Intra-individual response variability as an indicator of
-insufficient effort responding: Comparison to other indicators and
-relationships with individual differences. <em>Journal of Business and
-Psychology</em>, <em>33</em>(1), 105–121.
-</div>
-<div id="ref-edwards2009special" class="csl-entry" role="listitem">
-Edwards, M. C., &amp; Edelen, M. O. (2009). Special topics in item
-response theory. <em>The SAGE Handbook of Quantitative Methods in
-Psychology</em>, 178–198.
-</div>
-<div id="ref-eisinga2013" class="csl-entry" role="listitem">
-Eisinga, R., Grotenhuis, M. te, &amp; Pelzer, B. (2013). The reliability
-of a two-item scale: Pearson, cronbach, or spearman-brown?
-<em>International Journal of Public Health</em>, <em>58</em>(4),
-637–642. <a href="https://doi.org/10.1007/s00038-012-0416-3">https://doi.org/10.1007/s00038-012-0416-3</a>
-</div>
-<div id="ref-EndersBandalos2001" class="csl-entry" role="listitem">
-Enders, C. K., &amp; Bandalos, D. L. (2001). The relative performance of
-full information maximum likelihood estimation for missing data in
-structural equation models. <em>Structural Equation Modeling: A
-Multidisciplinary Journal</em>, <em>8</em>(3), 430–457. <a href="https://doi.org/10.1207/S15328007SEM0803_5">https://doi.org/10.1207/S15328007SEM0803_5</a>
-</div>
-<div id="ref-ferr2025" class="csl-entry" role="listitem">
-Ferr, H. (2025). The normal distribution is not normal in psychological
-data: Moving beyond parametric dogma. <em>PLOS Mental Health</em>,
-<em>2</em>(8), e0000403. <a href="https://doi.org/10.1371/journal.pmen.0000403">https://doi.org/10.1371/journal.pmen.0000403</a>
-</div>
-<div id="ref-officer" class="csl-entry" role="listitem">
-Gohel, D., Moog, S., &amp; Heckmann, M. (2026). <em>Officer:
-Manipulation of microsoft word and PowerPoint documents</em>. <a href="https://ardata-fr.github.io/officeverse/">https://ardata-fr.github.io/officeverse/</a>
-</div>
-<div id="ref-flextable" class="csl-entry" role="listitem">
-Gohel, D., &amp; Skintzos, P. (2026). <em>Flextable: Functions for
-tabular reporting</em>. <a href="https://github.com/davidgohel/flextable">https://github.com/davidgohel/flextable</a>
-</div>
-<div id="ref-goldstein2023" class="csl-entry" role="listitem">
-Goldstein, N. (2023). <em>Epidemiology blog of neal d. Goldstein, PhD,
-MBI</em>. <a href="https://doi.org/10.17918/goldsteinepi">https://doi.org/10.17918/goldsteinepi</a>
-</div>
-<div id="ref-Guo_Choi2023" class="csl-entry" role="listitem">
-Guo, W., &amp; Choi, Y.-J. (2023). Assessing dimensionality of IRT
-models using traditional and revised parallel analyses. <em>Educational
-and Psychological Measurement</em>, <em>83</em>(3), 609–629. <a href="https://doi.org/10.1177/00131644221111838">https://doi.org/10.1177/00131644221111838</a>
-</div>
-<div id="ref-hair2019" class="csl-entry" role="listitem">
-Hair, J. F., Risher, J. J., Sarstedt, M., &amp; Ringle, C. M. (2019).
-When to use and how to report the results of PLS-SEM. <em>European
-Business Review</em>, <em>31</em>(1), 2–24. <a href="https://doi.org/10.1108/EBR-11-2018-0203">https://doi.org/10.1108/EBR-11-2018-0203</a>
-</div>
-<div id="ref-HarrerCuijpersFurukawa" class="csl-entry" role="listitem">
-Harrer, M., Cuijpers, P., Furukawa, T. A., &amp; Ebert, D. D. (2021).
-<em>Doing meta-analysis in r: A hands-on guide</em>. <a href="https://doing-meta.guide/">https://doing-meta.guide/</a>
-</div>
-<div id="ref-hu1999" class="csl-entry" role="listitem">
-Hu, L., &amp; Bentler, P. M. (1999). Cutoff criteria for fit indexes in
-covariance structure analysis: Conventional criteria versus new
-alternatives. <em>Structural Equation Modeling: A Multidisciplinary
-Journal</em>, <em>6</em>(1), 1–55. <a href="https://doi.org/10.1080/10705519909540118">https://doi.org/10.1080/10705519909540118</a>
-</div>
-<div id="ref-iacobucci2015" class="csl-entry" role="listitem">
-Iacobucci, D., Schneider, M. J., Popovich, D. L., &amp; Bakamitsos, G.
-A. (2015). Mean centering helps alleviate
-<span>“</span>micro<span>”</span> but not
-<span>“</span>macro<span>”</span> multicollinearity. <em>Behavior
-Research Methods</em>, <em>48</em>(4), 1308–1317. <a href="https://doi.org/10.3758/s13428-015-0624-x">https://doi.org/10.3758/s13428-015-0624-x</a>
-</div>
-<div id="ref-fastdummies2026" class="csl-entry" role="listitem">
-Kaplan, J. (2026). <em>fastDummies: Fast creation of dummy (binary)
-columns and rows from categorical variables</em>. <a href="https://github.com/jacobkap/fastDummies">https://github.com/jacobkap/fastDummies</a>
-</div>
-<div id="ref-kline2015" class="csl-entry" role="listitem">
-Kline, R. B. (2015). <em>Principles and practice of structural equation
-modeling</em>. Guilford Publications.
-</div>
-<div id="ref-kugler2018coding" class="csl-entry" role="listitem">
-Kugler, K. C., Dziak, J. J., &amp; Trail, J. (2018). Coding and
-interpretation of effects in analysis of data from a factorial
-experiment. In <em>Optimization of behavioral, biobehavioral, and
-biomedical interventions: Advanced topics</em> (pp. 175–205). Springer.
-</div>
-<div id="ref-little1988a" class="csl-entry" role="listitem">
-Little, R. J. A. (1988). A test of missing completely at random for
-multivariate data with missing values. <em>Journal of the American
-Statistical Association</em>, <em>83</em>(404), 1198–1202. <a href="https://doi.org/10.1080/01621459.1988.10478722">https://doi.org/10.1080/01621459.1988.10478722</a>
-</div>
-<div id="ref-jtools" class="csl-entry" role="listitem">
-Long, J. A. (2024). Jtools: Analysis and presentation of social
-scientific data. <em>Journal of Open Source Software</em>,
-<em>9</em>(101), 6610. <a href="https://doi.org/10.21105/joss.06610">https://doi.org/10.21105/joss.06610</a>
-</div>
-<div id="ref-LongTeetor" class="csl-entry" role="listitem">
-Long, J. (JD)., &amp; Teetor, P. (2019). <em>R cookbook, 2nd
-edition</em>. <a href="https://rc2e.com/">https://rc2e.com/</a>
-</div>
-<div id="ref-marjanovic2015inter" class="csl-entry" role="listitem">
-Marjanovic, Z., Holden, R., Struthers, W., Cribbie, R., &amp;
-Greenglass, E. (2015). The inter-item standard deviation (ISD): An index
-that discriminates between conscientious and random responders.
-<em>Personality and Individual Differences</em>, <em>84</em>, 79–83.
-</div>
-<div id="ref-Navarro" class="csl-entry" role="listitem">
-Navarro, D. (2026). <em>Learning statistics with r</em>. <a href="https://learningstatisticswithr.com/">https://learningstatisticswithr.com/</a>
-</div>
-<div id="ref-Perneger1998" class="csl-entry" role="listitem">
-Perneger, T. V. (1998). What’s wrong with bonferroni adjustments.
-<em>BMJ</em>, <em>316</em>(7139), 1236–1238. <a href="https://doi.org/10.1136/bmj.316.7139.1236">https://doi.org/10.1136/bmj.316.7139.1236</a>
-</div>
-<div id="ref-PittawayFieldingLouis2024" class="csl-entry" role="listitem">
-Pittaway, C. R., Fielding, K. S., &amp; Louis, W. R. (2024). Pathways to
-conventional and radical climate action: The role of temporal
-orientation, environmental cognitive alternatives, and eco-anxiety.
-<em>Global Environmental Change</em>, <em>87</em>, 102886. <a href="https://doi.org/10.1016/j.gloenvcha.2024.102886">https://doi.org/10.1016/j.gloenvcha.2024.102886</a>
-</div>
-<div id="ref-Pittaway_Louis_Fielding2025" class="csl-entry" role="listitem">
-Pittaway, C. R., Louis, W., &amp; Fielding, K. (2025). Temporal
-orientations and climate action over time: A two-wave study of the
-associations between consideration of consequences and climate action
-intentions and behaviour. <em>Journal of Environmental Psychology</em>,
-<em>108</em>, 102833. <a href="https://doi.org/10.1016/j.jenvp.2025.102833">https://doi.org/10.1016/j.jenvp.2025.102833</a>
-</div>
-<div id="ref-splithalfr2025" class="csl-entry" role="listitem">
-Pronk, T. (2025). <em>Splithalfr: Estimates split-half reliabilities for
-scoring algorithms of cognitive tasks and questionnaires (version 3.0.0)
-[computer software]</em>. <a href="https://doi.org/10.5281/zenodo.7777894">https://doi.org/10.5281/zenodo.7777894</a>
-</div>
-<div id="ref-razali2011" class="csl-entry" role="listitem">
-Razali, N. M., &amp; Wah, Y. B. (2011). Power comparisons of
-shapiro-wilk, kolmogorov-smirnov, lilliefors and anderson-darling tests.
-<em>Journal of Statistical Modeling and Analytics</em>, <em>2</em>(1),
-21–33.
-</div>
-<div id="ref-lavaanarticle" class="csl-entry" role="listitem">
-Rosseel, Y. (2012). <span class="nocase">lavaan</span>: An
-<span>R</span> package for structural equation modeling. <em>Journal of
-Statistical Software</em>, <em>48</em>(2), 1–36. <a href="https://doi.org/10.18637/jss.v048.i02">https://doi.org/10.18637/jss.v048.i02</a>
-</div>
-<div id="ref-lavaanpackage" class="csl-entry" role="listitem">
-Rosseel, Y., Jorgensen, T. D., &amp; De Wilde, L. (2026). <em><span class="nocase">lavaan</span>: Latent variable analysis</em>. <a href="https://doi.org/10.32614/CRAN.package.lavaan">https://doi.org/10.32614/CRAN.package.lavaan</a>
-</div>
-<div id="ref-gtsummary" class="csl-entry" role="listitem">
-Sjoberg, D. D., Whiting, K., Curry, M., Lavery, J. A., &amp; Larmarange,
-J. (2021). Reproducible summary tables with the gtsummary package.
-<em><span>The R Journal</span></em>, <em>13</em>, 570–580. <a href="https://doi.org/10.32614/RJ-2021-053">https://doi.org/10.32614/RJ-2021-053</a>
-</div>
-<div id="ref-apaTables2026" class="csl-entry" role="listitem">
-Stanley, D. (2026). <em>apaTables: Create american psychological
-association (APA) style tables</em>. <a href="https://github.com/dstanley4/apaTables">https://github.com/dstanley4/apaTables</a>
-</div>
-<div id="ref-rempsyc" class="csl-entry" role="listitem">
-Thériault, R. (2023). <span class="nocase">rempsyc</span>: Convenience
-functions for psychology. <em>Journal of Open Source Software</em>,
-<em>8</em>(87), 5466. <a href="https://doi.org/10.21105/joss.05466">https://doi.org/10.21105/joss.05466</a>
-</div>
-<div id="ref-naniar" class="csl-entry" role="listitem">
-Tierney, N., &amp; Cook, D. (2023). Expanding tidy data principles to
-facilitate missing data exploration, visualization and assessment of
-imputations. <em>Journal of Statistical Software</em>, <em>105</em>(7),
-1–31. <a href="https://doi.org/10.18637/jss.v105.i07">https://doi.org/10.18637/jss.v105.i07</a>
-</div>
-<div id="ref-weijters2012" class="csl-entry" role="listitem">
-Weijters, B., &amp; Baumgartner, H. (2012). Misresponse to reversed and
-negated items in surveys: A review. <em>Journal of Marketing
-Research</em>, <em>49</em>(5), 737–747. <a href="https://doi.org/10.1509/jmr.11.0368">https://doi.org/10.1509/jmr.11.0368</a>
-</div>
+<section id="combining-data-frames" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="combining-data-frames"><span class="header-section-number">8.1</span> Combining data frames</h2>
+<p>For whatever reason, you might have ended up with multiple separate data frames that need to be combined.</p>
+<p>Using the <strong>dplyr</strong> package from the tidyverse <span class="citation" data-cites="tidyverse2019">(<a href="../references.html#ref-tidyverse2019" role="doc-biblioref">Wickham et al., 2019</a>)</span>, append using the function <code>bindrows()</code>.</p>
+<pre><code>data_master &lt;- bind_rows(dataset_1, dataset_2, dataset_3) </code></pre>
+<p>This code will:</p>
+<ul>
+<li><p>Keep all variables from all datasets</p></li>
+<li><p>Fill in NA for variables that don’t exist in a particular version</p></li>
+<li><p>Stack the rows on top of each other</p></li>
+</ul>
+<p>You can also add some specifications that might be helpful; for example, you can order by date and flag second+ occurrences of a particular participant ID.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data_full_t1 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(data_t1_v1, data_t1_v2, data_t1_v3, data_t1_v4) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>Q_TotalDuration) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">ui_duplicate =</span> <span class="fu">duplicated</span>(ui))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Why might this be helpful?</strong></p>
+<ul>
+<li><p>During a soft launch of a survey, we found that the survey was far too long and needed to create a shorter version. However, creating a shorter version meant substantially changing the structure of the survey, so we needed to create a whole new Qualtrics questionnaire rather than amending the active one.</p></li>
+<li><p>This resulted in separate data frames that we needed to combine, but we also wanted to make sure that we only included the first instance of every participant ID, as launching a second survey meant that Qualtrics’ in-built ballot stuffing prevention measures wouldn’t apply and participants could legitimately take our study twice.</p></li>
+<li><p>In order to keep only the first case of every participant ID (called <code>ui</code> in our data), we needed to order the data by date and then flag any subsequent instances, which we did so with the variable <code>ui_duplicate</code></p></li>
+</ul>
+</section>
+<section id="combining-longitudinal-data" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="combining-longitudinal-data"><span class="header-section-number">8.2</span> Combining longitudinal data</h2>
+<p>First, and crucially, you must make sure there are <strong>no duplicates</strong> in the separate waves.</p>
+<p>Second, make sure you have created a variable that indicates which waves participants have completed (e.g., <code>w1_sample == 1 or 0</code>, and so on). Third, add a timepoint suffix to the variables in each wave. Fourth, combine the data frames, linking by participant ID. You can do these three steps at the same time.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data_wide <span class="ot">&lt;-</span> data_t1 <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">w1_sample =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_with</span>(<span class="sc">~</span> <span class="fu">paste0</span>(.x, <span class="st">"_t1"</span>), <span class="sc">-</span>ui) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    data_t2 <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">w2_sample =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename_with</span>(<span class="sc">~</span> <span class="fu">paste0</span>(.x, <span class="st">"_t2"</span>), <span class="sc">-</span>ui),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"ui"</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    data_t3 <span class="sc">%&gt;%</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">w3_sample =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename_with</span>(<span class="sc">~</span> <span class="fu">paste0</span>(.x, <span class="st">"_t3"</span>), <span class="sc">-</span>ui),</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"ui"</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">"w"</span>), <span class="sc">~</span> <span class="fu">replace_na</span>(.x, <span class="dv">0</span>))</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li>Creates wave-completion indicators (<code>w1_sample</code>, <code>w2_sample</code>, <code>w3_sample</code>), where a value of 1 indicates that a participant completed that wave.</li>
+</ul>
+<!-- -->
+<ul>
+<li>Adds timepoint suffixes to all variables (e.g., <code>stress_t1</code>, <code>stress_t2</code>, <code>stress_t3</code>) while leaving the participant ID (<code>ui</code>) unchanged.</li>
+</ul>
+<!-- -->
+<ul>
+<li>Merges the datasets by participant ID using <code>full_join()</code>, retaining all participants regardless of whether they completed every wave.</li>
+</ul>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
 <div id="ref-tidyverse2019" class="csl-entry" role="listitem">
-Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D.,
-François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M.,
-Pedersen, T. L., Miller, E., Bache, S. M., Müller, K., Ooms, J.,
-Robinson, D., Seidel, D. P., Spinu, V., … Yutani, H. (2019). Welcome to
-the <span class="nocase">tidyverse</span>. <em>Journal of Open Source
-Software</em>, <em>4</em>(43), 1686. <a href="https://doi.org/10.21105/joss.01686">https://doi.org/10.21105/joss.01686</a>
-</div>
-<div id="ref-readr2026" class="csl-entry" role="listitem">
-Wickham, H., Hester, J., &amp; Bryan, J. (2026). <em>Readr: Read
-rectangular text data</em>. <a href="https://readr.tidyverse.org">https://readr.tidyverse.org</a>
-</div>
-<div id="ref-haven2025" class="csl-entry" role="listitem">
-Wickham, H., Miller, E., &amp; Smith, D. (2025). <em>Haven: Import and
-export ’SPSS’, ’stata’ and ’SAS’ files</em>. <a href="https://haven.tidyverse.org">https://haven.tidyverse.org</a>
-</div>
-<div id="ref-psych2026" class="csl-entry" role="listitem">
-William Revelle. (2026). <em>Psych: Procedures for psychological,
-psychometric, and personality research</em>. Northwestern University. <a href="https://CRAN.R-project.org/package=psych">https://CRAN.R-project.org/package=psych</a>
-</div>
-<div id="ref-yazici2007comparison" class="csl-entry" role="listitem">
-Yazici, B., &amp; Yolacan, S. (2007). A comparison of various tests of
-normality. <em>Journal of Statistical Computation and Simulation</em>,
-<em>77</em>(2), 175–183.
-</div>
-<div id="ref-careless" class="csl-entry" role="listitem">
-Yentes, R., &amp; Wilhelm, F. (2023). <em>Careless: Procedures for
-computing indices of careless responding</em>.
-</div>
-<div id="ref-tableone" class="csl-entry" role="listitem">
-Yoshida, K., &amp; Bartel, A. (2022). <em>Tableone: Create ’table 1’ to
-describe baseline characteristics with or without propensity score
-weights</em>. <a href="https://CRAN.R-project.org/package=tableone">https://CRAN.R-project.org/package=tableone</a>
-</div>
-<div id="ref-zhang2014" class="csl-entry" role="listitem">
-Zhang, C., &amp; Conrad, F. (2014). Speeding in web surveys: The
-tendency to answer very fast and its association with straightlining.
-<em>Survey Research Methods</em>, <em>Vol 8</em>, No 2 (2014). <a href="https://doi.org/10.18148/SRM/2014.V8I2.5453">https://doi.org/10.18148/SRM/2014.V8I2.5453</a>
+Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T. L., Miller, E., Bache, S. M., Müller, K., Ooms, J., Robinson, D., Seidel, D. P., Spinu, V., … Yutani, H. (2019). Welcome to the <span class="nocase">tidyverse</span>. <em>Journal of Open Source Software</em>, <em>4</em>(43), 1686. <a href="https://doi.org/10.21105/joss.01686">https://doi.org/10.21105/joss.01686</a>
 </div>
 </div>
-
-
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1043,11 +907,14 @@ tendency to answer very fast and its association with straightlining.
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./chapters/guides.html" class="pagination-link" aria-label="Official R Guides">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Official R Guides</span></span>
+      <a href="../chapters/deleting-rows.html" class="pagination-link" aria-label="Deleting Rows and Columns">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Deleting Rows and Columns</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../chapters/saving-files.html" class="pagination-link" aria-label="Saving Data">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Saving Data</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
