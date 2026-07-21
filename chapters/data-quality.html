@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -360,7 +395,15 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#measures-of-response-quality" id="toc-measures-of-response-quality" class="nav-link active" data-scroll-target="#measures-of-response-quality"><span class="header-section-number">8.1</span> Measures of response quality</a></li>
+  <li><a href="#measures-of-response-quality" id="toc-measures-of-response-quality" class="nav-link active" data-scroll-target="#measures-of-response-quality"><span class="header-section-number">8.1</span> Measures of response quality</a>
+  <ul class="collapse">
+  <li><a href="#instructed-response-attention-checks" id="toc-instructed-response-attention-checks" class="nav-link" data-scroll-target="#instructed-response-attention-checks"><span class="header-section-number">8.1.1</span> Instructed response attention checks</a></li>
+  <li><a href="#speeding" id="toc-speeding" class="nav-link" data-scroll-target="#speeding"><span class="header-section-number">8.1.2</span> Speeding</a></li>
+  <li><a href="#straightlining" id="toc-straightlining" class="nav-link" data-scroll-target="#straightlining"><span class="header-section-number">8.1.3</span> Straightlining</a></li>
+  <li><a href="#item-response-variability" id="toc-item-response-variability" class="nav-link" data-scroll-target="#item-response-variability"><span class="header-section-number">8.1.4</span> Item response variability</a></li>
+  <li><a href="#seriousness-check" id="toc-seriousness-check" class="nav-link" data-scroll-target="#seriousness-check"><span class="header-section-number">8.1.5</span> Seriousness check</a></li>
+  <li><a href="#latent-response-quality" id="toc-latent-response-quality" class="nav-link" data-scroll-target="#latent-response-quality"><span class="header-section-number">8.1.6</span> Latent response quality</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -389,17 +432,277 @@ div.csl-indent {
 <p>There are lots of different ways to assess data quality, and different strategies for what to do with this information.</p>
 <section id="measures-of-response-quality" class="level2" data-number="8.1">
 <h2 data-number="8.1" class="anchored" data-anchor-id="measures-of-response-quality"><span class="header-section-number">8.1</span> Measures of response quality</h2>
+<section id="instructed-response-attention-checks" class="level3" data-number="8.1.1">
+<h3 data-number="8.1.1" class="anchored" data-anchor-id="instructed-response-attention-checks"><span class="header-section-number">8.1.1</span> Instructed response attention checks</h3>
+<p>Instructed response attention checks have long been used in the world of assessing data quality. Questions are clear that they are attention checks (e.g., “To show you are paying attention, please select ‘Disagree’ in response to this question”). You might place several throughout the survey and decide on how many participants are able to fail before they are excluded from your final dataset. Alternatively, you may place two very early on in the survey and automatically screen out participants who fail both, while flagging those who failed one as potentially having lower quality responses.</p>
+<p>My current strategy is the second option: participants respond to two attention checks in the first block of question; if they fail both, they are booted (with an explanation)—I think this is only appropriate to do if the checks are early on, so participants don’t feel like they have sacrificed too much of their time for a survey they will never be paid for.</p>
+<p>I then flag participants who failed one attention check as having potentially lower quality responses (<code>low_attention == 1 if 1/2 attention checks are failed, low_attention == 0 if both are passed</code>), and use this as one indicator in a latent response quality variable assessed using item response theory (more on this at the bottom of the page).</p>
+</section>
+<section id="speeding" class="level3" data-number="8.1.2">
+<h3 data-number="8.1.2" class="anchored" data-anchor-id="speeding"><span class="header-section-number">8.1.2</span> Speeding</h3>
+<p>Participants who complete the study far too quickly to have meaningfully engaged with it are called <strong>speeders</strong> <span class="citation" data-cites="zhang2014">(<a href="../references.html#ref-zhang2014" role="doc-biblioref">Zhang &amp; Conrad, 2014</a>)</span>. Speeders often show other indicators of low response quality like straightlining, where they provide the same response repeatedly across a series of questions in order to complete the survey very quickly.</p>
+<section id="how-to-detect-speeders" class="level4" data-number="8.1.2.1">
+<h4 data-number="8.1.2.1" class="anchored" data-anchor-id="how-to-detect-speeders"><span class="header-section-number">8.1.2.1</span> How to detect speeders</h4>
+<p>There are two common approaches for identifying participants who complete a survey too quickly.</p>
+<p>First, you can decide in advance on a minimum completion time and exclude anyone who finishes faster than that as a blanket rule.</p>
+<p>Second, you can determine what an unreasonably fast completion time is using the sample distribution. I typically calculate the survey’s average completion time and define speeding as a completion time that is more than three standard deviations below the mean. To ensure the average is representative, I exclude outliers (both high and low) from this estimate. Participants whose completion times fall more than three standard deviations below this adjusted are then flagged (my preference) or excluded.</p>
+<p>Here is some example data, with some extreme low and extreme high outliers.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example usage</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>my_data <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">50</span>, <span class="at">sd =</span> <span class="dv">10</span>), <span class="sc">-</span><span class="dv">250</span>, <span class="sc">-</span><span class="dv">400</span>, <span class="dv">560</span>, <span class="dv">600</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(my_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 53.85006</code></pre>
+</div>
+</div>
+<p>The below function finds the mean response time, excluding values +/- 3SD from the mean.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to calculate mean excluding outliers (+/- 3 SD)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>mean_no_outliers <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">sd_threshold =</span> <span class="dv">3</span>) {</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> x[<span class="sc">!</span><span class="fu">is.na</span>(x)]  <span class="co"># remove NAs first</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> <span class="fu">sd</span>(x)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  lower <span class="ot">&lt;-</span> m <span class="sc">-</span> sd_threshold <span class="sc">*</span> s</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  upper <span class="ot">&lt;-</span> m <span class="sc">+</span> sd_threshold <span class="sc">*</span> s</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  x_trimmed <span class="ot">&lt;-</span> x[x <span class="sc">&gt;=</span> lower <span class="sc">&amp;</span> x <span class="sc">&lt;=</span> upper]</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(x_trimmed))</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="fu">mean_no_outliers</span>(my_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 50.90406</code></pre>
+</div>
+</div>
+<p>If you want to know the outliers that were removed, you can run the following function. This code produces a tibble which will show you all the outlier values, and whether they are high or low outliers.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>identify_outliers <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">sd_threshold =</span> <span class="dv">3</span>) {</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  x_clean <span class="ot">&lt;-</span> x[<span class="sc">!</span><span class="fu">is.na</span>(x)]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">mean</span>(x_clean)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> <span class="fu">sd</span>(x_clean)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  lower_bound <span class="ot">&lt;-</span> m <span class="sc">-</span> sd_threshold <span class="sc">*</span> s</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  upper_bound <span class="ot">&lt;-</span> m <span class="sc">+</span> sd_threshold <span class="sc">*</span> s</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  outlier_values <span class="ot">&lt;-</span> x_clean[x_clean <span class="sc">&lt;</span> lower_bound <span class="sc">|</span> x_clean <span class="sc">&gt;</span> upper_bound]</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">value =</span> outlier_values,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="fu">if_else</span>(value <span class="sc">&lt;</span> lower_bound, <span class="st">"low"</span>, <span class="st">"high"</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="fu">identify_outliers</span>(my_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  value type 
+  &lt;dbl&gt; &lt;chr&gt;
+1  -250 low  
+2  -400 low  
+3   560 high 
+4   600 high </code></pre>
+</div>
+</div>
+<p>Now that we know the adjusted mean, you can flag participants as speeders if their response time was more than 3SD below the adjusted mean. The below code flags participants as a speeder (1) if their duration was more than 3SD below the mean, and 0 if not.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">speeder =</span> <span class="fu">case_when</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    duration <span class="sc">&lt;</span> (<span class="fu">mean</span>(duration) <span class="sc">-</span> <span class="dv">3</span><span class="sc">*</span>(<span class="fu">sd</span>(duration))) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">0</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  ))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You can exclude based on this flag, see below, or include as an indicator to assess latent response quality (more on this later).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(speeder <span class="sc">==</span> <span class="dv">0</span>) <span class="co"># This will exclude participants that you have flagged as speeder</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="straightlining" class="level3" data-number="8.1.3">
+<h3 data-number="8.1.3" class="anchored" data-anchor-id="straightlining"><span class="header-section-number">8.1.3</span> Straightlining</h3>
+<p>Straightlining is when participants have selected the same answer repeatedly across a series of questions, indicating they may not have provided meaningful answers. This measure tends to be associated with speeding <span class="citation" data-cites="zhang2014">(<a href="../references.html#ref-zhang2014" role="doc-biblioref">Zhang &amp; Conrad, 2014</a>)</span>.</p>
+<p>Straightlining is <em>most</em> effective if you have both forward- and reverse-coded items for constructs, in which it would be extremely improbably for people to provide the same answers to all questions.</p>
+<section id="how-to-detect-straightlining" class="level4" data-number="8.1.3.1">
+<h4 data-number="8.1.3.1" class="anchored" data-anchor-id="how-to-detect-straightlining"><span class="header-section-number">8.1.3.1</span> How to detect straightlining</h4>
+<p>The <strong>careless</strong> package contains many tools for assessing, as the name might imply, careless responding <span class="citation" data-cites="careless">(<a href="../references.html#ref-careless" role="doc-biblioref">Yentes &amp; Wilhelm, 2023</a>)</span>. One such measure is the <code>longstring()</code> function, which assesses straightlining. The <code>longstring()</code> function looks at a matrix of items and compares each response to the one before it, calculating the longest uninterrupted string of identical responses. That is, if a participants’ longstring score is 25, this means that they provided an identical response to 25 consecutive questions (and they have “straight-lined”). In this way, you only want to run the <code>longstring()</code> function on items that were measured on the same response scale.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(careless)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>data_careless <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(var1, var2, var3, var4, var5, var6, var7, var8, var9, var10) <span class="co">#Select the variables you want to check for straightlining</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>straightliner_results <span class="ot">&lt;-</span> <span class="fu">longstring</span>(data_careless, <span class="at">avg =</span> <span class="cn">TRUE</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
-<li><p>Speeding: Participants complete the study too quickly, indicating they may not have provided meaningful answers <span class="citation" data-cites="zhang2014">(<a href="../references.html#ref-zhang2014" role="doc-biblioref">Zhang &amp; Conrad, 2014</a>)</span>.</p></li>
-<li><p>Straightlining: Participants have selected the same answer repeatedly across a series of questions, indicating they may not have provided meaningful answers. This measure tends to be associated with speeding behaviour <span class="citation" data-cites="zhang2014">(<a href="../references.html#ref-zhang2014" role="doc-biblioref">Zhang &amp; Conrad, 2014</a>)</span>.</p></li>
+<li><p><code>avg = TRUE</code> additionally returns the average length of uninterrupted identical responses for the participant.</p></li>
+<li><p>This code will produce two variables in the “straightliner_results” dataframe called <code>longstr</code> and <code>avgstr</code>.</p></li>
 </ul>
+<p>Then, append those new variables back into the main dataframe. The below code uses base R.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>longstr <span class="ot">&lt;-</span> straightliner_results<span class="sc">$</span>longstr</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>avgstr <span class="ot">&lt;-</span> straightliner_results<span class="sc">$</span>avgstr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>I don’t typically include many reverse-coded items in my surveys as they are known to have psychometric issues <span class="citation" data-cites="weijters2012">(<a href="../references.html#ref-weijters2012" role="doc-biblioref">Weijters &amp; Baumgartner, 2012</a>)</span>, and I usually include measures for many, many different variables. As such, it is completely possible that participants might show <em>some</em> level of straightlining in my surveys, and I don’t feel comfortable straight-up excluding participants based on this measure. However, I again use this as one indicator in a latent model of response quality. My approach is to find participants which show high outliers on this measure, and then flag them, using this flag as another indicator in a latent inattention variable.</p>
+<p>The code below will tell the threshold above which you would flag people as being a high outlier on longstr and avgstr.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Threshold for longstr</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>longstr) <span class="sc">+</span> (<span class="dv">3</span><span class="sc">*</span><span class="fu">sd</span>(data<span class="sc">$</span>longstr))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Threshold for avgstr </span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>avgstr) <span class="sc">+</span> (<span class="dv">3</span><span class="sc">*</span><span class="fu">sd</span>(data<span class="sc">$</span>avgstr))</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Flag high outliers</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">longstring_flag =</span> <span class="fu">case_when</span>(longstr <span class="sc">&gt;</span> (<span class="fu">mean</span>(longstr) <span class="sc">+</span> (<span class="dv">3</span><span class="sc">*</span><span class="fu">sd</span>(longstr))) <span class="sc">~</span> <span class="dv">1</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">0</span>),</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">avgstring_flag =</span> <span class="fu">case_when</span>(avgstr <span class="sc">&gt;</span> (<span class="fu">mean</span>(avgstr) <span class="sc">+</span> (<span class="dv">3</span><span class="sc">*</span><span class="fu">sd</span>(avgstr))) <span class="sc">~</span> <span class="dv">1</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">0</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="item-response-variability" class="level3" data-number="8.1.4">
+<h3 data-number="8.1.4" class="anchored" data-anchor-id="item-response-variability"><span class="header-section-number">8.1.4</span> Item response variability</h3>
+<p>Item response variability (IRV) is a measure of within-person response variability and is often conceptually linked to straightlining. Respondents who provide low-quality data may be aware that researchers screen for straightlining and therefore attempt to avoid detection by responding in simple, repetitive patterns that nevertheless exhibit minimal variation. Consequently, low IRV scores, reflecting reduced within-person variability, may indicate patterned or non-differentiated responding <span class="citation" data-cites="dunn2018intra">(<a href="../references.html#ref-dunn2018intra" role="doc-biblioref">Dunn et al., 2018</a>)</span>. Such cases can be identified by examining low-end outliers in the IRV distribution. At the same time, other researchers have argued that unusually high IRV scores may also signal problematic responding, as excessive variability can reflect random or careless response patterns <span class="citation" data-cites="marjanovic2015inter">(<a href="../references.html#ref-marjanovic2015inter" role="doc-biblioref">Marjanovic et al., 2015</a>)</span>.</p>
+<section id="how-to-measure-irv" class="level4" data-number="8.1.4.1">
+<h4 data-number="8.1.4.1" class="anchored" data-anchor-id="how-to-measure-irv"><span class="header-section-number">8.1.4.1</span> How to measure IRV</h4>
+<p>Again, the <strong>careless</strong> package <span class="citation" data-cites="careless">(<a href="../references.html#ref-careless" role="doc-biblioref">Yentes &amp; Wilhelm, 2023</a>)</span> provides functions to assess IRV. As with straightlining, this assessment is only really useful on matrixes of continuously-scored items that share the same response scale.</p>
+<p>The code below utilises the helper dataframe made in the previous section comprising relevant measures. A new variable called irv will be calculated, which is the standard deviation of responses across the set of items for each participant.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>irv_values <span class="ot">&lt;-</span> <span class="fu">irv</span>(data_careless, <span class="at">split =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Append these values back into the main dataframe.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>irv <span class="ot">&lt;-</span> irv_values<span class="sc">$</span>irv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You can use the code from earlier to identify the high and low outliers.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>identify_outliers <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">sd_threshold =</span> <span class="dv">3</span>) {</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  x_clean <span class="ot">&lt;-</span> x[<span class="sc">!</span><span class="fu">is.na</span>(x)]</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">mean</span>(x_clean)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> <span class="fu">sd</span>(x_clean)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  lower_bound <span class="ot">&lt;-</span> m <span class="sc">-</span> sd_threshold <span class="sc">*</span> s</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  upper_bound <span class="ot">&lt;-</span> m <span class="sc">+</span> sd_threshold <span class="sc">*</span> s</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  outlier_values <span class="ot">&lt;-</span> x_clean[x_clean <span class="sc">&lt;</span> lower_bound <span class="sc">|</span> x_clean <span class="sc">&gt;</span> upper_bound]</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">value =</span> outlier_values,</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="fu">if_else</span>(value <span class="sc">&lt;</span> lower_bound, <span class="st">"low"</span>, <span class="st">"high"</span>)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="fu">identify_outliers</span>(data<span class="sc">$</span>irv)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You can then use the values to identify low and/or high thresholds beyond which participants will be flagged.</p>
+<p>Alternatively, you can do this using the following code:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">irv_low =</span> <span class="fu">case_when</span>(irv <span class="sc">&lt;</span> (<span class="fu">mean</span>(irv) <span class="sc">-</span> (<span class="dv">3</span><span class="sc">*</span><span class="fu">sd</span>(irv))) <span class="sc">~</span> <span class="dv">1</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">0</span>),</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">irv_high =</span> <span class="fu">case_when</span>(irv <span class="sc">&gt;</span> (<span class="fu">mean</span>(irv) <span class="sc">+</span> (<span class="dv">3</span><span class="sc">*</span><span class="fu">sd</span>(irv))) <span class="sc">~</span> <span class="dv">1</span>, <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">0</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Again, these flags can be used in a latent measure of response quality.</p>
+</section>
+</section>
+<section id="seriousness-check" class="level3" data-number="8.1.5">
+<h3 data-number="8.1.5" class="anchored" data-anchor-id="seriousness-check"><span class="header-section-number">8.1.5</span> Seriousness check</h3>
+<p>Another measure I use is an explicit seriousness check presented as the final question in the survey, asking participants if they took part seriously or just clicked through. If they report that they just clicked through, their responses are flagged as being not serious (1), versus serious (0).</p>
+</section>
+<section id="latent-response-quality" class="level3" data-number="8.1.6">
+<h3 data-number="8.1.6" class="anchored" data-anchor-id="latent-response-quality"><span class="header-section-number">8.1.6</span> Latent response quality</h3>
+<p>Rather than excluding participants based on the above measures, I include them all as indicators of an underlying “response quality” measure using item response theory <span class="citation" data-cites="berinsky2013">(<a href="../references.html#ref-berinsky2013" role="doc-biblioref">Berinsky et al., 2013</a>)</span>. Regardless of what measures of response quality are included in my survey design, I convert them all to a binary system of flags, as above, where 1 indicates a potentially low quality response as indicated by this measure and 0 suggests that the participant passes that particular check. These binary indicators are then modelled as indicators of an underlying latent “response quality” variable. This means that participants who score 1 on all of the response quality measures can be treated differently from participants who score 1 on only one or two. This latent variable can then be used to weight participant responses, as a covariate, or as another strategy to make exclusions for sensitivity analyses.</p>
+<p>The strategy is as follows:</p>
+<p>Prior to fitting a model, the unidimensionality of the response quality indicators is assessed using parallel analysis <span class="citation" data-cites="Guo_Choi2023">(<a href="../references.html#ref-Guo_Choi2023" role="doc-biblioref">Guo &amp; Choi, 2023</a>)</span>. This confirms whether a single latent factor adequately represents these measures.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mirt)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the flag variables from the main dataset and ensure there are no NAs</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>flags <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(low_attention, speeder, longstr_flag, averagestr_flag, irv_low, irv_high, seriousness_check) <span class="sc">%&gt;%</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Replace any remaining NAs with 0 (assuming non-flagged)</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">replace_na</span>(., <span class="dv">0</span>)))</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Run parallel analysis</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">fa.parallel</span>(flags, <span class="at">cor =</span> <span class="st">"tet"</span>, <span class="at">fa =</span> <span class="st">"fa"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><p>Parallel analysis checks how many real factors underlie the data by comparing the actual eigenvalues to eigenvalues generated from random, uncorrelated data of the same size. Any real eigenvalue that exceeds its random counterpart signals a genuine factor.</p></li>
+<li><p>Parallel analysis is conducted using tetrachoric correlations rather than Pearson correlations for binary data, as here <span class="citation" data-cites="Guo_Choi2023">(<a href="../references.html#ref-Guo_Choi2023" role="doc-biblioref">Guo &amp; Choi, 2023</a>)</span>.</p></li>
+<li><p>This code will tell you how many factors are underlying the indicators. 1 factor indicates that they all represent the same underlying response quality measure – if more than 1 factor emerges, it might be worth investigating this further to see which measures hang together and whether they represent different measures of response quality.</p></li>
+</ul>
+<p>Next, these indicators are modelled as items in a unidimensional two-parameter logistic model (2PL) to estimate a latent response quality factor for careless responding using the <strong>mirt</strong> package <span class="citation" data-cites="mirt">(<a href="../references.html#ref-mirt" role="doc-biblioref">Chalmers, 2012</a>)</span>. The 2PL model is the most appropriate choice for survey data because the measures will vary in how well they measure the underlying construct (response quality) and will vary in how difficult it is for participants to ‘trigger’ the flag, but there is no guessing involved (such as in tests where people can potentially guess the correct answer) which would justify the use of a three-parameter logic model <span class="citation" data-cites="edwards2009special">(<a href="../references.html#ref-edwards2009special" role="doc-biblioref">Edwards &amp; Edelen, 2009</a>)</span>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a unidimensional 2PL model</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>irt_model <span class="ot">&lt;-</span> <span class="fu">mirt</span>(<span class="at">data =</span> flags, </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">model =</span> <span class="dv">1</span>,        </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">itemtype =</span> <span class="st">"2PL"</span>, </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li><code>model = 1</code> tells <code>mirt</code> to fit a single-factor (unidimensional) model — appropriate if the parallel analysis confirmed one factor.</li>
+</ul>
+<!-- -->
+<ul>
+<li><p><code>itemtype = "2PL"</code> fits a two-parameter logistic model to each item. For each of the flags, this estimates two parameters:</p>
+<ul>
+<li><p><strong>Discrimination (a)</strong>: how strongly that flag distinguishes between high- and low-response-quality participants. A flag with a high discrimination value is a “good” indicator: it clearly separates people who are genuinely careless from those who aren’t. A flag with low discrimination is a noisier or weaker signal of the underlying construct.</p></li>
+<li><p><strong>Difficulty/severity (b)</strong>: how extreme someone’s underlying “low quality” trait needs to be before they trip that particular flag. Some flags (e.g., a strict speeder cutoff) might only get triggered by very low-quality responders, while others might get triggered more easily.</p></li>
+</ul></li>
+</ul>
+<!-- -->
+<ul>
+<li><code>verbose = FALSE</code> suppresses the iteration output during estimation</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract latent response quality scores and add to data</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>response_quality <span class="ot">&lt;-</span> <span class="fu">fscores</span>(irt_model)[, <span class="dv">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><code>fscores()</code> estimates each participant’s position on the latent response-quality continuum, given their pattern of 0/1 flags and considering the discrimination/difficulty of each indicator. Higher values on this scale represent lower response quality (more evidence of careless responding), assuming 1 = fail on each of the indicators. This is the variable you can later use in sensitivity analyses.</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># View the item parameters</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">coef</span>(irt_model, <span class="at">simplify =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>This prints the <code>a</code> (discrimination) and <code>b</code> (difficulty) estimates for each of the flags.</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: Check model fit</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(irt_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>This gives you factor loadings (a standardised version of the <code>a</code> parameters) and the proportion of variance in the flags explained by the single latent factor. This is the evidence that the 2PL solution is behaving sensibly (or not).</li>
+</ul>
+<p>The resulting latent inattention scores can then be used in sensitivity analyses. For example, latent scores could be used as a control or weight in models, or a threshold can be set beyond which participants are flagged and sensitivity analyses are run with and without these participants.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-berinsky2013" class="csl-entry" role="listitem">
+Berinsky, A. J., Margolis, M. F., &amp; Sances, M. W. (2013). Separating the shirkers from the workers? Making sure respondents pay attention on self<span>-</span>administered surveys. <em>American Journal of Political Science</em>, <em>58</em>(3), 739–753. <a href="https://doi.org/10.1111/ajps.12081">https://doi.org/10.1111/ajps.12081</a>
+</div>
+<div id="ref-mirt" class="csl-entry" role="listitem">
+Chalmers, R. P. (2012). <span class="nocase">mirt</span>: A multidimensional item response theory package for the <span>R</span> environment. <em>Journal of Statistical Software</em>, <em>48</em>(6), 1–29. <a href="https://doi.org/10.18637/jss.v048.i06">https://doi.org/10.18637/jss.v048.i06</a>
+</div>
+<div id="ref-dunn2018intra" class="csl-entry" role="listitem">
+Dunn, A. M., Heggestad, E. D., Shanock, L. R., &amp; Theilgard, N. (2018). Intra-individual response variability as an indicator of insufficient effort responding: Comparison to other indicators and relationships with individual differences. <em>Journal of Business and Psychology</em>, <em>33</em>(1), 105–121.
+</div>
+<div id="ref-edwards2009special" class="csl-entry" role="listitem">
+Edwards, M. C., &amp; Edelen, M. O. (2009). Special topics in item response theory. <em>The SAGE Handbook of Quantitative Methods in Psychology</em>, 178–198.
+</div>
+<div id="ref-Guo_Choi2023" class="csl-entry" role="listitem">
+Guo, W., &amp; Choi, Y.-J. (2023). Assessing dimensionality of IRT models using traditional and revised parallel analyses. <em>Educational and Psychological Measurement</em>, <em>83</em>(3), 609–629. <a href="https://doi.org/10.1177/00131644221111838">https://doi.org/10.1177/00131644221111838</a>
+</div>
+<div id="ref-marjanovic2015inter" class="csl-entry" role="listitem">
+Marjanovic, Z., Holden, R., Struthers, W., Cribbie, R., &amp; Greenglass, E. (2015). The inter-item standard deviation (ISD): An index that discriminates between conscientious and random responders. <em>Personality and Individual Differences</em>, <em>84</em>, 79–83.
+</div>
+<div id="ref-weijters2012" class="csl-entry" role="listitem">
+Weijters, B., &amp; Baumgartner, H. (2012). Misresponse to reversed and negated items in surveys: A review. <em>Journal of Marketing Research</em>, <em>49</em>(5), 737–747. <a href="https://doi.org/10.1509/jmr.11.0368">https://doi.org/10.1509/jmr.11.0368</a>
+</div>
+<div id="ref-careless" class="csl-entry" role="listitem">
+Yentes, R., &amp; Wilhelm, F. (2023). <em>Careless: Procedures for computing indices of careless responding</em>.
+</div>
 <div id="ref-zhang2014" class="csl-entry" role="listitem">
 Zhang, C., &amp; Conrad, F. (2014). Speeding in web surveys: The tendency to answer very fast and its association with straightlining. <em>Survey Research Methods</em>, <em>Vol 8</em>, No 2 (2014). <a href="https://doi.org/10.18148/SRM/2014.V8I2.5453">https://doi.org/10.18148/SRM/2014.V8I2.5453</a>
 </div>
 </div>
+</section>
 </section>
 
 </main> <!-- /main -->
