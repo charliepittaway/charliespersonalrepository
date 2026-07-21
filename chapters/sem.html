@@ -454,6 +454,12 @@ div.csl-indent {
 <section id="covariance-based-sem" class="level2" data-number="18.1">
 <h2 data-number="18.1" class="anchored" data-anchor-id="covariance-based-sem"><span class="header-section-number">18.1</span> Covariance-based SEM</h2>
 <p>The code below is taken from <span class="citation" data-cites="PittawayFieldingLouis2024">Pittaway et al. (<a href="../references.html#ref-PittawayFieldingLouis2024" role="doc-biblioref">2024</a>)</span>. This was a complicated model that included two observed IVs, three observed DVs, and a parallel mediation model comprising one observed and one latent variable. In order to calculate the specific indirect and total effects, you must specify names for each indirect effect and assign them an alphabetical code.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/Pittaway et al 2024 model.jpg" class="img-fluid figure-img"></p>
+<figcaption>The theoretical model being tested in Pittaway et al.&nbsp;(2024).</figcaption>
+</figure>
+</div>
 <p><em>Note:</em> I am pasting this code here so that others can access it as needed, but I will return to tidy up this page and annotate the code more comprehensively when I have time. If you are trying to run a similar model and it’s throwing errors, let me know and I can help troubleshoot.</p>
 <section id="specify-the-model" class="level3" data-number="18.1.1">
 <h3 data-number="18.1.1" class="anchored" data-anchor-id="specify-the-model"><span class="header-section-number">18.1.1</span> Specify the model</h3>
@@ -963,6 +969,12 @@ div.csl-indent {
 <section id="build-the-model-using-lavaan" class="level3" data-number="18.2.1">
 <h3 data-number="18.2.1" class="anchored" data-anchor-id="build-the-model-using-lavaan"><span class="header-section-number">18.2.1</span> Build the model using lavaan</h3>
 <p>The following code is taken from <span class="citation" data-cites="Pittaway_Louis_Fielding2025">Pittaway et al. (<a href="../references.html#ref-Pittaway_Louis_Fielding2025" role="doc-biblioref">2025</a>)</span>. This tests practically the same model as in the example above, except with additional longer indirect pathways to the three DVs.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/Pittaway et al 2025 model.jpg" class="img-fluid figure-img"></p>
+<figcaption>The theoretical model being tested in Pittaway et al.&nbsp;(2025.</figcaption>
+</figure>
+</div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">### M1 </span><span class="al">###</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>m1_csem <span class="ot">&lt;-</span> <span class="st">'</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">ANX &lt;~ anx_aff_w1 + anx_behav_w1 + anx_rumin_w1 + anx_pers_w1</span></span>
