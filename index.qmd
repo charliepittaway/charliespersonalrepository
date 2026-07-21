@@ -24,8 +24,6 @@ Work-in-progress pages are:
 
 -   Mediation, moderated mediation
 
--   Appending data sets
-
 -   Factor analyses: PCA, EFA, CFA, and which to use for what.
 
 -   Regression discontinuity designs
