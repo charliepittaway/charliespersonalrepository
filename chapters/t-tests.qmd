@@ -11,7 +11,44 @@ I use the **rempsyc** package to run t-tests, which is a "wrapper" on top of oth
 
 ## Running a single t-test
 
-``` r
+Let's create some fake data to demonstrate.
+
+```{r}
+set.seed(1234)
+
+dat <- data.frame(
+  grouping_variable = rep(c("Control", "Treatment"), each = 50),
+
+  dependent_variable = c(
+    rnorm(50, mean = 4.0, sd = 1.0),
+    rnorm(50, mean = 4.8, sd = 1.1)
+  ),
+
+  var1 = c(
+    rnorm(50, 4.0, 1.0),
+    rnorm(50, 4.7, 1.0)
+  ),
+
+  var2 = c(
+    rnorm(50, 5.2, 1.2),
+    rnorm(50, 5.8, 1.1)
+  ),
+
+  var3 = c(
+    rnorm(50, 3.8, 0.9),
+    rnorm(50, 4.0, 0.9)
+  ),
+
+  var4 = c(
+    rnorm(50, 4.5, 1.0),
+    rnorm(50, 5.4, 1.1)
+  )
+)
+```
+
+And to run the t-test and create the results table using **rempsyc...**
+
+```{r}
 library(rempsyc)
 
 t_test_results <- nice_t_test(
@@ -36,7 +73,7 @@ t_test_table
 
 The function accepts either a single variable or a vector of several variables (e.g. `response = c("var1", "var2", "var3")`) to run multiple t-tests at once, all formatted consistently in the same output.
 
-``` r
+```{r}
 t_test_results <- nice_t_test(
   data = dat,
   response = c("var1", "var2", "var3", "var4"),
@@ -44,8 +81,7 @@ t_test_results <- nice_t_test(
   correction = "bonferroni"
 )
 
-t_test_table <- nice_table(t_test_results)
-t_test_table
+nice_table(t_test_results)
 ```
 
 **What this is doing:**
@@ -169,7 +205,7 @@ if (length(common_auxiliaries) > 0) {
 }
 ```
 
-### Step 4: Mean-centring covariates 
+### Step 4: Mean-centring covariates
 
 If you wanted to add controls/covariates to the model, you must mean-centre continuous variables and ensure that dichotomous variables are effect-coded.
 
@@ -313,43 +349,18 @@ run_group_comparison_controlled <- function(dv_name, common_auxiliary = NULL, da
 **What this is doing:**
 
 -   This is a custom function, written once, then looped over every DV in the next step.
-
-<!-- -->
-
 -   `use_auxiliary <- !is.null(common_auxiliary) && common_auxiliary != dv_name` checks two things: that an auxiliary variable was actually specified, and that it isn't the same variable as the DV currently being tested (which would be nonsensical). If both are true, `aux_syntax` is built (the auxiliary's mean is estimated, and its covariance with the DV specified) — this is the lavaan syntax that actually implements the FIML auxiliary-variable approach.
-
-<!-- -->
-
 -   `model_unconstrained` is the **alternative hypothesis** model: `c(mu1, mu2)*1` estimates a **separate mean** for each of the two groups (labeled `mu1` and `mu2`) — this is the "the groups genuinely differ" model.
-
     -   `~~ c(v1, v2)*dv_name` estimates a **separate variance** per group too, which is what makes this approximate a **Welch t-test** (which doesn't assume equal variances) rather than a standard Student's t-test.
 
     -   The `diff`, `sd_welch`, and `d_welch` lines are lavaan's `:=` syntax for defining new quantities *derived* from the model's parameters — here, calculating the mean difference and a Welch-style Cohen's d directly as part of the model, rather than needing a separate calculation step afterward.
-
-<!-- -->
-
 -   `model_constrained` is your **null hypothesis** model: `c(mu_equal, mu_equal)*1` forces both groups to share the **same** mean — this is "the groups don't actually differ" model, everything else kept identical.
-
-<!-- -->
-
 -   `sem(..., missing = "FIML")` is what actually runs each model using full information maximum likelihood — this single argument is what allows participants with partial missing data to still contribute to parameter estimation, rather than being dropped via listwise deletion, addressing the exact problem described in your intro paragraph.
-
-<!-- -->
-
 -   `group = "pre_post"` tells lavaan which variable defines your two comparison groups — the model is fit **separately per group**, which is what allows the means (and variances) to differ between them in the unconstrained model.
-
 -   The `group_labels` check is a safeguard: lavaan orders groups alphabetically/by factor level internally, and if that order ever didn't match your expectation (`"pre"` first, `"post"` second), any downstream code assuming `group == 1` is "pre" would silently mislabel results. `stop()` halts execution with a clear error message the moment this happens, rather than letting a silent labeling mistake flow through to your final table.
-
-<!-- -->
-
 -   `lavInspect(..., "nobs")` extracts the sample size used in each group.
-
-<!-- -->
-
 -   `anova(fit_constrained, fit_unconstrained)` runs a **likelihood ratio test**, comparing how well the two models fit the data. This is the "t-test equivalent": rather than a t-statistic, you get a chi-square difference test, where a significant result means the unconstrained model (means allowed to differ) fits meaningfully better than the constrained one (means forced equal) — i.e. the groups differ significantly.
-
 -   The `params` block tpulls every result out of the fitted model — group means, variances, the mean difference with its confidence interval, and Cohen's d with its confidence interval — and assembles them into a single tidy row of output for this one DV.
-
     -   This is where **`scale_factor`** does its work: `pre_M * scale_factor`, `post_M * scale_factor`, and the difference/CI values are all multiplied back up, undoing the /10 rescaling, so the variables are reported back on their original, interpretable 0–100 scale.
 
     -   `d_est`, `d_lci`, `d_uci` are **not** multiplied by `scale_factor` — Cohen's d is a standardised effect size (already expressed in SD units), so it's scale-invariant by design and doesn't need back-transforming.
