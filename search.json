@@ -67,18 +67,7 @@
     "href": "chapters/getting-started.html#importing-data-into-r",
     "title": "1  Getting Started",
     "section": "1.3 Importing data into R",
-    "text": "1.3 Importing data into R\nYou’re probably familiar with downloading your data from Qualtrics in .sav format to import into SPSS, or .csv format to open in Excel. Both of these file types (and many more) can be used in R.\nMy recommendation is to save as an .sav file for the utility of having the item wording retained, which you lose in .csv format. To do this, you’ll need to install the haven package (Wickham et al., 2025).\n\ninstall.packages(\"haven\")\nlibrary(haven)\n\n# Import your data into R, using the relative file path\ndat &lt;- read_sav(\"data/my_qualtrics_export.sav\")\n\nIf you don’t care about retaining the item stem and .csv is sufficient, you’ll need the readr package instead (Wickham et al., 2026).\n\ninstall.packages(\"readr\")\nlibrary(readr)\n\n# Import your data into R, using the relative file path\ndat &lt;- read_csv(\"data/my_qualtrics_export.csv\")\n\n\n\n\n\n\n\nWarningCommon error\n\n\n\nIf read_sav() throws an error about the file not being found, double check you’re working inside your .Rproj (look for the project name in the top-right corner of RStudio) and that the file path matches your actual folder structure, e.g. \"data/filename.sav\" not just \"filename.sav\".\n\n\nNow that you have your data saved and your R project structure set up, you are ready to move on to data cleaning…",
-    "crumbs": [
-      "Data Wrangling & Basics",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Getting Started</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/getting-started.html#references",
-    "href": "chapters/getting-started.html#references",
-    "title": "1  Getting Started",
-    "section": "1.4 References",
-    "text": "1.4 References\n\n\n\n\nWickham, H., Hester, J., & Bryan, J. (2026). Readr: Read rectangular text data. https://readr.tidyverse.org\n\n\nWickham, H., Miller, E., & Smith, D. (2025). Haven: Import and export ’SPSS’, ’stata’ and ’SAS’ files. https://haven.tidyverse.org",
+    "text": "1.3 Importing data into R\nYou’re probably familiar with downloading your data from Qualtrics in .sav format to import into SPSS, or .csv format to open in Excel. Both of these file types (and many more) can be used in R.\nMy recommendation is to save as an .sav file for the utility of having the item wording retained, which you lose in .csv format. To do this, you’ll need to install the haven package (Wickham et al., 2025).\n\ninstall.packages(\"haven\")\nlibrary(haven)\n\n# Import your data into R, using the relative file path\ndat &lt;- read_sav(\"data/my_qualtrics_export.sav\")\n\nIf you don’t care about retaining the item stem and .csv is sufficient, you’ll need the readr package instead (Wickham et al., 2026).\n\ninstall.packages(\"readr\")\nlibrary(readr)\n\n# Import your data into R, using the relative file path\ndat &lt;- read_csv(\"data/my_qualtrics_export.csv\")\n\n\n\n\n\n\n\nWarningCommon error\n\n\n\nIf read_sav() throws an error about the file not being found, double check you’re working inside your .Rproj (look for the project name in the top-right corner of RStudio) and that the file path matches your actual folder structure, e.g. \"data/filename.sav\" not just \"filename.sav\".\n\n\nNow that you have your data saved and your R project structure set up, you are ready to move on to data cleaning…\n\n\n\n\nWickham, H., Hester, J., & Bryan, J. (2026). Readr: Read rectangular text data. https://readr.tidyverse.org\n\n\nWickham, H., Miller, E., & Smith, D. (2025). Haven: Import and export ’SPSS’, ’stata’ and ’SAS’ files. https://haven.tidyverse.org",
     "crumbs": [
       "Data Wrangling & Basics",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Getting Started</span>"
