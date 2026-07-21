@@ -62,6 +62,4 @@ dat <- read_csv("data/my_qualtrics_export.csv")
 If `read_sav()` throws an error about the file not being found, double check you're working inside your `.Rproj` (look for the project name in the top-right corner of RStudio) and that the file path matches your actual folder structure, e.g. `"data/filename.sav"` not just `"filename.sav"`.
 :::
 
-Now that you have your data saved and your R project structure set up, you are ready to move on to [data cleaning](data-cleaning.qmd)...
-
-## References
+Now that you have your data saved and your R project structure set up, you are ready to move on to [data cleaning](data-cleaning-overview.qmd)...
