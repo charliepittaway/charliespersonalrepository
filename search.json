@@ -2,7 +2,7 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Charlie’s R for Psychological Science Repository",
+    "title": "Charlie’s Personal R for Psychology Repository",
     "section": "",
     "text": "Overview\nThis is an ongoing collection of functions/workflows/code snippets to run analyses in R, as per psychological science conventions. The initial goal of this project was to provide a workflow for data cleaning for psychology researchers, as I was unable to find something similar when I was a PhD student. I’m now expanding it to be a living repository of all of the R code I collect over the years.\nI learned how to do many of these things from other people’s generously developed guides, which I have cited and linked throughout.",
     "crumbs": [
@@ -12,7 +12,7 @@
   {
     "objectID": "index.html#do-you-have-code-to-share",
     "href": "index.html#do-you-have-code-to-share",
-    "title": "Charlie’s R for Psychological Science Repository",
+    "title": "Charlie’s Personal R for Psychology Repository",
     "section": "Do you have code to share?",
     "text": "Do you have code to share?\n📧 charlie.pittaway@flinders.edu.au\n⭐ If you find new packages, or better processes, please let me know!\n⭐ If you have R code, and you’re happy to share it, I will add it to the page.\n\nIf the code relates to published data, it would be handy if you sent through the analysis code along with the data (as you would upload to OSF) so that I can run executable code and show examples of the output alongside a link to the publication.\nIf the data are not yet published, the analysis code is sufficient, and I can update the page when the data are published. Thank you for contributing!",
     "crumbs": [
@@ -22,7 +22,7 @@
   {
     "objectID": "index.html#roadmap",
     "href": "index.html#roadmap",
-    "title": "Charlie’s R for Psychological Science Repository",
+    "title": "Charlie’s Personal R for Psychology Repository",
     "section": "Roadmap 🚧",
     "text": "Roadmap 🚧\nWork-in-progress pages are:\n\nHierarchical regression\nMediation, moderated mediation\nFactor analyses: PCA, EFA, CFA, and which to use for what.\nRegression discontinuity designs\nBasic sentiment analysis\nPapers that cite the same papers package\nBayesian moderated mediation (thanks to Emily Haines for providing the code)\nStructural topic modelling (thanks to Emily Haines for providing the code)",
     "crumbs": [
