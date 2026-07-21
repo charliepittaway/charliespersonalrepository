@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>16&nbsp; Meta-Analysis – Charlie's R for Psychological Science Repository</title>
+<title>8&nbsp; Data Quality – Charlie's R for Psychological Science Repository</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,7 +23,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -33,8 +53,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../chapters/themes-colours.html" rel="next">
-<link href="../chapters/sem.html" rel="prev">
+<link href="../chapters/reproducible-tables.html" rel="next">
+<link href="../chapters/data-cleaning-overview.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -85,7 +105,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/t-tests.html">Analyses</a></li><li class="breadcrumb-item"><a href="../chapters/meta-analysis-basic.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Meta-Analysis</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/data-cleaning-overview.html">Data Cleaning</a></li><li class="breadcrumb-item"><a href="../chapters/data-quality.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Data Quality</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -180,7 +200,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/data-quality.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/data-quality.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Data Quality</span></span></a>
   </div>
 </li>
@@ -250,7 +270,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/meta-analysis-basic.html" class="sidebar-item-text sidebar-link active">
+  <a href="../chapters/meta-analysis-basic.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Meta-Analysis</span></span></a>
   </div>
 </li>
@@ -335,15 +355,21 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#measures-of-response-quality" id="toc-measures-of-response-quality" class="nav-link active" data-scroll-target="#measures-of-response-quality"><span class="header-section-number">8.1</span> Measures of response quality</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/t-tests.html">Analyses</a></li><li class="breadcrumb-item"><a href="../chapters/meta-analysis-basic.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Meta-Analysis</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/data-cleaning-overview.html">Data Cleaning</a></li><li class="breadcrumb-item"><a href="../chapters/data-quality.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Data Quality</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Meta-Analysis</span></h1>
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Data Quality</span></h1>
 </div>
 
 
@@ -360,11 +386,21 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Contact me for a full three-level random-effects meta-analysis workflow from start to finish. I can’t upload it yet, as it uses data from a study that has not yet been published. When it has been published, I will upload it here.</p>
-<p>But in the meantime… let me know if you want me to send you the file.</p>
-<p>📧 <a href="mailto:charlie.pittaway@flinders.edu.au">charlie.pittaway@flinders.edu.au</a></p>
+<p>There are lots of different ways to assess data quality, and different strategies for what to do with this information.</p>
+<section id="measures-of-response-quality" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="measures-of-response-quality"><span class="header-section-number">8.1</span> Measures of response quality</h2>
+<ul>
+<li><p>Speeding: Participants complete the study too quickly, indicating they may not have provided meaningful answers <span class="citation" data-cites="zhang2014">(<a href="../references.html#ref-zhang2014" role="doc-biblioref">Zhang &amp; Conrad, 2014</a>)</span>.</p></li>
+<li><p>Straightlining: Participants have selected the same answer repeatedly across a series of questions, indicating they may not have provided meaningful answers. This measure tends to be associated with speeding behaviour <span class="citation" data-cites="zhang2014">(<a href="../references.html#ref-zhang2014" role="doc-biblioref">Zhang &amp; Conrad, 2014</a>)</span>.</p></li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-zhang2014" class="csl-entry" role="listitem">
+Zhang, C., &amp; Conrad, F. (2014). Speeding in web surveys: The tendency to answer very fast and its association with straightlining. <em>Survey Research Methods</em>, <em>Vol 8</em>, No 2 (2014). <a href="https://doi.org/10.18148/SRM/2014.V8I2.5453">https://doi.org/10.18148/SRM/2014.V8I2.5453</a>
+</div>
+</div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -769,13 +805,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/sem.html" class="pagination-link" aria-label="Structural Equation Modelling">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Structural Equation Modelling</span></span>
+      <a href="../chapters/data-cleaning-overview.html" class="pagination-link" aria-label="Data Cleaning: Step-by-Step">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data Cleaning: Step-by-Step</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../chapters/themes-colours.html" class="pagination-link" aria-label="Themes and Plot Colouring">
-        <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Themes and Plot Colouring</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/reproducible-tables.html" class="pagination-link" aria-label="Overview">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Overview</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
