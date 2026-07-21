@@ -7,6 +7,280 @@ There are lots of different ways to assess data quality, and different strategie
 
 ## Measures of response quality
 
--   Speeding: Participants complete the study too quickly, indicating they may not have provided meaningful answers [@zhang2014].
+### Instructed response attention checks
 
--   Straightlining: Participants have selected the same answer repeatedly across a series of questions, indicating they may not have provided meaningful answers. This measure tends to be associated with speeding behaviour [@zhang2014].
+Instructed response attention checks have long been used in the world of assessing data quality. Questions are clear that they are attention checks (e.g., "To show you are paying attention, please select 'Disagree' in response to this question"). You might place several throughout the survey and decide on how many participants are able to fail before they are excluded from your final dataset. Alternatively, you may place two very early on in the survey and automatically screen out participants who fail both, while flagging those who failed one as potentially having lower quality responses.
+
+My current strategy is the second option: participants respond to two attention checks in the first block of question; if they fail both, they are booted (with an explanation)—I think this is only appropriate to do if the checks are early on, so participants don't feel like they have sacrificed too much of their time for a survey they will never be paid for.
+
+I then flag participants who failed one attention check as having potentially lower quality responses (`low_attention == 1 if 1/2 attention checks are failed, low_attention == 0 if both are passed`), and use this as one indicator in a latent response quality variable assessed using item response theory (more on this at the bottom of the page).
+
+### Speeding
+
+Participants who complete the study far too quickly to have meaningfully engaged with it are called **speeders** [@zhang2014]. Speeders often show other indicators of low response quality like straightlining, where they provide the same response repeatedly across a series of questions in order to complete the survey very quickly.
+
+#### How to detect speeders
+
+There are two common approaches for identifying participants who complete a survey too quickly.
+
+First, you can decide in advance on a minimum completion time and exclude anyone who finishes faster than that as a blanket rule.
+
+Second, you can determine what an unreasonably fast completion time is using the sample distribution. I typically calculate the survey's average completion time and define speeding as a completion time that is more than three standard deviations below the mean. To ensure the average is representative, I exclude outliers (both high and low) from this estimate. Participants whose completion times fall more than three standard deviations below this adjusted are then flagged (my preference) or excluded.
+
+Here is some example data, with some extreme low and extreme high outliers.
+
+```{r}
+# Example usage
+set.seed(123)
+my_data <- c(rnorm(100, mean = 50, sd = 10), -250, -400, 560, 600)
+mean(my_data)
+```
+
+The below function finds the mean response time, excluding values +/- 3SD from the mean.
+
+```{r}
+library(dplyr)
+
+# Function to calculate mean excluding outliers (+/- 3 SD)
+mean_no_outliers <- function(x, sd_threshold = 3) {
+  x <- x[!is.na(x)]  # remove NAs first
+  m <- mean(x)
+  s <- sd(x)
+  
+  lower <- m - sd_threshold * s
+  upper <- m + sd_threshold * s
+  
+  x_trimmed <- x[x >= lower & x <= upper]
+  
+  return(mean(x_trimmed))
+}
+
+mean_no_outliers(my_data)
+```
+
+If you want to know the outliers that were removed, you can run the following function. This code produces a tibble which will show you all the outlier values, and whether they are high or low outliers.
+
+```{r}
+library(tibble)
+
+identify_outliers <- function(x, sd_threshold = 3) {
+  x_clean <- x[!is.na(x)]
+  m <- mean(x_clean)
+  s <- sd(x_clean)
+  
+  lower_bound <- m - sd_threshold * s
+  upper_bound <- m + sd_threshold * s
+  
+  outlier_values <- x_clean[x_clean < lower_bound | x_clean > upper_bound]
+  
+  tibble(
+    value = outlier_values,
+    type = if_else(value < lower_bound, "low", "high")
+  )
+}
+
+identify_outliers(my_data)
+```
+
+Now that we know the adjusted mean, you can flag participants as speeders if their response time was more than 3SD below the adjusted mean. The below code flags participants as a speeder (1) if their duration was more than 3SD below the mean, and 0 if not.
+
+``` r
+data <- data %>%
+  mutate(speeder = case_when(
+    duration < (mean(duration) - 3*(sd(duration))) ~ 1,
+    TRUE ~ 0
+  ))
+```
+
+You can exclude based on this flag, see below, or include as an indicator to assess latent response quality (more on this later).
+
+``` r
+data <- data %>%
+  filter(speeder == 0) # This will exclude participants that you have flagged as speeder
+```
+
+### Straightlining
+
+Straightlining is when participants have selected the same answer repeatedly across a series of questions, indicating they may not have provided meaningful answers. This measure tends to be associated with speeding [@zhang2014].
+
+Straightlining is *most* effective if you have both forward- and reverse-coded items for constructs, in which it would be extremely improbably for people to provide the same answers to all questions.
+
+#### How to detect straightlining
+
+The **careless** package contains many tools for assessing, as the name might imply, careless responding [@careless]. One such measure is the `longstring()` function, which assesses straightlining. The `longstring()` function looks at a matrix of items and compares each response to the one before it, calculating the longest uninterrupted string of identical responses. That is, if a participants' longstring score is 25, this means that they provided an identical response to 25 consecutive questions (and they have "straight-lined"). In this way, you only want to run the `longstring()` function on items that were measured on the same response scale.
+
+``` r
+library(dplyr)
+library(careless)
+
+data_careless <- data %>%
+  dplyr::select(var1, var2, var3, var4, var5, var6, var7, var8, var9, var10) #Select the variables you want to check for straightlining
+
+straightliner_results <- longstring(data_careless, avg = TRUE) 
+```
+
+-   `avg = TRUE` additionally returns the average length of uninterrupted identical responses for the participant.
+
+-   This code will produce two variables in the "straightliner_results" dataframe called `longstr` and `avgstr`.
+
+Then, append those new variables back into the main dataframe. The below code uses base R.
+
+``` r
+data$longstr <- straightliner_results$longstr
+data$avgstr <- straightliner_results$avgstr
+```
+
+I don't typically include many reverse-coded items in my surveys as they are known to have psychometric issues [@weijters2012], and I usually include measures for many, many different variables. As such, it is completely possible that participants might show *some* level of straightlining in my surveys, and I don't feel comfortable straight-up excluding participants based on this measure. However, I again use this as one indicator in a latent model of response quality. My approach is to find participants which show high outliers on this measure, and then flag them, using this flag as another indicator in a latent inattention variable.
+
+The code below will tell the threshold above which you would flag people as being a high outlier on longstr and avgstr.
+
+``` r
+# Threshold for longstr
+mean(data$longstr) + (3*sd(data$longstr))
+
+# Threshold for avgstr 
+mean(data$avgstr) + (3*sd(data$avgstr))
+
+# Flag high outliers
+data <- data %>%
+  mutate(
+    longstring_flag = case_when(longstr > (mean(longstr) + (3*sd(longstr))) ~ 1, TRUE ~ 0),
+    avgstring_flag = case_when(avgstr > (mean(avgstr) + (3*sd(avgstr))) ~ 1, TRUE ~ 0)
+  )
+```
+
+### Item response variability
+
+Item response variability (IRV) is a measure of within-person response variability and is often conceptually linked to straightlining. Respondents who provide low-quality data may be aware that researchers screen for straightlining and therefore attempt to avoid detection by responding in simple, repetitive patterns that nevertheless exhibit minimal variation. Consequently, low IRV scores, reflecting reduced within-person variability, may indicate patterned or non-differentiated responding [@dunn2018intra]. Such cases can be identified by examining low-end outliers in the IRV distribution. At the same time, other researchers have argued that unusually high IRV scores may also signal problematic responding, as excessive variability can reflect random or careless response patterns [@marjanovic2015inter].
+
+#### How to measure IRV
+
+Again, the **careless** package [@careless] provides functions to assess IRV. As with straightlining, this assessment is only really useful on matrixes of continuously-scored items that share the same response scale.
+
+The code below utilises the helper dataframe made in the previous section comprising relevant measures. A new variable called irv will be calculated, which is the standard deviation of responses across the set of items for each participant.
+
+``` r
+irv_values <- irv(data_careless, split = FALSE)
+```
+
+Append these values back into the main dataframe.
+
+``` r
+data$irv <- irv_values$irv
+```
+
+You can use the code from earlier to identify the high and low outliers.
+
+``` r
+identify_outliers <- function(x, sd_threshold = 3) {
+  x_clean <- x[!is.na(x)]
+  m <- mean(x_clean)
+  s <- sd(x_clean)
+  
+  lower_bound <- m - sd_threshold * s
+  upper_bound <- m + sd_threshold * s
+  
+  outlier_values <- x_clean[x_clean < lower_bound | x_clean > upper_bound]
+  
+  tibble(
+    value = outlier_values,
+    type = if_else(value < lower_bound, "low", "high")
+  )
+}
+
+identify_outliers(data$irv)
+```
+
+You can then use the values to identify low and/or high thresholds beyond which participants will be flagged.
+
+Alternatively, you can do this using the following code:
+
+``` r
+data <- data %>%
+  mutate(irv_low = case_when(irv < (mean(irv) - (3*sd(irv))) ~ 1, TRUE ~ 0),
+         irv_high = case_when(irv > (mean(irv) + (3*sd(irv))) ~ 1, TRUE ~ 0)
+  )
+```
+
+Again, these flags can be used in a latent measure of response quality.
+
+### Seriousness check
+
+Another measure I use is an explicit seriousness check presented as the final question in the survey, asking participants if they took part seriously or just clicked through. If they report that they just clicked through, their responses are flagged as being not serious (1), versus serious (0).
+
+### Latent response quality
+
+Rather than excluding participants based on the above measures, I include them all as indicators of an underlying "response quality" measure using item response theory [@berinsky2013]. Regardless of what measures of response quality are included in my survey design, I convert them all to a binary system of flags, as above, where 1 indicates a potentially low quality response as indicated by this measure and 0 suggests that the participant passes that particular check. These binary indicators are then modelled as indicators of an underlying latent "response quality" variable. This means that participants who score 1 on all of the response quality measures can be treated differently from participants who score 1 on only one or two. This latent variable can then be used to weight participant responses, as a covariate, or as another strategy to make exclusions for sensitivity analyses.
+
+The strategy is as follows:
+
+Prior to fitting a model, the unidimensionality of the response quality indicators is assessed using parallel analysis [@Guo_Choi2023]. This confirms whether a single latent factor adequately represents these measures.
+
+``` r
+library(mirt)
+library(tidyr)
+
+# Select the flag variables from the main dataset and ensure there are no NAs
+flags <- data %>%
+  dplyr::select(low_attention, speeder, longstr_flag, averagestr_flag, irv_low, irv_high, seriousness_check) %>%
+  # Replace any remaining NAs with 0 (assuming non-flagged)
+  mutate(across(everything(), ~replace_na(., 0)))
+
+# Run parallel analysis
+psych::fa.parallel(flags, cor = "tet", fa = "fa")
+```
+
+-   Parallel analysis checks how many real factors underlie the data by comparing the actual eigenvalues to eigenvalues generated from random, uncorrelated data of the same size. Any real eigenvalue that exceeds its random counterpart signals a genuine factor.
+
+-   Parallel analysis is conducted using tetrachoric correlations rather than Pearson correlations for binary data, as here [@Guo_Choi2023].
+
+-   This code will tell you how many factors are underlying the indicators. 1 factor indicates that they all represent the same underlying response quality measure – if more than 1 factor emerges, it might be worth investigating this further to see which measures hang together and whether they represent different measures of response quality.
+
+Next, these indicators are modelled as items in a unidimensional two-parameter logistic model (2PL) to estimate a latent response quality factor for careless responding using the **mirt** package [@mirt]. The 2PL model is the most appropriate choice for survey data because the measures will vary in how well they measure the underlying construct (response quality) and will vary in how difficult it is for participants to 'trigger' the flag, but there is no guessing involved (such as in tests where people can potentially guess the correct answer) which would justify the use of a three-parameter logic model [@edwards2009special].
+
+``` r
+# Fit a unidimensional 2PL model
+irt_model <- mirt(data = flags, 
+                  model = 1,        
+                  itemtype = "2PL", 
+                  verbose = FALSE)
+```
+
+**What this is doing:**
+
+-   `model = 1` tells `mirt` to fit a single-factor (unidimensional) model — appropriate if the parallel analysis confirmed one factor.
+
+<!-- -->
+
+-   `itemtype = "2PL"` fits a two-parameter logistic model to each item. For each of the flags, this estimates two parameters:
+
+    -   **Discrimination (a)**: how strongly that flag distinguishes between high- and low-response-quality participants. A flag with a high discrimination value is a "good" indicator: it clearly separates people who are genuinely careless from those who aren't. A flag with low discrimination is a noisier or weaker signal of the underlying construct.
+
+    -   **Difficulty/severity (b)**: how extreme someone's underlying "low quality" trait needs to be before they trip that particular flag. Some flags (e.g., a strict speeder cutoff) might only get triggered by very low-quality responders, while others might get triggered more easily.
+
+<!-- -->
+
+-   `verbose = FALSE` suppresses the iteration output during estimation
+
+``` r
+# Extract latent response quality scores and add to data
+data$response_quality <- fscores(irt_model)[, 1]
+```
+
+-   `fscores()` estimates each participant's position on the latent response-quality continuum, given their pattern of 0/1 flags and considering the discrimination/difficulty of each indicator. Higher values on this scale represent lower response quality (more evidence of careless responding), assuming 1 = fail on each of the indicators. This is the variable you can later use in sensitivity analyses.
+
+``` r
+# View the item parameters
+print(coef(irt_model, simplify = TRUE))
+```
+
+-   This prints the `a` (discrimination) and `b` (difficulty) estimates for each of the flags.
+
+``` r
+# Optional: Check model fit
+summary(irt_model)
+```
+
+-   This gives you factor loadings (a standardised version of the `a` parameters) and the proportion of variance in the flags explained by the single latent factor. This is the evidence that the 2PL solution is behaving sensibly (or not).
+
+The resulting latent inattention scores can then be used in sensitivity analyses. For example, latent scores could be used as a control or weight in models, or a threshold can be set beyond which participants are flagged and sensitivity analyses are run with and without these participants.
