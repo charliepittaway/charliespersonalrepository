@@ -507,8 +507,7 @@ div.csl-indent {
 </section>
 <section id="step-2-build-the-summary-table-with-createtableone" class="level3" data-number="13.1.2">
 <h3 data-number="13.1.2" class="anchored" data-anchor-id="step-2-build-the-summary-table-with-createtableone"><span class="header-section-number">13.1.2</span> Step 2: Build the summary table with createTableOne()</h3>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tableone)  </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tableone)  </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"gender_r"</span>, <span class="st">"education_r"</span>)  <span class="co"># Select variables</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>table_1 <span class="ot">&lt;-</span> <span class="fu">CreateTableOne</span>(</span>
@@ -520,39 +519,6 @@ div.csl-indent {
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>table_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                          Stratified by country_r
-                           Overall       Australia     United Kingdom
-  n                          500           256           162         
-  age (mean (SD))          42.42 (14.59) 41.86 (14.91) 43.04 (14.36) 
-  gender_r (%)                                                       
-     Male                    229 (45.8)    120 (46.9)     75 (46.3)  
-     Female                  255 (51.0)    130 (50.8)     80 (49.4)  
-     Non-binary                9 ( 1.8)      5 ( 2.0)      3 ( 1.9)  
-     Other                     7 ( 1.4)      1 ( 0.4)      4 ( 2.5)  
-  education_r (%)                                                    
-     Less than high school    41 ( 8.2)     21 ( 8.2)     14 ( 8.6)  
-     High school             123 (24.6)     71 (27.7)     37 (22.8)  
-     TAFE                    105 (21.0)     53 (20.7)     34 (21.0)  
-     Undergraduate degree    147 (29.4)     79 (30.9)     48 (29.6)  
-     Postgraduate degree      84 (16.8)     32 (12.5)     29 (17.9)  
-                          Stratified by country_r
-                           United States
-  n                           82        
-  age (mean (SD))          42.93 (14.14)
-  gender_r (%)                          
-     Male                     34 (41.5) 
-     Female                   45 (54.9) 
-     Non-binary                1 ( 1.2) 
-     Other                     2 ( 2.4) 
-  education_r (%)                       
-     Less than high school     6 ( 7.3) 
-     High school              15 (18.3) 
-     TAFE                     18 (22.0) 
-     Undergraduate degree     20 (24.4) 
-     Postgraduate degree      23 (28.0) </code></pre>
-</div>
-</div>
 <p><strong>What this is doing:</strong></p>
 <ul>
 <li><p><code>vars &lt;- c("age", "gender_r", "education_r")</code> defines which variables should appear as rows in the table..</p></li>
@@ -566,42 +532,42 @@ div.csl-indent {
 <section id="step-3-converting-the-tableone-object-into-a-flextable" class="level3" data-number="13.1.3">
 <h3 data-number="13.1.3" class="anchored" data-anchor-id="step-3-converting-the-tableone-object-into-a-flextable"><span class="header-section-number">13.1.3</span> Step 3: Converting the tableone object into a flextable</h3>
 <p>This is a function helpfully created by Graham Cooper <span class="citation" data-cites="Cooper2024">(<a href="../references.html#ref-Cooper2024" role="doc-biblioref">Cooper, 2024</a>)</span> and made available on GitHub to quickly convert a <strong>tableone</strong> object to something that you can open in a Word document using the <strong>flextable</strong> and <strong>officer</strong> packages. Make sure you have those two packages installed and loaded to be able to run the function.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tableone2flextable <span class="ot">&lt;-</span> <span class="cf">function</span>(tableone) {</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  tableone <span class="ot">&lt;-</span> <span class="fu">print</span>(</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    tableone,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">quote =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">noSpaces =</span> <span class="cn">TRUE</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(tableone)</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  cols <span class="ot">&lt;-</span> <span class="fu">ncol</span>(tableone)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  column_names <span class="ot">&lt;-</span> <span class="fu">colnames</span>(tableone)</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  listoflists <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, cols)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(cols)) {</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    start <span class="ot">&lt;-</span> (i <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> rows <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    end <span class="ot">&lt;-</span> i <span class="sc">*</span> rows</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    listoflists[[i]] <span class="ot">&lt;-</span> tableone[start<span class="sc">:</span>end]</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  dataframe <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    listoflists,</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.names =</span> column_names</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  dataframe <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> <span class="fu">rownames</span>(tableone),</span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    dataframe</span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(dataframe) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  flextable<span class="sc">::</span><span class="fu">flextable</span>(dataframe)</span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>tableone2flextable <span class="ot">&lt;-</span> <span class="cf">function</span>(tableone) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  tableone <span class="ot">&lt;-</span> <span class="fu">print</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    tableone,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">quote =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">noSpaces =</span> <span class="cn">TRUE</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(tableone)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  cols <span class="ot">&lt;-</span> <span class="fu">ncol</span>(tableone)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  column_names <span class="ot">&lt;-</span> <span class="fu">colnames</span>(tableone)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  listoflists <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">"list"</span>, cols)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(cols)) {</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    start <span class="ot">&lt;-</span> (i <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> rows <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    end <span class="ot">&lt;-</span> i <span class="sc">*</span> rows</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    listoflists[[i]] <span class="ot">&lt;-</span> tableone[start<span class="sc">:</span>end]</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  dataframe <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    listoflists,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.names =</span> column_names</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  dataframe <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> <span class="fu">rownames</span>(tableone),</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    dataframe</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(dataframe) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  flextable<span class="sc">::</span><span class="fu">flextable</span>(dataframe)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>What this is doing:</strong></p>
 <ul>
 <li><p><code>print(tableone, quote = FALSE, noSpaces = TRUE)</code> converts the tableone object into a plain <strong>character matrix</strong>, stripping out quote marks and extra padding spaces that tableone normally adds for console display.</p></li>
@@ -615,68 +581,36 @@ div.csl-indent {
 </section>
 <section id="step-4-format-and-export-to-word" class="level3" data-number="13.1.4">
 <h3 data-number="13.1.4" class="anchored" data-anchor-id="step-4-format-and-export-to-word"><span class="header-section-number">13.1.4</span> Step 4: Format and export to Word</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>flextable2word <span class="ot">&lt;-</span> <span class="cf">function</span>(flextab, filepath) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  ft <span class="ot">&lt;-</span> flextable<span class="sc">::</span><span class="fu">theme_apa</span>(flextab) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    flextable<span class="sc">::</span><span class="fu">autofit</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    flextable<span class="sc">::</span><span class="fu">align</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">j =</span> <span class="dv">1</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">align =</span> <span class="st">"left"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">part =</span> <span class="st">"all"</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    flextable<span class="sc">::</span><span class="fu">line_spacing</span>(</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">space =</span> <span class="dv">1</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">part =</span> <span class="st">"all"</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  officer<span class="sc">::</span><span class="fu">read_docx</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    flextable<span class="sc">::</span><span class="fu">body_add_flextable</span>(ft) <span class="sc">%&gt;%</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    officer<span class="sc">::</span><span class="fu">body_end_section_landscape</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="at">target =</span> filepath)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">browseURL</span>(filepath)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>tab_1 <span class="ot">&lt;-</span> <span class="fu">tableone2flextable</span>(table_1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>That will have saved the table as a word document. You can also view it in your R window.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>flextable2word <span class="ot">&lt;-</span> <span class="cf">function</span>(flextab, filepath) {</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  ft <span class="ot">&lt;-</span> flextable<span class="sc">::</span><span class="fu">theme_apa</span>(flextab) <span class="sc">%&gt;%</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    flextable<span class="sc">::</span><span class="fu">autofit</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    flextable<span class="sc">::</span><span class="fu">align</span>(</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">j =</span> <span class="dv">1</span>,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">align =</span> <span class="st">"left"</span>,</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">part =</span> <span class="st">"all"</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    flextable<span class="sc">::</span><span class="fu">line_spacing</span>(</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">space =</span> <span class="dv">1</span>,</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">part =</span> <span class="st">"all"</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  officer<span class="sc">::</span><span class="fu">read_docx</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    flextable<span class="sc">::</span><span class="fu">body_add_flextable</span>(ft) <span class="sc">%&gt;%</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    officer<span class="sc">::</span><span class="fu">body_end_section_landscape</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="at">target =</span> filepath)</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">browseURL</span>(filepath)</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>tab_1 <span class="ot">&lt;-</span> <span class="fu">tableone2flextable</span>(table_1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                          Stratified by country_r
-                           Overall       Australia     United Kingdom
-  n                        500           256           162           
-  age (mean (SD))          42.42 (14.59) 41.86 (14.91) 43.04 (14.36) 
-  gender_r (%)                                                       
-     Male                  229 (45.8)    120 (46.9)    75 (46.3)     
-     Female                255 (51.0)    130 (50.8)    80 (49.4)     
-     Non-binary            9 (1.8)       5 (2.0)       3 (1.9)       
-     Other                 7 (1.4)       1 (0.4)       4 (2.5)       
-  education_r (%)                                                    
-     Less than high school 41 (8.2)      21 (8.2)      14 (8.6)      
-     High school           123 (24.6)    71 (27.7)     37 (22.8)     
-     TAFE                  105 (21.0)    53 (20.7)     34 (21.0)     
-     Undergraduate degree  147 (29.4)    79 (30.9)     48 (29.6)     
-     Postgraduate degree   84 (16.8)     32 (12.5)     29 (17.9)     
-                          Stratified by country_r
-                           United States
-  n                        82           
-  age (mean (SD))          42.93 (14.14)
-  gender_r (%)                          
-     Male                  34 (41.5)    
-     Female                45 (54.9)    
-     Non-binary            1 (1.2)      
-     Other                 2 (2.4)      
-  education_r (%)                       
-     Less than high school 6 (7.3)      
-     High school           15 (18.3)    
-     TAFE                  18 (22.0)    
-     Undergraduate degree  20 (24.4)    
-     Postgraduate degree   23 (28.0)    </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>tab_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tab_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div class="tabwid"><style>.cl-fd55f2a0{}.cl-fd4f14e4{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-fd51cd60{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fd51fe70{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd51fe7a{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd51fe7b{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-fd55f2a0"><thead><tr style="overflow-wrap:break-word;"><th class="cl-fd51fe70"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">Variable</span></p></th><th class="cl-fd51fe70"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">Overall</span></p></th><th class="cl-fd51fe70"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">Australia</span></p></th><th class="cl-fd51fe70"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">United.Kingdom</span></p></th><th class="cl-fd51fe70"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">United.States</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">n</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">500</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">256</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">162</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">82</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">age (mean (SD))</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">42.42 (14.59)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">41.86 (14.91)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">43.04 (14.36)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">42.93 (14.14)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">gender_r (%)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   Male</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">229 (45.8)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">120 (46.9)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">75 (46.3)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">34 (41.5)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   Female</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">255 (51.0)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">130 (50.8)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">80 (49.4)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">45 (54.9)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   Non-binary</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">9 (1.8)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">5 (2.0)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">3 (1.9)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">1 (1.2)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   Other</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">7 (1.4)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">1 (0.4)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">4 (2.5)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">2 (2.4)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">education_r (%)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   Less than high school</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">41 (8.2)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">21 (8.2)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">14 (8.6)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">6 (7.3)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   High school</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">123 (24.6)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">71 (27.7)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">37 (22.8)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">15 (18.3)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   TAFE</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">105 (21.0)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">53 (20.7)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">34 (21.0)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">18 (22.0)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   Undergraduate degree</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">147 (29.4)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">79 (30.9)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">48 (29.6)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">20 (24.4)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7b"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   Postgraduate degree</span></p></td><td class="cl-fd51fe7b"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">84 (16.8)</span></p></td><td class="cl-fd51fe7b"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">32 (12.5)</span></p></td><td class="cl-fd51fe7b"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">29 (17.9)</span></p></td><td class="cl-fd51fe7b"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">23 (28.0)</span></p></td></tr></tbody></table></div>
+<div class="tabwid"><style>.cl-d3783f94{}.cl-d36ec4a0{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-d3726c4a{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-d372a5d4{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-d372a5de{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-d372a5e8{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-d3783f94"><thead><tr style="overflow-wrap:break-word;"><th class="cl-d372a5d4"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">Variable</span></p></th><th class="cl-d372a5d4"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">Overall</span></p></th><th class="cl-d372a5d4"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">Australia</span></p></th><th class="cl-d372a5d4"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">United.Kingdom</span></p></th><th class="cl-d372a5d4"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">United.States</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">n</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">500</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">256</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">162</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">82</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">age (mean (SD))</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">42.42 (14.59)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">41.86 (14.91)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">43.04 (14.36)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">42.93 (14.14)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">gender_r (%)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0"></span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0"></span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0"></span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0"></span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">   Male</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">229 (45.8)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">120 (46.9)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">75 (46.3)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">34 (41.5)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">   Female</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">255 (51.0)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">130 (50.8)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">80 (49.4)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">45 (54.9)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">   Non-binary</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">9 (1.8)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">5 (2.0)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">3 (1.9)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">1 (1.2)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">   Other</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">7 (1.4)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">1 (0.4)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">4 (2.5)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">2 (2.4)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">education_r (%)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0"></span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0"></span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0"></span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0"></span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">   Less than high school</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">41 (8.2)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">21 (8.2)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">14 (8.6)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">6 (7.3)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">   High school</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">123 (24.6)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">71 (27.7)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">37 (22.8)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">15 (18.3)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">   TAFE</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">105 (21.0)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">53 (20.7)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">34 (21.0)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">18 (22.0)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">   Undergraduate degree</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">147 (29.4)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">79 (30.9)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">48 (29.6)</span></p></td><td class="cl-d372a5de"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">20 (24.4)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-d372a5e8"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">   Postgraduate degree</span></p></td><td class="cl-d372a5e8"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">84 (16.8)</span></p></td><td class="cl-d372a5e8"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">32 (12.5)</span></p></td><td class="cl-d372a5e8"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">29 (17.9)</span></p></td><td class="cl-d372a5e8"><p class="cl-d3726c4a"><span class="cl-d36ec4a0">23 (28.0)</span></p></td></tr></tbody></table></div>
 </div>
 </div>
-<p>Save and open Word document.</p>
 <p><strong>What this is doing:</strong></p>
 <ul>
 <li><p><code>flextable2word</code> is a second custom function that takes a flextable object (from Step 3) and a <code>filepath</code> argument, letting you specify exactly where and under what filename the finished Word document should be saved.</p></li>
@@ -694,10 +628,10 @@ div.csl-indent {
 </section>
 <section id="step-5-run-it" class="level3" data-number="13.1.5">
 <h3 data-number="13.1.5" class="anchored" data-anchor-id="step-5-run-it"><span class="header-section-number">13.1.5</span> Step 5: Run it</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">flextable2word</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  tab_1,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"output/Table 1 Sample demographics.docx"</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">flextable2word</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  tab_1,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"output/Table 1 Sample demographics.docx"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>What this is doing:</strong></p>
 <ul>
 <li><p><code>tableone2flextable(table_1)</code> runs the Step 3 function on the table you built in Step 2, producing the flextable version.</p></li>
