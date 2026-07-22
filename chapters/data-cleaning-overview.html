@@ -1184,39 +1184,14 @@ Attaching package: 'ggplot2'</code></pre>
 <p>Next, run a missing value analysis to determine whether your data are missing completely at random. This uses the package <strong>naniar</strong>, and has a hold bunch of useful functions that are documented <a href="https://naniar.njtierney.com/">here</a>.</p>
 <p>For the most part, I only check the proportion of missing data on each variable, and use the Little’s MCAR test, unless I need to do some exploring.</p>
 <p>First, run this code to determine the proportion of each variable which is missing data. Variables missing more than 30% are usually cause for concern.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar)</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">miss_var_summary</span>(data) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 18 × 3
-   variable   n_miss pct_miss
-   &lt;chr&gt;       &lt;int&gt;    &lt;num&gt;
- 1 trust_1         0        0
- 2 trust_2         0        0
- 3 identity_1      0        0
- 4 identity_2      0        0
- 5 identity_3      0        0
- 6 efficacy_1      0        0
- 7 efficacy_2      0        0
- 8 efficacy_3      0        0
- 9 efficacy_4      0        0
-10 action_1        0        0
-11 action_2        0        0
-12 action_3        0        0
-13 action_4        0        0
-14 action_5        0        0
-15 trust           0        0
-16 identity        0        0
-17 efficacy        0        0
-18 action          0        0</code></pre>
-</div>
-</div>
 <p><strong>What this is doing:</strong></p>
 <ul>
 <li>This provides a summary for each variable of the number, percentage, and cumulative sum of missings, ordered by the most missing.</li>
 </ul>
 <p>If there is no missing data on any of your key variables, there is no need to run Little’s MCAR test <span class="citation" data-cites="little1988a">(<a href="../references.html#ref-little1988a" role="doc-biblioref">Little, 1988</a>)</span>. If there is missing data, run the following code:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mcar_test</span>(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mcar_test</span>(data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>What this is doing:</strong></p>
 <ul>
 <li>Use Little’s (1988) test statistic to assess if data is missing completely at random (MCAR). The null hypothesis in this test is that the data is MCAR, and the test statistic is a chi-squared value.</li>
