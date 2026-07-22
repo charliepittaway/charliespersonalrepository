@@ -464,16 +464,41 @@ div.csl-indent {
 <h3 data-number="13.1.1" class="anchored" data-anchor-id="step-1-recode-numeric-codes-into-labelled-factors"><span class="header-section-number">13.1.1</span> Step 1: Recode numeric codes into labelled factors</h3>
 <p>Now let’s recode.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span>   </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gender_r =</span> <span class="fu">factor</span>(gender,                           </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>),                           </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Male"</span>, <span class="st">"Female"</span>, <span class="st">"Non-binary"</span>, <span class="st">"Other"</span>)),</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">state_r =</span> <span class="fu">factor</span>(state,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>),</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"NSW"</span>, <span class="st">"VIC"</span>, <span class="st">"QLD"</span>, <span class="st">"SA"</span>, <span class="st">"WA"</span>, <span class="st">"TAS"</span>, <span class="st">"NT"</span>, <span class="st">"ACT"</span>)),</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">education_r =</span> <span class="fu">factor</span>(education,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>),</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                              <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Less than high school"</span>, <span class="st">"High school"</span>, <span class="st">"TAFE"</span>, <span class="st">"Undergraduate degree"</span>, <span class="st">"Postgraduate degree"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">gender_r =</span> <span class="fu">factor</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>      gender,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Male"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Female"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Non-binary"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Other"</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">country_r =</span> <span class="fu">factor</span>(</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>      country,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>),</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Australia"</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"United Kingdom"</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">"United States"</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">education_r =</span> <span class="fu">factor</span>(</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>      education,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>),</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Less than high school"</span>,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>        <span class="st">"High school"</span>,</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>        <span class="st">"TAFE"</span>,</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Undergraduate degree"</span>,</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Postgraduate degree"</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>What this is doing:</strong></p>
 <ul>
@@ -486,67 +511,54 @@ div.csl-indent {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tableone)  </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"gender_r"</span>, <span class="st">"education_r"</span>)  <span class="co"># Select variables</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>table_1 <span class="ot">&lt;-</span> <span class="fu">CreateTableOne</span>(<span class="at">data =</span> data,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">vars =</span> vars,</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">strata =</span> <span class="st">"state_r"</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                          <span class="at">addOverall =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                          <span class="at">test =</span> <span class="cn">FALSE</span>) </span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>table_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>table_1 <span class="ot">&lt;-</span> <span class="fu">CreateTableOne</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> data,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">vars =</span> vars,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">strata =</span> <span class="st">"country_r"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">addOverall =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">test =</span> <span class="cn">FALSE</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>table_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                          Stratified by state_r
-                           Overall       NSW           VIC          
-  n                          500           164           129        
-  age (mean (SD))          42.42 (14.59) 41.54 (15.19) 42.86 (14.59)
-  gender_r (%)                                                      
-     Male                    229 (45.8)     76 (46.3)     58 (45.0) 
-     Female                  255 (51.0)     83 (50.6)     70 (54.3) 
-     Non-binary                9 ( 1.8)      4 ( 2.4)      1 ( 0.8) 
-     Other                     7 ( 1.4)      1 ( 0.6)      0 ( 0.0) 
-  education_r (%)                                                   
-     Less than high school    41 ( 8.2)      9 ( 5.5)     18 (14.0) 
-     High school             123 (24.6)     48 (29.3)     29 (22.5) 
-     TAFE                    105 (21.0)     32 (19.5)     29 (22.5) 
-     Undergraduate degree    147 (29.4)     54 (32.9)     39 (30.2) 
-     Postgraduate degree      84 (16.8)     21 (12.8)     14 (10.9) 
-                          Stratified by state_r
-                           QLD           SA            WA           
-  n                          102            32            49        
-  age (mean (SD))          41.96 (13.67) 42.38 (14.48) 45.33 (14.70)
-  gender_r (%)                                                      
-     Male                     49 (48.0)     13 (40.6)     23 (46.9) 
-     Female                   46 (45.1)     19 (59.4)     25 (51.0) 
-     Non-binary                3 ( 2.9)      0 ( 0.0)      0 ( 0.0) 
-     Other                     4 ( 3.9)      0 ( 0.0)      1 ( 2.0) 
-  education_r (%)                                                   
-     Less than high school     7 ( 6.9)      4 (12.5)      3 ( 6.1) 
-     High school              26 (25.5)      2 ( 6.2)     10 (20.4) 
-     TAFE                     20 (19.6)      8 (25.0)     12 (24.5) 
-     Undergraduate degree     25 (24.5)      8 (25.0)     15 (30.6) 
-     Postgraduate degree      24 (23.5)     10 (31.2)      9 (18.4) 
-                          Stratified by state_r
-                           TAS           NT             ACT          
-  n                           15             3              6        
-  age (mean (SD))          43.07 (13.19) 39.67 (21.55)  41.00 (18.08)
+<pre><code>                          Stratified by country_r
+                           Overall       Australia     United Kingdom
+  n                          500           256           162         
+  age (mean (SD))          42.42 (14.59) 41.86 (14.91) 43.04 (14.36) 
   gender_r (%)                                                       
-     Male                      5 (33.3)      3 (100.0)      2 (33.3) 
-     Female                    8 (53.3)      0 (  0.0)      4 (66.7) 
-     Non-binary                1 ( 6.7)      0 (  0.0)      0 ( 0.0) 
-     Other                     1 ( 6.7)      0 (  0.0)      0 ( 0.0) 
+     Male                    229 (45.8)    120 (46.9)     75 (46.3)  
+     Female                  255 (51.0)    130 (50.8)     80 (49.4)  
+     Non-binary                9 ( 1.8)      5 ( 2.0)      3 ( 1.9)  
+     Other                     7 ( 1.4)      1 ( 0.4)      4 ( 2.5)  
   education_r (%)                                                    
-     Less than high school     0 ( 0.0)      0 (  0.0)      0 ( 0.0) 
-     High school               6 (40.0)      1 ( 33.3)      1 (16.7) 
-     TAFE                      3 (20.0)      0 (  0.0)      1 (16.7) 
-     Undergraduate degree      4 (26.7)      0 (  0.0)      2 (33.3) 
-     Postgraduate degree       2 (13.3)      2 ( 66.7)      2 (33.3) </code></pre>
+     Less than high school    41 ( 8.2)     21 ( 8.2)     14 ( 8.6)  
+     High school             123 (24.6)     71 (27.7)     37 (22.8)  
+     TAFE                    105 (21.0)     53 (20.7)     34 (21.0)  
+     Undergraduate degree    147 (29.4)     79 (30.9)     48 (29.6)  
+     Postgraduate degree      84 (16.8)     32 (12.5)     29 (17.9)  
+                          Stratified by country_r
+                           United States
+  n                           82        
+  age (mean (SD))          42.93 (14.14)
+  gender_r (%)                          
+     Male                     34 (41.5) 
+     Female                   45 (54.9) 
+     Non-binary                1 ( 1.2) 
+     Other                     2 ( 2.4) 
+  education_r (%)                       
+     Less than high school     6 ( 7.3) 
+     High school              15 (18.3) 
+     TAFE                     18 (22.0) 
+     Undergraduate degree     20 (24.4) 
+     Postgraduate degree      23 (28.0) </code></pre>
 </div>
 </div>
 <p><strong>What this is doing:</strong></p>
 <ul>
 <li><p><code>vars &lt;- c("age", "gender_r", "education_r")</code> defines which variables should appear as rows in the table..</p></li>
 <li><p><code>CreateTableOne()</code> builds the summary table itself. It automatically detects each variable’s type and picks an appropriate summary: means and SDs for continuous variables like <code>age</code>, counts and percentages for factors like <code>gender_r</code>and <code>education_r</code>— you don’t need to specify this manually.</p></li>
-<li><p><code>strata = "state_r"</code> splits the table into separate columns, one per state, so you can see how demographics differ by state at a glance, rather than only getting one pooled summary. This is useful if you have a representative survey; however, you could also list this as another count variable like gender and education. Similarly, you could add in an ethnicity variable, if relevant.</p></li>
-<li><p><code>addOverall = TRUE</code> adds an additional column showing the summary across <em>all</em> participants combined, alongside the state-by-state breakdown. This is useful if you have stratified the table, as we have done here.</p></li>
+<li><p><code>strata = "country_r"</code> splits the table into separate columns, one per state, so you can see how demographics differ by country at a glance, rather than only getting one pooled summary.</p></li>
+<li><p><code>addOverall = TRUE</code> adds an additional column showing the summary across <em>all</em> participants combined, alongside the country-by-countrybreakdown. This is useful if you have stratified the table, as we have done here.</p></li>
 <li><p><code>test = FALSE</code> turns off tableone’s default behavior of automatically running significance tests (e.g.&nbsp;ANOVA, chi-square) comparing groups and adding a p-value column. Turn this off if the table is meant to be purely descriptive (as Table 1s usually are). Turn this on with <code>TRUE</code> if you specifically want group comparisons included.</p></li>
 <li><p>Printing <code>table_1</code> on its own displays the table in your R console.</p></li>
 </ul>
@@ -554,8 +566,7 @@ div.csl-indent {
 <section id="step-3-converting-the-tableone-object-into-a-flextable" class="level3" data-number="13.1.3">
 <h3 data-number="13.1.3" class="anchored" data-anchor-id="step-3-converting-the-tableone-object-into-a-flextable"><span class="header-section-number">13.1.3</span> Step 3: Converting the tableone object into a flextable</h3>
 <p>This is a function helpfully created by Graham Cooper <span class="citation" data-cites="Cooper2024">(<a href="../references.html#ref-Cooper2024" role="doc-biblioref">Cooper, 2024</a>)</span> and made available on GitHub to quickly convert a <strong>tableone</strong> object to something that you can open in a Word document using the <strong>flextable</strong> and <strong>officer</strong> packages. Make sure you have those two packages installed and loaded to be able to run the function.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tableone2flextable <span class="ot">&lt;-</span> <span class="cf">function</span>(tableone) {</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tableone2flextable <span class="ot">&lt;-</span> <span class="cf">function</span>(tableone) {</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  tableone <span class="ot">&lt;-</span> <span class="fu">print</span>(</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    tableone,</span>
@@ -591,7 +602,6 @@ div.csl-indent {
 <span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  flextable<span class="sc">::</span><span class="fu">flextable</span>(dataframe)</span>
 <span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 <p><strong>What this is doing:</strong></p>
 <ul>
 <li><p><code>print(tableone, quote = FALSE, noSpaces = TRUE)</code> converts the tableone object into a plain <strong>character matrix</strong>, stripping out quote marks and extra padding spaces that tableone normally adds for console display.</p></li>
@@ -630,55 +640,40 @@ div.csl-indent {
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>tab_1 <span class="ot">&lt;-</span> <span class="fu">tableone2flextable</span>(table_1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                          Stratified by state_r
-                           Overall       NSW           VIC          
-  n                        500           164           129          
-  age (mean (SD))          42.42 (14.59) 41.54 (15.19) 42.86 (14.59)
-  gender_r (%)                                                      
-     Male                  229 (45.8)    76 (46.3)     58 (45.0)    
-     Female                255 (51.0)    83 (50.6)     70 (54.3)    
-     Non-binary            9 (1.8)       4 (2.4)       1 (0.8)      
-     Other                 7 (1.4)       1 (0.6)       0 (0.0)      
-  education_r (%)                                                   
-     Less than high school 41 (8.2)      9 (5.5)       18 (14.0)    
-     High school           123 (24.6)    48 (29.3)     29 (22.5)    
-     TAFE                  105 (21.0)    32 (19.5)     29 (22.5)    
-     Undergraduate degree  147 (29.4)    54 (32.9)     39 (30.2)    
-     Postgraduate degree   84 (16.8)     21 (12.8)     14 (10.9)    
-                          Stratified by state_r
-                           QLD           SA            WA           
-  n                        102           32            49           
-  age (mean (SD))          41.96 (13.67) 42.38 (14.48) 45.33 (14.70)
-  gender_r (%)                                                      
-     Male                  49 (48.0)     13 (40.6)     23 (46.9)    
-     Female                46 (45.1)     19 (59.4)     25 (51.0)    
-     Non-binary            3 (2.9)       0 (0.0)       0 (0.0)      
-     Other                 4 (3.9)       0 (0.0)       1 (2.0)      
-  education_r (%)                                                   
-     Less than high school 7 (6.9)       4 (12.5)      3 (6.1)      
-     High school           26 (25.5)     2 (6.2)       10 (20.4)    
-     TAFE                  20 (19.6)     8 (25.0)      12 (24.5)    
-     Undergraduate degree  25 (24.5)     8 (25.0)      15 (30.6)    
-     Postgraduate degree   24 (23.5)     10 (31.2)     9 (18.4)     
-                          Stratified by state_r
-                           TAS           NT            ACT          
-  n                        15            3             6            
-  age (mean (SD))          43.07 (13.19) 39.67 (21.55) 41.00 (18.08)
-  gender_r (%)                                                      
-     Male                  5 (33.3)      3 (100.0)     2 (33.3)     
-     Female                8 (53.3)      0 (0.0)       4 (66.7)     
-     Non-binary            1 (6.7)       0 (0.0)       0 (0.0)      
-     Other                 1 (6.7)       0 (0.0)       0 (0.0)      
-  education_r (%)                                                   
-     Less than high school 0 (0.0)       0 (0.0)       0 (0.0)      
-     High school           6 (40.0)      1 (33.3)      1 (16.7)     
-     TAFE                  3 (20.0)      0 (0.0)       1 (16.7)     
-     Undergraduate degree  4 (26.7)      0 (0.0)       2 (33.3)     
-     Postgraduate degree   2 (13.3)      2 (66.7)      2 (33.3)     </code></pre>
+<pre><code>                          Stratified by country_r
+                           Overall       Australia     United Kingdom
+  n                        500           256           162           
+  age (mean (SD))          42.42 (14.59) 41.86 (14.91) 43.04 (14.36) 
+  gender_r (%)                                                       
+     Male                  229 (45.8)    120 (46.9)    75 (46.3)     
+     Female                255 (51.0)    130 (50.8)    80 (49.4)     
+     Non-binary            9 (1.8)       5 (2.0)       3 (1.9)       
+     Other                 7 (1.4)       1 (0.4)       4 (2.5)       
+  education_r (%)                                                    
+     Less than high school 41 (8.2)      21 (8.2)      14 (8.6)      
+     High school           123 (24.6)    71 (27.7)     37 (22.8)     
+     TAFE                  105 (21.0)    53 (20.7)     34 (21.0)     
+     Undergraduate degree  147 (29.4)    79 (30.9)     48 (29.6)     
+     Postgraduate degree   84 (16.8)     32 (12.5)     29 (17.9)     
+                          Stratified by country_r
+                           United States
+  n                        82           
+  age (mean (SD))          42.93 (14.14)
+  gender_r (%)                          
+     Male                  34 (41.5)    
+     Female                45 (54.9)    
+     Non-binary            1 (1.2)      
+     Other                 2 (2.4)      
+  education_r (%)                       
+     Less than high school 6 (7.3)      
+     High school           15 (18.3)    
+     TAFE                  18 (22.0)    
+     Undergraduate degree  20 (24.4)    
+     Postgraduate degree   23 (28.0)    </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>tab_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div class="tabwid"><style>.cl-9e923a4c{}.cl-9e8814ea{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-9e8bc608{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-9e8c050a{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9e8c0514{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-9e8c051e{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-9e923a4c"><thead><tr style="overflow-wrap:break-word;"><th class="cl-9e8c050a"><p class="cl-9e8bc608"><span class="cl-9e8814ea">Variable</span></p></th><th class="cl-9e8c050a"><p class="cl-9e8bc608"><span class="cl-9e8814ea">Overall</span></p></th><th class="cl-9e8c050a"><p class="cl-9e8bc608"><span class="cl-9e8814ea">NSW</span></p></th><th class="cl-9e8c050a"><p class="cl-9e8bc608"><span class="cl-9e8814ea">VIC</span></p></th><th class="cl-9e8c050a"><p class="cl-9e8bc608"><span class="cl-9e8814ea">QLD</span></p></th><th class="cl-9e8c050a"><p class="cl-9e8bc608"><span class="cl-9e8814ea">SA</span></p></th><th class="cl-9e8c050a"><p class="cl-9e8bc608"><span class="cl-9e8814ea">WA</span></p></th><th class="cl-9e8c050a"><p class="cl-9e8bc608"><span class="cl-9e8814ea">TAS</span></p></th><th class="cl-9e8c050a"><p class="cl-9e8bc608"><span class="cl-9e8814ea">NT</span></p></th><th class="cl-9e8c050a"><p class="cl-9e8bc608"><span class="cl-9e8814ea">ACT</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">n</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">500</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">164</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">129</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">102</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">32</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">49</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">15</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">3</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">6</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">age (mean (SD))</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">42.42 (14.59)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">41.54 (15.19)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">42.86 (14.59)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">41.96 (13.67)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">42.38 (14.48)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">45.33 (14.70)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">43.07 (13.19)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">39.67 (21.55)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">41.00 (18.08)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">gender_r (%)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">   Male</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">229 (45.8)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">76 (46.3)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">58 (45.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">49 (48.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">13 (40.6)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">23 (46.9)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">5 (33.3)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">3 (100.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">2 (33.3)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">   Female</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">255 (51.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">83 (50.6)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">70 (54.3)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">46 (45.1)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">19 (59.4)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">25 (51.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">8 (53.3)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">0 (0.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">4 (66.7)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">   Non-binary</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">9 (1.8)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">4 (2.4)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">1 (0.8)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">3 (2.9)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">0 (0.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">0 (0.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">1 (6.7)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">0 (0.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">0 (0.0)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">   Other</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">7 (1.4)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">1 (0.6)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">0 (0.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">4 (3.9)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">0 (0.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">1 (2.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">1 (6.7)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">0 (0.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">0 (0.0)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">education_r (%)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea"></span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">   Less than high school</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">41 (8.2)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">9 (5.5)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">18 (14.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">7 (6.9)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">4 (12.5)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">3 (6.1)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">0 (0.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">0 (0.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">0 (0.0)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">   High school</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">123 (24.6)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">48 (29.3)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">29 (22.5)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">26 (25.5)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">2 (6.2)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">10 (20.4)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">6 (40.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">1 (33.3)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">1 (16.7)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">   TAFE</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">105 (21.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">32 (19.5)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">29 (22.5)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">20 (19.6)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">8 (25.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">12 (24.5)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">3 (20.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">0 (0.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">1 (16.7)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">   Undergraduate degree</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">147 (29.4)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">54 (32.9)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">39 (30.2)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">25 (24.5)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">8 (25.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">15 (30.6)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">4 (26.7)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">0 (0.0)</span></p></td><td class="cl-9e8c0514"><p class="cl-9e8bc608"><span class="cl-9e8814ea">2 (33.3)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-9e8c051e"><p class="cl-9e8bc608"><span class="cl-9e8814ea">   Postgraduate degree</span></p></td><td class="cl-9e8c051e"><p class="cl-9e8bc608"><span class="cl-9e8814ea">84 (16.8)</span></p></td><td class="cl-9e8c051e"><p class="cl-9e8bc608"><span class="cl-9e8814ea">21 (12.8)</span></p></td><td class="cl-9e8c051e"><p class="cl-9e8bc608"><span class="cl-9e8814ea">14 (10.9)</span></p></td><td class="cl-9e8c051e"><p class="cl-9e8bc608"><span class="cl-9e8814ea">24 (23.5)</span></p></td><td class="cl-9e8c051e"><p class="cl-9e8bc608"><span class="cl-9e8814ea">10 (31.2)</span></p></td><td class="cl-9e8c051e"><p class="cl-9e8bc608"><span class="cl-9e8814ea">9 (18.4)</span></p></td><td class="cl-9e8c051e"><p class="cl-9e8bc608"><span class="cl-9e8814ea">2 (13.3)</span></p></td><td class="cl-9e8c051e"><p class="cl-9e8bc608"><span class="cl-9e8814ea">2 (66.7)</span></p></td><td class="cl-9e8c051e"><p class="cl-9e8bc608"><span class="cl-9e8814ea">2 (33.3)</span></p></td></tr></tbody></table></div>
+<div class="tabwid"><style>.cl-fd55f2a0{}.cl-fd4f14e4{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-fd51cd60{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fd51fe70{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd51fe7a{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fd51fe7b{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-fd55f2a0"><thead><tr style="overflow-wrap:break-word;"><th class="cl-fd51fe70"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">Variable</span></p></th><th class="cl-fd51fe70"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">Overall</span></p></th><th class="cl-fd51fe70"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">Australia</span></p></th><th class="cl-fd51fe70"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">United.Kingdom</span></p></th><th class="cl-fd51fe70"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">United.States</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">n</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">500</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">256</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">162</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">82</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">age (mean (SD))</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">42.42 (14.59)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">41.86 (14.91)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">43.04 (14.36)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">42.93 (14.14)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">gender_r (%)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   Male</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">229 (45.8)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">120 (46.9)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">75 (46.3)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">34 (41.5)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   Female</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">255 (51.0)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">130 (50.8)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">80 (49.4)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">45 (54.9)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   Non-binary</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">9 (1.8)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">5 (2.0)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">3 (1.9)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">1 (1.2)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   Other</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">7 (1.4)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">1 (0.4)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">4 (2.5)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">2 (2.4)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">education_r (%)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4"></span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   Less than high school</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">41 (8.2)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">21 (8.2)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">14 (8.6)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">6 (7.3)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   High school</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">123 (24.6)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">71 (27.7)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">37 (22.8)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">15 (18.3)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   TAFE</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">105 (21.0)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">53 (20.7)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">34 (21.0)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">18 (22.0)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   Undergraduate degree</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">147 (29.4)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">79 (30.9)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">48 (29.6)</span></p></td><td class="cl-fd51fe7a"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">20 (24.4)</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-fd51fe7b"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">   Postgraduate degree</span></p></td><td class="cl-fd51fe7b"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">84 (16.8)</span></p></td><td class="cl-fd51fe7b"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">32 (12.5)</span></p></td><td class="cl-fd51fe7b"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">29 (17.9)</span></p></td><td class="cl-fd51fe7b"><p class="cl-fd51cd60"><span class="cl-fd4f14e4">23 (28.0)</span></p></td></tr></tbody></table></div>
 </div>
 </div>
 <p>Save and open Word document.</p>
@@ -692,7 +687,7 @@ div.csl-indent {
 <li><p><code>line_spacing(space = 1, part = "all")</code> sets single line spacing throughout the table, overriding Word’s common default of double spacing, which looks cluttered in a table context.</p></li>
 <li><p><code>officer::read_docx()</code> starts a new, blank Word document object using the <strong>officer</strong> package (which flextable relies on for Word export) — <code>officer::</code> here again explicitly specifies the package without a separate <code>library()</code> call.</p></li>
 <li><p><code>body_add_flextable(ft)</code> inserts your formatted table into that blank document.</p></li>
-<li><p><code>body_end_section_landscape()</code> sets the page orientation to landscape for this section — useful for wider tables (like this one, with multiple state columns) that wouldn’t fit well on a standard portrait page.</p></li>
+<li><p><code>body_end_section_landscape()</code> sets the page orientation to landscape for this section — useful for wider tables that wouldn’t fit well on a standard portrait page.</p></li>
 <li><p><code>print(target = filepath)</code> writes the finished Word document out to disk, at the location and filename you specify in <code>filepath</code>.</p></li>
 <li><p><code>browseURL(filepath)</code> automatically opens the newly created Word file once it’s saved, so you can immediately check the result without manually navigating to find it.</p></li>
 </ul>
