@@ -51,6 +51,7 @@ jobs:
             any::MASS
             any::ggplot2
             any::naniar
+            any::splithalfr
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
