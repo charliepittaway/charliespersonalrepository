@@ -437,12 +437,14 @@ div.csl-indent {
 <ul>
 <li>apaTables <span class="citation" data-cites="apaTables2026">(<a href="../references.html#ref-apaTables2026" role="doc-biblioref">Stanley, 2026</a>)</span></li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(apaTables)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>corr_table <span class="ot">&lt;-</span> <span class="fu">apa.cor.table</span>(data[, <span class="fu">c</span>(<span class="st">"var1"</span>, <span class="st">"var2"</span>, <span class="st">"var3"</span>, <span class="st">"var4"</span>)], </span>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(apaTables)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>corr_table <span class="ot">&lt;-</span> <span class="fu">apa.cor.table</span>(data[, <span class="fu">c</span>(<span class="st">"trust"</span>, <span class="st">"identity"</span>, <span class="st">"efficacy"</span>, <span class="st">"action"</span>)], </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">table.number =</span> <span class="dv">2</span>, </span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">show.sig.stars =</span> <span class="cn">TRUE</span>, </span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">landscape =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">filename =</span> <span class="st">"output/Table 2 Correlations pooled sample.doc"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">filename =</span> <span class="st">"output/Table 2 Correlations pooled sample.docx"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <p><strong>What this is doing:</strong></p>
 <ul>
 <li><p><code>corr_table &lt;-</code> saves the created table to an object in your R environment.</p></li>
@@ -452,6 +454,39 @@ div.csl-indent {
 <li><p><code>filename = "output/Table 2 Correlations pooled sample.doc"</code> saves the table to a word document in your ‘outputs’ folder in your R project.</p></li>
 </ul>
 <p>You can then call it in your R environment using the code <code>corr_table</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>corr_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+
+Table 2 
+
+Means, standard deviations, and correlations with confidence intervals
+ 
+
+  Variable    M    SD   1          2          3         
+  1. trust    3.96 1.02                                 
+                                                        
+  2. identity 4.03 1.08 .47**                           
+                        [.39, .53]                      
+                                                        
+  3. efficacy 4.00 1.05 .44**      .45**                
+                        [.37, .51] [.38, .52]           
+                                                        
+  4. action   4.04 1.13 .47**      .49**      .44**     
+                        [.40, .53] [.42, .56] [.37, .51]
+                                                        
+
+Note. M and SD are used to represent mean and standard deviation, respectively.
+Values in square brackets indicate the 95% confidence interval.
+The confidence interval is a plausible range of population correlations 
+that could have caused the sample correlation (Cumming, 2014).
+ * indicates p &lt; .05. ** indicates p &lt; .01.
+ </code></pre>
+</div>
+</div>
+<p>And the formatted Word document will produce a table like this:</p>
+<p><img src="../images/apaTables corr table.JPG" class="img-fluid"></p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
