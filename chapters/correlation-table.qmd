@@ -27,6 +27,8 @@ data <- data.frame(
 # Keep values roughly on a 1-7 scale
 data <- data %>%
   mutate(across(everything(), ~pmin(pmax(., 1), 7)))
+
+library(tidyverse)
 ```
 
 ```{r}
