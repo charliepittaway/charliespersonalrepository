@@ -37,12 +37,12 @@ data <- data.frame(
     replace = TRUE,
     prob = c(.47, .49, .02, .02)
   ),
-  state = sample(
-    1:8,
-    size = 500,
-    replace = TRUE,
-    prob = c(.31, .25, .20, .08, .10, .03, .01, .02)
-  ),
+  country = sample(
+  1:3,
+  size = 500,
+  replace = TRUE,
+  prob = c(.50, .30, .20)
+),
   education = sample(
     1:5,
     size = 500,
@@ -58,16 +58,41 @@ data$age <- pmin(pmax(data$age, 18), 85)
 Now let's recode.
 
 ```{r}
-data <- data %>%   
-  mutate(gender_r = factor(gender,                           
-                           levels = c(1, 2, 3, 4),                           
-                           labels = c("Male", "Female", "Non-binary", "Other")),
-         state_r = factor(state,
-                          levels = c(1, 2, 3, 4, 5, 6, 7, 8),
-                          labels = c("NSW", "VIC", "QLD", "SA", "WA", "TAS", "NT", "ACT")),
-         education_r = factor(education,
-                              levels = c(1, 2, 3, 4, 5),
-                              labels = c("Less than high school", "High school", "TAFE", "Undergraduate degree", "Postgraduate degree")))
+data <- data %>%
+  mutate(
+    gender_r = factor(
+      gender,
+      levels = c(1, 2, 3, 4),
+      labels = c(
+        "Male",
+        "Female",
+        "Non-binary",
+        "Other"
+      )
+    ),
+
+    country_r = factor(
+      country,
+      levels = c(1, 2, 3),
+      labels = c(
+        "Australia",
+        "United Kingdom",
+        "United States"
+      )
+    ),
+
+    education_r = factor(
+      education,
+      levels = c(1, 2, 3, 4, 5),
+      labels = c(
+        "Less than high school",
+        "High school",
+        "TAFE",
+        "Undergraduate degree",
+        "Postgraduate degree"
+      )
+    )
+  )
 ```
 
 **What this is doing:**
@@ -80,11 +105,13 @@ data <- data %>%
 library(tableone)  
 
 vars <- c("age", "gender_r", "education_r")  # Select variables
-table_1 <- CreateTableOne(data = data,
-                          vars = vars,
-                          strata = "state_r",
-                          addOverall = TRUE,
-                          test = FALSE) 
+table_1 <- CreateTableOne(
+  data = data,
+  vars = vars,
+  strata = "country_r",
+  addOverall = TRUE,
+  test = FALSE
+)
 
 table_1
 ```
@@ -95,9 +122,9 @@ table_1
 
 -   `CreateTableOne()` builds the summary table itself. It automatically detects each variable's type and picks an appropriate summary: means and SDs for continuous variables like `age`, counts and percentages for factors like `gender_r`and `education_r`— you don't need to specify this manually.
 
--   `strata = "state_r"` splits the table into separate columns, one per state, so you can see how demographics differ by state at a glance, rather than only getting one pooled summary. This is useful if you have a representative survey; however, you could also list this as another count variable like gender and education. Similarly, you could add in an ethnicity variable, if relevant.
+-   `strata = "country_r"` splits the table into separate columns, one per state, so you can see how demographics differ by country at a glance, rather than only getting one pooled summary.
 
--   `addOverall = TRUE` adds an additional column showing the summary across *all* participants combined, alongside the state-by-state breakdown. This is useful if you have stratified the table, as we have done here.
+-   `addOverall = TRUE` adds an additional column showing the summary across *all* participants combined, alongside the country-by-countrybreakdown. This is useful if you have stratified the table, as we have done here.
 
 -   `test = FALSE` turns off tableone's default behavior of automatically running significance tests (e.g. ANOVA, chi-square) comparing groups and adding a p-value column. Turn this off if the table is meant to be purely descriptive (as Table 1s usually are). Turn this on with `TRUE` if you specifically want group comparisons included.
 
@@ -107,7 +134,47 @@ table_1
 
 This is a function helpfully created by Graham Cooper [@Cooper2024] and made available on GitHub to quickly convert a **tableone** object to something that you can open in a Word document using the **flextable** and **officer** packages. Make sure you have those two packages installed and loaded to be able to run the function.
 
+``` r
+tableone2flextable <- function(tableone) {
+
+  tableone <- print(
+    tableone,
+    quote = FALSE,
+    noSpaces = TRUE
+  )
+
+  rows <- nrow(tableone)
+  cols <- ncol(tableone)
+  column_names <- colnames(tableone)
+
+  listoflists <- vector("list", cols)
+
+  for (i in seq_len(cols)) {
+
+    start <- (i - 1) * rows + 1
+    end <- i * rows
+
+    listoflists[[i]] <- tableone[start:end]
+  }
+
+  dataframe <- as.data.frame(
+    listoflists,
+    col.names = column_names
+  )
+
+  dataframe <- cbind(
+    Variable = rownames(tableone),
+    dataframe
+  )
+
+  rownames(dataframe) <- NULL
+
+  flextable::flextable(dataframe)
+}
+```
+
 ```{r}
+#| include: false
 tableone2flextable <- function(tableone) {
 
   tableone <- print(
@@ -211,7 +278,7 @@ Save and open Word document.
 
 -   `body_add_flextable(ft)` inserts your formatted table into that blank document.
 
--   `body_end_section_landscape()` sets the page orientation to landscape for this section — useful for wider tables (like this one, with multiple state columns) that wouldn't fit well on a standard portrait page.
+-   `body_end_section_landscape()` sets the page orientation to landscape for this section — useful for wider tables that wouldn't fit well on a standard portrait page.
 
 -   `print(target = filepath)` writes the finished Word document out to disk, at the location and filename you specify in `filepath`.
 

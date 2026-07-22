@@ -62,4 +62,4 @@ corr_table
 
 And the formatted Word document will produce a table like this:
 
-![](/images/apaTables corr table.JPG)
+![](/images/apaTables%20corr%20table.JPG)
