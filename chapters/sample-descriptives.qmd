@@ -102,6 +102,22 @@ data <- data %>%
 ### Step 2: Build the summary table with createTableOne()
 
 ```{r}
+#| include: false
+library(tableone)  
+
+vars <- c("age", "gender_r", "education_r")  # Select variables
+table_1 <- CreateTableOne(
+  data = data,
+  vars = vars,
+  strata = "country_r",
+  addOverall = TRUE,
+  test = FALSE
+)
+
+table_1
+```
+
+``` r
 library(tableone)  
 
 vars <- c("age", "gender_r", "education_r")  # Select variables
@@ -232,6 +248,7 @@ tableone2flextable <- function(tableone) {
 ### Step 4: Format and export to Word
 
 ```{r}
+#| include: false
 flextable2word <- function(flextab, filepath) {
 
   ft <- flextable::theme_apa(flextab) %>%
@@ -255,10 +272,39 @@ flextable2word <- function(flextab, filepath) {
 }
 
 tab_1 <- tableone2flextable(table_1)
-tab_1
 ```
 
-Save and open Word document.
+``` r
+flextable2word <- function(flextab, filepath) {
+
+  ft <- flextable::theme_apa(flextab) %>%
+    flextable::autofit() %>%
+    flextable::align(
+      j = 1,
+      align = "left",
+      part = "all"
+    ) %>%
+    flextable::line_spacing(
+      space = 1,
+      part = "all"
+    )
+
+  officer::read_docx() %>%
+    flextable::body_add_flextable(ft) %>%
+    officer::body_end_section_landscape() %>%
+    print(target = filepath)
+
+  browseURL(filepath)
+}
+
+tab_1 <- tableone2flextable(table_1)
+```
+
+That will have saved the table as a word document. You can also view it in your R window.
+
+```{r}
+tab_1
+```
 
 **What this is doing:**
 
