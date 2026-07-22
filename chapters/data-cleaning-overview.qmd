@@ -621,8 +621,7 @@ For the most part, I only check the proportion of missing data on each variable,
 
 First, run this code to determine the proportion of each variable which is missing data. Variables missing more than 30% are usually cause for concern.
 
-```{r}
-#| label: Missing variable summary
+``` r
 library(naniar)
 miss_var_summary(data) 
 ```
