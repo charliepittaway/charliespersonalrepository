@@ -176,6 +176,7 @@ To my understanding, omega looks like it will be the way forward for new scales/
 You can calculate the Spearman-Brown coefficient using the **splithalfr** package [@splithalfr2025].
 
 ```{r}
+library(splithalfr)
 #| label: Spearman-Brown coefficient
 library(splithalfr)
 spearman_brown(data$trust_1, data$trust_2,
