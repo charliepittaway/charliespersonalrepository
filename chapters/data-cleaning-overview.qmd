@@ -633,8 +633,7 @@ miss_var_summary(data)
 
 If there is no missing data on any of your key variables, there is no need to run Little's MCAR test [@little1988a]. If there is missing data, run the following code:
 
-```{r}
-#| label: MCAR test
+``` r
 mcar_test(data)
 ```
 
