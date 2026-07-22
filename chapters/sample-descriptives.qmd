@@ -23,9 +23,8 @@ The **tableone** package is great because it's whole purpose is literally this, 
 
 ### Step 1: Recode numeric codes into labelled factors
 
-Let's generate some fake data.
-
 ```{r}
+#| include: false
 library(dplyr)
 
 set.seed(1234)

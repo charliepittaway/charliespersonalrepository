@@ -7,13 +7,36 @@ The second table you will probably create in your manuscript is the table of int
 
 -   apaTables [@apaTables2026]
 
-``` r
+```{r}
+#| label: Simulated data
+#| include: false
+set.seed(1234)
+
+N <- 500
+
+# Shared latent factor creates correlations between scales
+general <- rnorm(N)
+
+data <- data.frame(
+  trust    = 4 + 0.60 * general + rnorm(N, 0, 0.80),
+  identity = 4 + 0.70 * general + rnorm(N, 0, 0.80),
+  efficacy = 4 + 0.65 * general + rnorm(N, 0, 0.80),
+  action   = 4 + 0.75 * general + rnorm(N, 0, 0.80)
+)
+
+# Keep values roughly on a 1-7 scale
+data <- data %>%
+  mutate(across(everything(), ~pmin(pmax(., 1), 7)))
+```
+
+```{r}
+#| label: apaTables()
 library(apaTables)
-corr_table <- apa.cor.table(data[, c("var1", "var2", "var3", "var4")], 
+corr_table <- apa.cor.table(data[, c("trust", "identity", "efficacy", "action")], 
                         table.number = 2, 
                         show.sig.stars = TRUE, 
                         landscape = TRUE,
-                        filename = "output/Table 2 Correlations pooled sample.doc")
+                        filename = "output/Table 2 Correlations pooled sample.docx")
 ```
 
 **What this is doing:**
@@ -29,3 +52,11 @@ corr_table <- apa.cor.table(data[, c("var1", "var2", "var3", "var4")],
 -   `filename = "output/Table 2 Correlations pooled sample.doc"` saves the table to a word document in your 'outputs' folder in your R project.
 
 You can then call it in your R environment using the code `corr_table`.
+
+```{r}
+corr_table
+```
+
+And the formatted Word document will produce a table like this:
+
+![](/images/apaTables corr table.JPG)
