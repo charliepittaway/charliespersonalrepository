@@ -440,6 +440,7 @@ hist(data$trust_1)
 Or using **ggplot2** from **tidyverse** [@tidyverse2019]. The code below shows a normal curve on the graph – this means it is actually a density plot (rather than a histogram).
 
 ```{r}
+library(ggplot2)
 #| label: Density plot with ggplot2
 ggplot(data, aes(trust_1)) +
   theme(legend.position = "none") +
