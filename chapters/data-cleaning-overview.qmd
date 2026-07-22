@@ -5,6 +5,81 @@ format: html
 
 Researchers have different processes for preparing their data for analysis, often which appears to be by convention. On this page, I will set out my process and reasoning—take what works, leave what doesn't. Notably, I conduct my reliability analysis and scale creation during my data cleaning process, as this makes the most sense for me.
 
+Let's create some fake data.
+
+```{r}
+library(dplyr)
+
+set.seed(1234)
+
+N <- 500
+
+# Helper function to keep values on a 1-7 scale
+cap_scale <- function(x) {
+  pmin(pmax(round(x), 1), 7)
+}
+
+data <- data.frame(
+
+  # Two-item trust scale
+  trust_1 = sample(1:7, N, replace = TRUE),
+  trust_2 = NA,
+
+  # Three-item identity scale
+  identity_1 = sample(1:7, N, replace = TRUE),
+  identity_2 = NA,
+  identity_3 = NA,
+
+  # Four-item efficacy scale
+  efficacy_1 = sample(1:7, N, replace = TRUE),
+  efficacy_2 = NA,
+  efficacy_3 = NA,
+  efficacy_4 = NA,
+
+  # Five-item collective action scale
+  action_1 = sample(1:7, N, replace = TRUE),
+  action_2 = NA,
+  action_3 = NA,
+  action_4 = NA,
+  action_5 = NA
+)
+
+# Trust (2 items)
+data$trust_2 <-
+  cap_scale(data$trust_1 + rnorm(N, 0, 0.8))
+
+# Identity (3 items)
+data$identity_2 <-
+  cap_scale(data$identity_1 + rnorm(N, 0, 1))
+
+data$identity_3 <-
+  cap_scale(data$identity_1 + rnorm(N, 0, 1))
+
+# Efficacy (4 items)
+data$efficacy_2 <-
+  cap_scale(data$efficacy_1 + rnorm(N, 0, 1.2))
+
+data$efficacy_3 <-
+  cap_scale(data$efficacy_1 + rnorm(N, 0, 1.2))
+
+data$efficacy_4 <-
+  cap_scale(data$efficacy_1 + rnorm(N, 0, 1.2))
+
+# Collective action (5 items)
+data$action_2 <-
+  cap_scale(data$action_1 + rnorm(N, 0, 1))
+
+data$action_3 <-
+  cap_scale(data$action_1 + rnorm(N, 0, 1))
+
+data$action_4 <-
+  cap_scale(data$action_1 + rnorm(N, 0, 1))
+
+data$action_5 <-
+  cap_scale(data$action_1 + rnorm(N, 0, 1))
+``
+```
+
 ## Step 1: Participant exclusions
 
 The first step I like to do is exclude participants based on my pre-registered criteria. One example is filtering out likely bot responses using Qualtrics' built-in reCAPTCHA score.
@@ -50,9 +125,9 @@ Scale by scale, I conduct reliability analysis and create my scales. I use funct
 
 ### Cronbach's alpha
 
-``` r
+```{r}
 library(psych)
-alpha(data[, c("var1", "var2", "var3")], na.rm = T)
+alpha(data[, c("identity_1", "identity_2", "identity_3")], na.rm = T)
 ```
 
 **What this is doing:**
@@ -77,9 +152,8 @@ Cronbach's alpha assumes that all the items measure the underlying construct equ
 
 McDonald's omega, on the other hand, run a factor analysis on the items first, then calculates reliability based on actual factor loadings so that items which load more strongly onto the factor are weighted more heavily than weaker items.
 
-``` r
-library(psych)
-omega(data[, c("var1", "var2", "var3")], na.rm = T)
+```{r}
+omega(data[, c("efficacy_1", "efficacy_2", "efficacy_3", "efficacy_4")], na.rm = T)
 ```
 
 The output includes several different reliability coefficients, but the two most commonly reported are:
@@ -98,9 +172,9 @@ To my understanding, omega looks like it will be the way forward for new scales/
 
 You can calculate the Spearman-Brown coefficient using the **splithalfr** package [@splithalfr2025].
 
-``` r
+```{r}
 library(splithalfr)
-spearman_brown(data$var1, data$var2,
+spearman_brown(data$trust_1, data$trust_2,
                use = "pairwise.complete.obs")
 ```
 
@@ -134,14 +208,14 @@ data <- data %>%
 
 I have recently discovered that the **psych** package has a function called scoreItems() which allows you to calculate reliability and create multiple scales in one step. First, you define the variables that make up each scale and prefix any reverse-scored items with a minus sign. Next, you score all scales at once. Finally, you can print the reliability and descriptives for every scale at the same time.
 
-``` r
-library(psych)
-
+```{r}
 # Define each scale's items, prefixing reverse-scored items with a minus sign
 scale_keys <- list(
-  scale_1 = c("var1", "var2", "-var3", "var4"), # In this scale, var3 is reverse-coded
-  scale_2 = c("var5", "-var6", "var7"), # var6 is reverse-coded
-  scale_3 = c("var8", "var9", "var10", "-var11", "var12") # var11 is reverse-coded
+  trust = c("trust_1", "trust_2"), 
+  identity = c("identity_1", "identity_2", "identity_3"), 
+  efficacy = c("efficacy_1", "efficacy_2", "efficacy_3", "efficacy_4"),
+  action = c("action_1", "action_2", "action_3", "action_4", "action_5") # One reverse-coded item
+  
 )
 
 # Score all scales at once
@@ -162,7 +236,9 @@ data <- cbind(data, scores$scores)
 
 -   `scoreItems(scale_keys, data)` scores every scale defined in `scale_keys` in one call.
 
--   `summary(scores)` prints reliability (alpha) and basic descriptives for all three scales at once.
+-   `summary(scores)` prints reliability (alpha) along the diagonal and basic descriptives for all three scales at once.
+
+    -   As you can see, in this fake data the action scale does not cohere. Ideally in real life your scale would!
 
 -   `scores$scores` is a matrix with one column per scale, each row matching the corresponding row in `data`. `cbind(dat, scores$scores)` binds these new columns onto your existing dataframe, so all three scale scores become permanent columns in `data`, ready to use in later analysis.
 
@@ -186,28 +262,41 @@ Sometimes you might want to check for univariate outliers on individual items (e
 
 First, I developed a function to identify scales on which outliers were present, with outliers defined as those more than 3 standard deviations below or above the mean.
 
-``` r
+```{r}
 detect_outliers <- function(df) {
-  outlier_flags <sapply(df, function(x) {
+
+  outlier_flags <- sapply(df, function(x) {
+
     if (is.numeric(x)) {
-      any(x > (mean(x, na.rm = TRUE) + 3 * sd(x, na.rm = TRUE)) |
-            x < (mean(x, na.rm = TRUE) - 3 * sd(x, na.rm = TRUE)),
-          na.rm = TRUE)  # <-- added here
+
+      any(
+        x > (mean(x, na.rm = TRUE) + 3 * sd(x, na.rm = TRUE)) |
+          x < (mean(x, na.rm = TRUE) - 3 * sd(x, na.rm = TRUE)),
+        na.rm = TRUE
+      )
+
     } else {
+
       FALSE
+
     }
+
   })
-  
+
   outlier_results <- tibble(
     Variable = names(outlier_flags),
     Has_Outliers = outlier_flags
   )
-  
+
   return(outlier_results)
+
 }
 
 # Run univariate outlier analysis
-detect_outlers(data[, c(var1, var2, var3, var4)])
+detect_outliers(data)
+```
+
+``` r
 ```
 
 **What this is doing:**
@@ -300,8 +389,9 @@ Outliers inflate skewness and kurtosis statistics. Most normality checks are sen
 
 Use the **psych** package [@psych2026] to check the skew and kurtosis.
 
-``` r
-library(psych) describe(dat[, c(var1, var2, var3)]) #Describe specific variables describe(dat) # Describe every variable in the dataset
+```{r}
+library(psych) 
+describe(data) #Describe specific variables describe(dat) # Describe every variable in the dataset
 ```
 
 **What this is doing:**
@@ -316,8 +406,8 @@ There's no single universally agreed cutoff, but a commonly used rule of thumb i
 
 The Shapiro-Wilk test gives you a formal statistical test of whether one variable's distribution differs significantly from normal.
 
-``` r
-shapiro.test(dat$var1)
+```{r}
+shapiro.test(data$trust_1)
 ```
 
 The output gives you a test statistic (`W`) and a p-value. If significant, you reject the null hypothesis (i.e. your data significantly deviates from normal).
@@ -336,18 +426,18 @@ A histogram gives you an intuitive sense of a variable's shape, and is often mor
 
 You can do this really quickly using base R:
 
-``` r
-hist(dat$var)
+```{r}
+hist(data$trust_1)
 ```
 
 Or using **ggplot2** from **tidyverse** [@tidyverse2019]. The code below shows a normal curve on the graph – this means it is actually a density plot (rather than a histogram).
 
-``` r
-ggplot(dat, aes(var1)) +
+```{r}
+ggplot(data, aes(trust_1)) +
   theme(legend.position = "none") +
   geom_histogram(aes(y = after_stat(density)), colour = "black", fill = "skyblue", binwidth = 1) +
   labs(x = "Item Responses", y = "Density") +
-  stat_function(fun = dnorm, args = list(mean = mean(dat$var1, na.rm = TRUE), sd = sd(dat$var1, na.rm = TRUE)), colour = "black", linewidth = 1) +
+  stat_function(fun = dnorm, args = list(mean = mean(data$trust_1, na.rm = TRUE), sd = sd(data$trust_1, na.rm = TRUE)), colour = "black", linewidth = 1) +
   theme_classic() +
   scale_x_continuous(breaks = seq(1, 7, 1)) + # First number = min scale, second number = max scale, last number leave as 1
   theme(text = element_text(size = 25))
@@ -356,39 +446,21 @@ ggplot(dat, aes(var1)) +
 **What this is doing:**
 
 -   `ggplot(dat, aes(var1))` sets up the plot, telling ggplot which dataframe and variable to use.
-
-<!-- -->
-
 -   `theme(legend.position = "none")` removes the plot legend. Since this plot only has one histogram and one line (no grouping variable), there's nothing a legend would usefully explain.
-
-<!-- -->
-
 -   `geom_histogram(aes(y = after_stat(density)), ...)` draws the histogram.
-
     -   Normally a histogram's y-axis shows **raw counts** (how many participants fell in each bin), but that can't be directly compared to a normal curve, which is a probability density, not a count. In this code, `aes(y = after_stat(density))`. `after_stat(density)` tells ggplot to rescale the histogram bars so the total area under them sums to 1 — the same scale a density curve uses — so that a normal curve can be overlaid.
-
-    -   `colour = "black"` outlines each bar, `fill = "skyblue"` colors them in, and `binwidth = 1` sets each bar to span 1 unit (sensible for a Likert-type item).
-
-<!-- -->
-
+-   `colour = "black"` outlines each bar, `fill = "skyblue"` colors them in, and `binwidth = 1` sets each bar to span 1 unit (sensible for a Likert-type item).
 -   `labs(x = "Item Responses", y = "Density")` sets axis labels.
-
-<!-- -->
-
 -   `stat_function(fun = dnorm, args = list(mean = ..., sd = ...), ...)` draws the actual normal curve.
-
 -   `theme_classic()` applies a clean, minimal ggplot theme (removes the default grey background and gridlines).
-
-<!-- -->
-
 -   `scale_x_continuous(breaks = seq(1, 7, 1))` controls where the tick marks appear on the x-axis. `seq(1, 7, 1)` generates the sequence 1, 2, 3, 4, 5, 6, 7 — matching a 1–7 response scale, so every scale point gets its own labeled tick mark rather than R choosing arbitrary breaks. If your scale was scored differently, you'd adjust the first two numbers to match your actual scale's minimum and maximum (e.g. `seq(1, 5, 1)` for a 1–5 scale).
 
 #### Q-Q plot
 
 A Q-Q ("quantile-quantile") plot compares the data's distribution directly against a theoretical normal distribution — points falling along the diagonal reference line indicate normality; systematic deviation from that line indicates non-normality, and the *shape* of the deviation tells you what kind.
 
-``` r
-ggplot(dat, aes(sample = var1)) +
+```{r}
+ggplot(data, aes(sample = trust_1)) +
   stat_qq() +
   stat_qq_line(color = "red") +
   labs(title = "Q-Q Plot of Variable 1")
@@ -397,13 +469,7 @@ ggplot(dat, aes(sample = var1)) +
 **What this is doing:**
 
 -   `stat_qq()` plots the data's quantiles against the quantiles you'd expect if the data were perfectly normally distributed.
-
-<!-- -->
-
 -   `stat_qq_line()` draws the reference diagonal line representing "perfect normality" — the closer your points hug this line, the closer your data is to normal.
-
-<!-- -->
-
 -   Points curving away from the line at the ends ("tails") typically indicate skew or heavy/light tails — the same issue skew and kurtosis values are picking up numerically, but here you can see exactly *where* in the distribution (upper end, lower end, or both) the deviation is occurring.
 
 ### So what...?
@@ -495,13 +561,7 @@ Some data is genuinely, meaningfully non-normal by nature. Social change and col
 Rather than defaulting straight to transformation, a few approaches are designed to handle non-normal data directly:
 
 -   Non-parametric tests (e.g. Mann-Whitney U instead of an independent-samples t-test, Spearman's rho instead of Pearson's r) don't assume normality in the first place, and handle skewed or ordinal data well.
-
-<!-- -->
-
 -   Bootstrapping/resampling methods estimate variability empirically from your actual data, rather than relying on distributional assumptions — a flexible option when the shape of your data doesn't map onto standard textbook methods.
-
-<!-- -->
-
 -   Robust regression estimators (e.g. M-estimators, or the Satorra-Bentler scaled correction commonly used in structural equation modeling) can produce more accurate standard errors and significance tests under non-normality, without requiring you to transform the variable itself first.
 
 ## Step 8: Multivariate outlier analysis
@@ -551,11 +611,9 @@ For the most part, I only check the proportion of missing data on each variable,
 
 First, run this code to determine the proportion of each variable which is missing data. Variables missing more than 30% are usually cause for concern.
 
-``` r
-install.packages("naniar")
+```{r}
 library(naniar)
-
-miss_var_summary(data[, c("var1", "var2", "var3", "var4", "var5")]) 
+miss_var_summary(data) 
 ```
 
 **What this is doing:**
@@ -564,8 +622,8 @@ miss_var_summary(data[, c("var1", "var2", "var3", "var4", "var5")])
 
 If there is no missing data on any of your key variables, there is no need to run Little's MCAR test [@little1988a]. If there is missing data, run the following code:
 
-``` r
-mcar_test(data[, c("var1", "var2", "var3")])
+```{r}
+mcar_test(data)
 ```
 
 **What this is doing:**

@@ -23,8 +23,52 @@ The **tableone** package is great because it's whole purpose is literally this, 
 
 ### Step 1: Recode numeric codes into labelled factors
 
-``` r
-library(dplyr)  data <- data %>%   mutate(gender_r = factor(gender,                           levels = c(1, 2, 3, 4),                           labels = c("Male", "Female", "Non-binary", "Other")),                    state_r = factor(state,                           levels = c(1, 2, 3, 4, 5, 6, 7, 8),                           labels = c("NSW", "VIC", "QLD", "SA", "WA", "TAS", "NT", "ACT")),                    education_r = factor(education,                          levels = c(1, 2, 3, 4, 5),                          labels = c("Less than high school", "High school", "TAFE",                                      "Undergraduate degree", "Postgraduate degree")))
+Let's generate some fake data.
+
+```{r}
+library(dplyr)
+
+set.seed(1234)
+
+data <- data.frame(
+  age = round(rnorm(500, mean = 42, sd = 15)),
+  gender = sample(
+    c(1, 2, 3, 4),
+    size = 500,
+    replace = TRUE,
+    prob = c(.47, .49, .02, .02)
+  ),
+  state = sample(
+    1:8,
+    size = 500,
+    replace = TRUE,
+    prob = c(.31, .25, .20, .08, .10, .03, .01, .02)
+  ),
+  education = sample(
+    1:5,
+    size = 500,
+    replace = TRUE,
+    prob = c(.08, .25, .20, .30, .17)
+  )
+)
+
+# Keep age within a reasonable range
+data$age <- pmin(pmax(data$age, 18), 85)
+```
+
+Now let's recode.
+
+```{r}
+data <- data %>%   
+  mutate(gender_r = factor(gender,                           
+                           levels = c(1, 2, 3, 4),                           
+                           labels = c("Male", "Female", "Non-binary", "Other")),
+         state_r = factor(state,
+                          levels = c(1, 2, 3, 4, 5, 6, 7, 8),
+                          labels = c("NSW", "VIC", "QLD", "SA", "WA", "TAS", "NT", "ACT")),
+         education_r = factor(education,
+                              levels = c(1, 2, 3, 4, 5),
+                              labels = c("Less than high school", "High school", "TAFE", "Undergraduate degree", "Postgraduate degree")))
 ```
 
 **What this is doing:**
@@ -33,8 +77,17 @@ library(dplyr)  data <- data %>%   mutate(gender_r = factor(gender,             
 
 ### Step 2: Build the summary table with createTableOne()
 
-``` r
-library(tableone)  vars <- c("age", "gender_r", "education_r")  table_1 <- CreateTableOne(data = data,                             vars = vars,                             strata = "state_r",                            addOverall = TRUE,                            test = FALSE) table_1
+```{r}
+library(tableone)  
+
+vars <- c("age", "gender_r", "education_r")  # Select variables
+table_1 <- CreateTableOne(data = data,
+                          vars = vars,
+                          strata = "state_r",
+                          addOverall = TRUE,
+                          test = FALSE) 
+
+table_1
 ```
 
 **What this is doing:**
@@ -55,8 +108,43 @@ library(tableone)  vars <- c("age", "gender_r", "education_r")  table_1 <- Creat
 
 This is a function helpfully created by Graham Cooper [@Cooper2024] and made available on GitHub to quickly convert a **tableone** object to something that you can open in a Word document using the **flextable** and **officer** packages. Make sure you have those two packages installed and loaded to be able to run the function.
 
-``` r
-tableone2flextable <- function(tableone){   tableone <- print(tableone, quote = FALSE, noSpaces = TRUE)  # convert to matrix      rows <- nrow(tableone)   cols <- ncol(tableone)   colnames <- colnames(tableone)      listoflists <- list()      for (i in 1:cols){     start <- (i * rows + 1) - rows     end <- i * rows     listoflists[[i]] <- tableone[start:end]   }      dataframe <- as.data.frame(listoflists, col.names = colnames)   dataframe <- cbind(Variable = rownames(tableone), dataframe)     rownames(dataframe) <- NULL                                        flex <- flextable::flextable(dataframe)      return(flex) }
+```{r}
+tableone2flextable <- function(tableone) {
+
+  tableone <- print(
+    tableone,
+    quote = FALSE,
+    noSpaces = TRUE
+  )
+
+  rows <- nrow(tableone)
+  cols <- ncol(tableone)
+  column_names <- colnames(tableone)
+
+  listoflists <- vector("list", cols)
+
+  for (i in seq_len(cols)) {
+
+    start <- (i - 1) * rows + 1
+    end <- i * rows
+
+    listoflists[[i]] <- tableone[start:end]
+  }
+
+  dataframe <- as.data.frame(
+    listoflists,
+    col.names = column_names
+  )
+
+  dataframe <- cbind(
+    Variable = rownames(tableone),
+    dataframe
+  )
+
+  rownames(dataframe) <- NULL
+
+  flextable::flextable(dataframe)
+}
 ```
 
 **What this is doing:**
@@ -77,9 +165,34 @@ tableone2flextable <- function(tableone){   tableone <- print(tableone, quote = 
 
 ### Step 4: Format and export to Word
 
-``` r
-flextable2word <-function(flextab, filepath){            # Add filepath so you can specify folder and name of file   require(tidyverse)   require(flextable)   ft <-autofit(theme_apa(flextab)) %>%     align(j = 1, align = "left", part = "all") %>%        # left-align first column     line_spacing(space = 1, part = "all")                  # remove double spacing   officer::read_docx() %>%     body_add_flextable(ft) %>%     body_end_section_landscape() %>%     print(target = filepath)   browseURL(filepath) }  tab_1 <-tableone2flextable(table_1)    flextable2word(tab_1, "output/Table 1 Sample demographics.docx")  tab_1
+```{r}
+flextable2word <- function(flextab, filepath) {
+
+  ft <- flextable::theme_apa(flextab) %>%
+    flextable::autofit() %>%
+    flextable::align(
+      j = 1,
+      align = "left",
+      part = "all"
+    ) %>%
+    flextable::line_spacing(
+      space = 1,
+      part = "all"
+    )
+
+  officer::read_docx() %>%
+    flextable::body_add_flextable(ft) %>%
+    officer::body_end_section_landscape() %>%
+    print(target = filepath)
+
+  browseURL(filepath)
+}
+
+tab_1 <- tableone2flextable(table_1)
+tab_1
 ```
+
+Save and open Word document.
 
 **What this is doing:**
 
@@ -108,7 +221,10 @@ flextable2word <-function(flextab, filepath){            # Add filepath so you c
 ### Step 5: Run it
 
 ``` r
-tab_1 <- tableone2flextable(table_1)    flextable2word(tab_1, "output/Table 1 Sample demographics.docx")  tab_1
+flextable2word(
+  tab_1,
+  "output/Table 1 Sample demographics.docx"
+)
 ```
 
 **What this is doing:**

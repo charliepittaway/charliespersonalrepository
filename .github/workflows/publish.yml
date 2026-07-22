@@ -47,6 +47,10 @@ jobs:
             any::corrplot
             any::rempsyc
             any::effectsize
+            any::tableone
+            any::MASS
+            any::ggplot2
+            any::naniar
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
