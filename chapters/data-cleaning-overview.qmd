@@ -77,7 +77,6 @@ data$action_4 <-
 
 data$action_5 <-
   cap_scale(data$action_1 + rnorm(N, 0, 1))
-``
 ```
 
 ## Step 1: Participant exclusions
