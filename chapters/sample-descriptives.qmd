@@ -21,7 +21,7 @@ The **tableone** package is great because it's whole purpose is literally this, 
 
 -   officer [@officer]
 
-### Step 1: Recode numeric codes into labelled factors 
+### Step 1: Recode numeric codes into labelled factors
 
 ```{r}
 #| include: false
