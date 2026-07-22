@@ -11,6 +11,7 @@ The second table you will probably create in your manuscript is the table of int
 #| label: Simulated data
 #| include: false
 set.seed(1234)
+library(tidyverse)
 
 N <- 500
 
