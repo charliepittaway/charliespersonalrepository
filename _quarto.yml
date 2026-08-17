@@ -20,6 +20,7 @@ book:
         - chapters/deleting-rows.qmd
         - chapters/appending-data.qmd
         - chapters/saving-files.qmd
+        - chapters/preparing-mplus-data.qmd
     - part: Data Cleaning
       chapters: 
         - chapters/data-cleaning-overview.qmd

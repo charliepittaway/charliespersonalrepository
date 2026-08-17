@@ -1,0 +1,63 @@
+---
+title: "Preparing Mplus Data"
+format: html
+---
+
+Mplus data must be in space-delimited format with no header (e.g., no variable names). Mplus also cannot handle R's `NA` values, and missing data must therefore be recoded as a numeric placeholder (e.g., -99) that does no overlap with any valid value in the dataset.
+
+This process can be automated using the **MplusAutomation** package [@mplusautomation2018], which exports a properly formatted `.dat` file and generates a starter `.inp` file with the variable names, order, and missing-value code already filled in – removing the need to manually retype variable lists (a common source of misalignment errors between R/SPSS and Mplus).
+
+::: callout-note
+## What is an .inp file?
+
+An .inp file is a plain-text Mplus input file – it's the script that tells Mplus what data to read, how to treat each variable, and what model to run. Every Mplus analysis starts from one. It's organised into commands like:
+
+-   DATA: – where to find the .dat file
+
+-   VARIABLE: – variable names, missing-value codes, which variables are categorical, which to use in the model, etc.
+
+-   MODEL: – the actual model specification (e.g., factor structure, regressions, paths)
+
+-   OUTPUT: – what results to print (standardised estimates, modification indices, etc.)
+
+The code below only fills in the DATA: and VARIABLE: sections automatically, since those depend on the structure of your dataset.
+:::
+
+``` r
+install.packages("MplusAutomation")
+library(MplusAutomation)
+
+gender_ownership_t2 %>%
+  mutate(
+    GENDER = case_when(
+      GENID == "man" ~ 1,
+      GENID == "woman" ~ 2,
+      TRUE ~ NA_real_
+    ),
+    OPP = case_when(
+      opinion_group == "supporter" ~ 1,
+      opinion_group == "opponent" ~ 2,
+      TRUE ~ NA_real_
+    )
+  ) %>%
+  dplyr::select(COGE1, COGE2, COGE3,
+                TTHR3, TTHR4,
+                TEM12, TEM13,
+                OPP,
+                TCA3, TCA4, TCA5, TCA7, TCA9,
+                TFA3, TFA4, TFA5, TFA7, TFA9,
+                GENST, AGE, EDUC, CONS, GENDER) %>%
+  prepareMplusData(filename = "ownership_s2.dat", inpfile = TRUE)
+```
+
+**What this is doing:**
+
+-   `mutate()` recodes to factor variables into numeric form, since Mplus requires all variables to be numeric. `GENID` ("man", "woman", "non-binary person", "other gender diverse person") is recoded into `GENDER` (1/2 - only controlling for binary gender in the models as there are insufficient cases of gender diverse folk in the data), and `opinion_group` ("supporter"/"opponent") is recoded into `OPP` (1/2) because the models I was running were predicting opponent (vs supporter) self-categorisation. Any value that doesn't match the specified condition becomes `NA`.
+
+-   `dplyr::select()` retains only the variables needed for the Mplus model, in a fixed order. The column order matters here, since Mplus reads data by position rather than by name – the order in `select()` determines the order Mplus expects in `NAMES ARE`
+
+-   `prepareMplusData()` writes two files here:
+
+    -   `ownership_s2.dat` – the space-delimited data file, with all `NA` values automatically recoded to `-99`.
+
+    -   `ownership_s2.inp` – a template Mplus input file with the `DATA:` and `VARIABLE:` sections pre-filled, including `NAMES ARE` (variable list, correctly ordered) and `MISSING ARE ALL (-99);`
