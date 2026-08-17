@@ -1,5 +1,5 @@
 ---
-title: "Getting Started"
+title: "Getting Started and Loading Data"
 format: html
 ---
 
@@ -34,6 +34,8 @@ library(package_name) # Install package
 
 You're probably familiar with downloading your data from Qualtrics in `.sav` format to import into SPSS, or `.csv` format to open in Excel. Both of these file types ([and many more](https://rfaqs.com/r-language-basics/files-in-r/)) can be used in R.
 
+### SPSS files
+
 My recommendation is to save as an `.sav` file for the utility of having the item wording retained, which you lose in `.csv` format. To do this, you'll need to install the **haven** package [@haven2025].
 
 ```{r}
@@ -44,6 +46,56 @@ library(haven)
 # Import your data into R, using the relative file path
 dat <- read_sav("data/my_qualtrics_export.sav")
 ```
+
+The **haven** package allows you to retain the "special missingness" function of SPSS. If you have this type of missingness in your data (e.g., -99 for when participants viewed the question but chose not to answer, to differentiate from NAs where participants were not shown the question), you can add `user_na = TRUE` when loading the data.
+
+``` r
+dat <- read_sav("data/my_qualtrics_export.sav", user_na = TRUE)
+```
+
+When you load .sav files into R, you will see that the data have lots of additional characteristics and you can't work with them in this form yet. For example, gender might have been stored as 1 = Man, 2 = Woman in SPSS, but is now showing up in R as a dbl+lbl (double variable with labels). See <https://haven.tidyverse.org/articles/semantics.html> for more information.
+
+TLDR, here is how to convert your categorical/factor variables.
+
+``` r
+data <- data %>%
+  mutate(
+    GENDER = haven::as_factor(haven::zap_missing(GENDER))
+  )
+```
+
+**What this is doing:**
+
+-   The first chunk of code converts the dbl variable into a factor, retaining the labels associated with each label.
+
+-   The variable label (with the item stem) is still retained, but can be removed by running the following code: `attr(data$GENDER, "label") <- NULL`
+
+Here is how to convert to a numeric variable (e.g., a continuously-scored variable).
+
+``` r
+data <- data %>%
+  mutate(
+    AGE = as.numeric(AGE)
+  )
+```
+
+If you want to automatically recode all special missingness to regular missingness, you can use the following code from **haven.**
+
+``` r
+data <- data %>%
+  mutate(VARIABLE = haven::zap_missing(VARIABLE))
+```
+
+This can be combined with other functions, e.g.: converting to a factor.
+
+``` r
+data <- data %>%
+  mutate(
+    GENDER = haven::as_factor(haven::zap_missing(GENDER))
+  )
+```
+
+### CSV files
 
 If you don't care about retaining the item stem and `.csv` is sufficient, you'll need the **readr** package instead [@readr2026].
 

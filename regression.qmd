@@ -1,0 +1,200 @@
+---
+title: "Regression"
+format: html
+---
+
+## Multivariate regression
+
+::: callout-important
+## Reminder
+
+1.  If using categorical predictors (for example, testing 2 x 2 factorial designs using regression), make sure that the IVs are **effect coded**, so that one level is -1 and the other is +1. This allows you to compare each group to the overall average of the sample, rather than to the reference category. It also makes interpretation of interactions easier. See [Recoding variables](recoding.qmd) for a guide.
+2.  If testing moderation by a continuous variable, make sure all continuous variables involved in interactions have been mean centred. This reduces multicollinearity between the interaction and its constituent variables, and again, makes interpretation of interactions easier. See [Mean centring and standardising](standardising.qmd) for a guide.
+:::
+
+I like to conduct multivariate regression analyses using the following code, using the **base r** functions + the apaTables package [@apaTables2026] to produce publication-ready tables.
+
+```{r}
+#| label: Simulate data
+#| include: false
+
+# Reproducibility
+set.seed(123)
+
+# Sample size
+N <- 300
+
+# Effect-coded 2-level factors
+IV1 <- sample(c(-1, 1), N, replace = TRUE)
+IV2 <- sample(c(-1, 1), N, replace = TRUE)
+
+# Continuous moderator for categorical interaction
+moderator <- rnorm(N)
+
+moderator_mc <- as.numeric(
+  scale(
+    moderator,
+    center = TRUE,
+    scale = FALSE
+  )
+)
+
+# New continuous predictors
+X <- rnorm(N)
+M <- rnorm(N)
+W <- rnorm(N)
+
+# Mean-center continuous predictors
+X_mc <- as.numeric(scale(X, center = TRUE, scale = FALSE))
+M_mc <- as.numeric(scale(M, center = TRUE, scale = FALSE))
+W_mc <- as.numeric(scale(W, center = TRUE, scale = FALSE))
+
+# Generate DV
+DV <- 50 +
+  # Original categorical three-way interaction
+  2.0 * IV1 +
+  1.5 * IV2 +
+  1.8 * moderator_mc +
+  1.2 * IV1 * IV2 +
+  1.0 * IV1 * moderator_mc +
+  0.8 * IV2 * moderator_mc +
+  1.5 * IV1 * IV2 * moderator_mc +
+
+  # New continuous three-way interaction
+  0.5 * X_mc +
+  0.5 * M_mc +
+  0.5 * W_mc +
+  0.4 * X_mc * M_mc +
+  0.4 * X_mc * W_mc +
+  0.4 * M_mc * W_mc +
+  1.0 * X_mc * M_mc * W_mc +
+
+  rnorm(N, 0, 3)
+
+# Create dataset
+dat <- data.frame(
+  DV,
+  IV1,
+  IV2,
+  moderator_mc,
+  X_mc,
+  M_mc,
+  W_mc
+)
+```
+
+In this example, we are testing a 2 x 2 factorial design, with one continuous moderator. The factors have been effect-coded (-1 and +1), and the continuous moderator has been mean-centred.
+
+We must build three models representing each 'block' in hierarchical regression. The **main effects** are entered in Block 1, the **two-way interactions** are entered in Block 2, and the **three-way interaction** is entered in Block 3.
+
+### Understanding the regression formula
+
+When specifying regression models in R, we use formula syntax that describes the relationship between variables.
+
+The general formula is: the **dependent variable** is to the left of the `~` symbol and the **predictor variables** are to the right of this symbol. The `~` symbol can therefore be understood as "is predicted by" or "is explained by."
+
+Therefore the formula `DV ~ IV1 + IV2` can be read in plain English as "DV is predicted by IV1 and IV2."
+
+Additional predictors are separated by a `+` symbol. If you are examining the interaction between variables, you use the colon symbol `:`.
+
+For example, the formula `DV ~ IV1:IV2` tests whether the effect of IV1 on DV depends on the level of IV2. Main effects and interactions must be added separately.
+
+The asterisk symbol `*` is shorthand that automatically includes all main effects and interactions between variables. So, if you wanted to test a three-way interaction, the code `IV1 * IV2 * IV3` would automatically include the main effects of IV1, IV2, and IV3, all two-way interactions, and the three-way interaction. This expands to:
+
+``` r
+DV ~ IV1 +
+     IV2 +
+     IV3 +
+     IV1:IV2 +
+     IV1:IV3 +
+     IV2:IV3 +
+     IV1:IV2:IV3
+```
+
+If you are testing a hierarchical regression model where you need to enter the main effects and two-way interactions at a separate step from the three-way interaction, you will need to build separate models to do this. An example of this is provided below.
+
+Finally, `I()` forces R to evaluate an arithmetic expression literally and use the result as a single predictor, rather than interpreting it as formula syntax. `I(IV1 * IV2)` creates one new numeric column equal to `IV1 × IV2` – that is, mathematically identical to the `IV1:IV2` interaction term, but stored and labelled as an ordinary product variable rather than a formula-level interaction.
+
+-   This is necessary for calculating the standardised betas in apa.reg.table(). To be clear, `I(IV1 * IV2)` will give the exact same coefficients (B), SEs, and p-values as `IV1:IV2` and `IV1*IV2`. The difference only matters once you pass the model to `apa.reg.table()`, because `apa.reg.table()` calculates the **standardised beta** for each predictor by re-fitting the model on standardised variables. To do this, it needs each interaction term to already exist in the data as an actual numeric column with a name it can parse (e.g. `I(IV1 * IV2)`). If you don't include the interaction terms in I(), the table will still be produced, but you won't get standardised betas or 95% confidence intervals for standardised betas.
+
+### Block 1: Main effects
+
+```{r}
+library(apaTables)
+
+# Block 1: Main effects
+model_b1 <- lm(DV ~ IV1 + IV2 + moderator_mc, dat)
+summary(model_b1)
+```
+
+**What this is doing:**
+
+-   This model estimates the direct effects of each predictor on the dependent variable.
+
+-   DV is the dependent/outcome/criterion variable. IV1 and IV2 are effect-coded categorical predictors (where -1 = one level, +1 = the other level). moderator_mc is a continuous moderator that has been mean-centred.
+
+-   All predictors are separated by `+`, meaning they are tested on average across all levels of the other variables (i.e., they are main effects).
+
+-   As we can see from the output, the model is significant and explains 38% of the total variance in the DV. All main effects are significant.
+
+### Block 2: Two-way interactions
+
+```{r}
+
+model_b2 <- lm(DV ~ IV1 + IV2 + moderator_mc + 
+                 I(IV1 * IV2) + 
+                 I(IV1 * moderator_mc) + 
+                 I(IV2 * moderator_mc), 
+               dat)
+summary(model_b2)
+
+```
+
+**What this is doing:**
+
+-   This model keeps all three main effects from Block 1 and adds every possible two-way interaction between the predictors. Each interaction is written as an `I()` product term (explained above) rather than `IV1:IV2`, so that `apa.reg.table()` can compute its standardised beta later.
+
+-   By comparing Block 2 to Block 1, we can determine whether including these interactions explains additional variance in the dependent variable.
+
+-   As we can see, the total model is again significant and explains 49% of the total variance in DV. All two-way interactions are significant.
+
+### Block 3: Three-way interactions
+
+```{r}
+model_b3 <- lm(DV ~ IV1 + IV2 + moderator_mc + 
+                 I(IV1 * IV2) + 
+                 I(IV1 * moderator_mc) + 
+                 I(IV2 * moderator_mc) + 
+                 I(IV1 * IV2 * moderator_mc), 
+               dat)
+summary(model_b3)
+```
+
+**What this is doing:**
+
+-   This model builds on Block 2 by adding the three-way interaction, `I(IV1 * IV2 * moderator_mc)`. We write out every term explicitly so the model matches Block 2 term-for-term except for the one new interaction — this is what makes the three models a proper hierarchical sequence that `apa.reg.table()` can compare block-by-block.
+
+-   As we can see from the output, the total model is again significant and explains 56% of the total variance in DV. The three-way interaction is also significant.
+
+### Producing an APA-formatted regression table
+
+```{r}
+tab_model <- apa.reg.table(model_b1, model_b2, model_b3)
+tab_model
+```
+
+**What this is doing:**
+
+-   The `apa.reg.table()` function from **apaTables** package [@apaTables2026] combines the results from all three regression models into a single, publication-ready table. This means you do not have to worry about small errors and inconsistencies when copying over values – whoopee!
+
+-   The table includes unstandardised regression coefficients (**b**), standard errors (SE), standardised coefficients (β), model R² values, changes in R² across blocks, and significance tests for individual predictors.
+
+-   Because Blocks 2 and 3 contain product terms, `apa.reg.table()` omits the zero-order correlation (**r**) column for those interaction rows — this is intentional, to avoid a common misinterpretation of raw correlations for interaction terms in psychology [@apaTables2026].
+
+-   As we can see from the delta R² values, each model was a significant improvement on the one before.
+
+### Following up significant interactions
+
+The standard rule when following up interactions is to interpret only the **highest order significant interaction** and treat any significant main effects or lower order interactions as nested within it – that is, they are conditional effects and not things to test or interpret on their own [@aiken1991].
+
+#### 

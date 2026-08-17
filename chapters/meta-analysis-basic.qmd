@@ -8,3 +8,9 @@ Contact me for a full three-level random-effects meta-analysis workflow from sta
 But in the meantime... let me know if you want me to send you the file.
 
 📧 [charlie.pittaway\@flinders.edu.au](mailto:charlie.pittaway@flinders.edu.au "Meta-analysis code")
+
+# Three-level random-effects meta-analysis
+
+Standard meta-analytic models assume independence between effect sizes; however, this assumption is violated when multiple effects are drawn from the same sample. This nested data structure can be accounted for by fitting *three-level random-effects* meta-analysis [@assink2016].
+
+Three-level random-effects models partition variance across three levels: sampling error at Level 1, variance between effect sizes within studies at Level 2, and variance between studies at Level 3. This approach ensures that dependent effect sizes are assigned the same random effects whereas independent effect sizes are assigned different ones. Further, three-level meta-analysis can assess moderators that account for variance both within and between studies [@moeyaert2016].

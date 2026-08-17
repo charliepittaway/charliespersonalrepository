@@ -53,6 +53,7 @@ jobs:
             any::naniar
             any::splithalfr
             any::apaTables
+            any::emmeans
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
