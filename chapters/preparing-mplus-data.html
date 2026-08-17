@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>20&nbsp; Meta-Analysis – Charlie's Personal R for Psychology Repository</title>
+<title>10&nbsp; Preparing Mplus Data – Charlie's Personal R for Psychology Repository</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -25,6 +25,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -56,8 +91,8 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../chapters/themes-colours.html" rel="next">
-<link href="../chapters/sem.html" rel="prev">
+<link href="../chapters/data-cleaning-overview.html" rel="next">
+<link href="../chapters/saving-files.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -108,7 +143,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/t-tests.html">Analyses</a></li><li class="breadcrumb-item"><a href="../chapters/meta-analysis-basic.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Meta-Analysis</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/getting-started.html">Data Wrangling &amp; Basics</a></li><li class="breadcrumb-item"><a href="../chapters/preparing-mplus-data.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Preparing Mplus Data</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -204,7 +239,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/preparing-mplus-data.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/preparing-mplus-data.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Preparing Mplus Data</span></span></a>
   </div>
 </li>
@@ -297,7 +332,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/meta-analysis-basic.html" class="sidebar-item-text sidebar-link active">
+  <a href="../chapters/meta-analysis-basic.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Meta-Analysis</span></span></a>
   </div>
 </li>
@@ -382,21 +417,15 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#three-level-random-effects-meta-analysis" id="toc-three-level-random-effects-meta-analysis" class="nav-link active" data-scroll-target="#three-level-random-effects-meta-analysis"><span class="header-section-number">21</span> Three-level random-effects meta-analysis</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/t-tests.html">Analyses</a></li><li class="breadcrumb-item"><a href="../chapters/meta-analysis-basic.html"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Meta-Analysis</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/getting-started.html">Data Wrangling &amp; Basics</a></li><li class="breadcrumb-item"><a href="../chapters/preparing-mplus-data.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Preparing Mplus Data</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Meta-Analysis</span></h1>
+<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Preparing Mplus Data</span></h1>
 </div>
 
 
@@ -413,24 +442,69 @@ div.csl-indent {
 </header>
 
 
-<p>Contact me for a full three-level random-effects meta-analysis workflow from start to finish. I can’t upload it yet, as it uses data from a study that has not yet been published. When it has been published, I will upload it here.</p>
-<p>But in the meantime… let me know if you want me to send you the file.</p>
-<p>📧 <a href="mailto:charlie.pittaway@flinders.edu.au">charlie.pittaway@flinders.edu.au</a></p>
-<section id="three-level-random-effects-meta-analysis" class="level1" data-number="21">
-<h1 data-number="21"><span class="header-section-number">21</span> Three-level random-effects meta-analysis</h1>
-<p>Standard meta-analytic models assume independence between effect sizes; however, this assumption is violated when multiple effects are drawn from the same sample. This nested data structure can be accounted for by fitting <em>three-level random-effects</em> meta-analysis <span class="citation" data-cites="assink2016">(<a href="../references.html#ref-assink2016" role="doc-biblioref">Assink &amp; Wibbelink, 2016</a>)</span>.</p>
-<p>Three-level random-effects models partition variance across three levels: sampling error at Level 1, variance between effect sizes within studies at Level 2, and variance between studies at Level 3. This approach ensures that dependent effect sizes are assigned the same random effects whereas independent effect sizes are assigned different ones. Further, three-level meta-analysis can assess moderators that account for variance both within and between studies <span class="citation" data-cites="moeyaert2016">(<a href="../references.html#ref-moeyaert2016" role="doc-biblioref">Moeyaert et al., 2016</a>)</span>.</p>
+<p>Mplus data must be in space-delimited format with no header (e.g., no variable names). Mplus also cannot handle R’s <code>NA</code> values, and missing data must therefore be recoded as a numeric placeholder (e.g., -99) that does no overlap with any valid value in the dataset.</p>
+<p>This process can be automated using the <strong>MplusAutomation</strong> package <span class="citation" data-cites="mplusautomation2018">(<a href="../references.html#ref-mplusautomation2018" role="doc-biblioref">Hallquist &amp; Wiley, 2018</a>)</span>, which exports a properly formatted <code>.dat</code> file and generates a starter <code>.inp</code> file with the variable names, order, and missing-value code already filled in – removing the need to manually retype variable lists (a common source of misalignment errors between R/SPSS and Mplus).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>What is an .inp file?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>An .inp file is a plain-text Mplus input file – it’s the script that tells Mplus what data to read, how to treat each variable, and what model to run. Every Mplus analysis starts from one. It’s organised into commands like:</p>
+<ul>
+<li><p>DATA: – where to find the .dat file</p></li>
+<li><p>VARIABLE: – variable names, missing-value codes, which variables are categorical, which to use in the model, etc.</p></li>
+<li><p>MODEL: – the actual model specification (e.g., factor structure, regressions, paths)</p></li>
+<li><p>OUTPUT: – what results to print (standardised estimates, modification indices, etc.)</p></li>
+</ul>
+<p>The code below only fills in the DATA: and VARIABLE: sections automatically, since those depend on the structure of your dataset.</p>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"MplusAutomation"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MplusAutomation)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>gender_ownership_t2 <span class="sc">%&gt;%</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">GENDER =</span> <span class="fu">case_when</span>(</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      GENID <span class="sc">==</span> <span class="st">"man"</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      GENID <span class="sc">==</span> <span class="st">"woman"</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_real_</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">OPP =</span> <span class="fu">case_when</span>(</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      opinion_group <span class="sc">==</span> <span class="st">"supporter"</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      opinion_group <span class="sc">==</span> <span class="st">"opponent"</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_real_</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(COGE1, COGE2, COGE3,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                TTHR3, TTHR4,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>                TEM12, TEM13,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                OPP,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>                TCA3, TCA4, TCA5, TCA7, TCA9,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                TFA3, TFA4, TFA5, TFA7, TFA9,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                GENST, AGE, EDUC, CONS, GENDER) <span class="sc">%&gt;%</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prepareMplusData</span>(<span class="at">filename =</span> <span class="st">"ownership_s2.dat"</span>, <span class="at">inpfile =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li><p><code>mutate()</code> recodes to factor variables into numeric form, since Mplus requires all variables to be numeric. <code>GENID</code> (“man”, “woman”, “non-binary person”, “other gender diverse person”) is recoded into <code>GENDER</code> (1/2 - only controlling for binary gender in the models as there are insufficient cases of gender diverse folk in the data), and <code>opinion_group</code> (“supporter”/“opponent”) is recoded into <code>OPP</code> (1/2) because the models I was running were predicting opponent (vs supporter) self-categorisation. Any value that doesn’t match the specified condition becomes <code>NA</code>.</p></li>
+<li><p><code>dplyr::select()</code> retains only the variables needed for the Mplus model, in a fixed order. The column order matters here, since Mplus reads data by position rather than by name – the order in <code>select()</code> determines the order Mplus expects in <code>NAMES ARE</code></p></li>
+<li><p><code>prepareMplusData()</code> writes two files here:</p>
+<ul>
+<li><p><code>ownership_s2.dat</code> – the space-delimited data file, with all <code>NA</code> values automatically recoded to <code>-99</code>.</p></li>
+<li><p><code>ownership_s2.inp</code> – a template Mplus input file with the <code>DATA:</code> and <code>VARIABLE:</code> sections pre-filled, including <code>NAMES ARE</code> (variable list, correctly ordered) and <code>MISSING ARE ALL (-99);</code></p></li>
+</ul></li>
+</ul>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
-<div id="ref-assink2016" class="csl-entry" role="listitem">
-Assink, M., &amp; Wibbelink, C. J. M. (2016). Fitting three-level meta-analytic models in r: A step-by-step tutorial. <em>The Quantitative Methods for Psychology</em>, <em>12</em>(3), 154–174. <a href="https://doi.org/10.20982/tqmp.12.3.p154">https://doi.org/10.20982/tqmp.12.3.p154</a>
-</div>
-<div id="ref-moeyaert2016" class="csl-entry" role="listitem">
-Moeyaert, M., Ugille, M., Natasha Beretvas, S., Ferron, J., Bunuan, R., &amp; Van den Noortgate, W. (2016). Methods for dealing with multiple outcomes in meta-analysis<span><strong>:</strong></span>a comparison between averaging effect sizes, robust variance estimation and multilevel meta-analysis. <em>International Journal of Social Research Methodology</em>, <em>20</em>(6), 559–572. <a href="https://doi.org/10.1080/13645579.2016.1252189">https://doi.org/10.1080/13645579.2016.1252189</a>
+<div id="ref-mplusautomation2018" class="csl-entry" role="listitem">
+Hallquist, M. N., &amp; Wiley, J. F. (2018). <span>MplusAutomation</span>: An <span>R</span> package for facilitating large-scale latent variable analyses in <span>Mplus</span>. <em>Structural Equation Modeling</em>, 621–638. <a href="https://doi.org/10.1080/10705511.2017.1402334">https://doi.org/10.1080/10705511.2017.1402334</a>
 </div>
 </div>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -835,13 +909,13 @@ Moeyaert, M., Ugille, M., Natasha Beretvas, S., Ferron, J., Bunuan, R., &amp; Va
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/sem.html" class="pagination-link" aria-label="Structural Equation Modelling">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Structural Equation Modelling</span></span>
+      <a href="../chapters/saving-files.html" class="pagination-link" aria-label="Saving Data">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Saving Data</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../chapters/themes-colours.html" class="pagination-link" aria-label="Themes and Plot Colouring">
-        <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Themes and Plot Colouring</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/data-cleaning-overview.html" class="pagination-link" aria-label="Data Cleaning: Step-by-Step">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Cleaning: Step-by-Step</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
