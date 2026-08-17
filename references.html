@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -59,10 +62,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-41230449efae31f530751339145997e9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-59f0b1c8be38d955fc3ce811f98d4f0a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -146,7 +149,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapters/getting-started.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Getting Started</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Getting Started and Loading Data</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -397,6 +400,11 @@ div.csl-indent {
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-assink2016" class="csl-entry" role="listitem">
+Assink, M., &amp; Wibbelink, C. J. M. (2016). Fitting three-level
+meta-analytic models in r: A step-by-step tutorial. <em>The Quantitative
+Methods for Psychology</em>, <em>12</em>(3), 154–174. <a href="https://doi.org/10.20982/tqmp.12.3.p154">https://doi.org/10.20982/tqmp.12.3.p154</a>
+</div>
 <div id="ref-BenjaminiHochberg1995" class="csl-entry" role="listitem">
 Benjamini, Y., &amp; Hochberg, Y. (1995). Controlling the false
 discovery rate: A practical and powerful approach to multiple testing.
@@ -532,6 +540,14 @@ Marjanovic, Z., Holden, R., Struthers, W., Cribbie, R., &amp;
 Greenglass, E. (2015). The inter-item standard deviation (ISD): An index
 that discriminates between conscientious and random responders.
 <em>Personality and Individual Differences</em>, <em>84</em>, 79–83.
+</div>
+<div id="ref-moeyaert2016" class="csl-entry" role="listitem">
+Moeyaert, M., Ugille, M., Natasha Beretvas, S., Ferron, J., Bunuan, R.,
+&amp; Van den Noortgate, W. (2016). Methods for dealing with multiple
+outcomes in meta-analysis<span><strong>:</strong></span>a comparison
+between averaging effect sizes, robust variance estimation and
+multilevel meta-analysis. <em>International Journal of Social Research
+Methodology</em>, <em>20</em>(6), 559–572. <a href="https://doi.org/10.1080/13645579.2016.1252189">https://doi.org/10.1080/13645579.2016.1252189</a>
 </div>
 <div id="ref-Navarro" class="csl-entry" role="listitem">
 Navarro, D. (2026). <em>Learning statistics with r</em>. <a href="https://learningstatisticswithr.com/">https://learningstatisticswithr.com/</a>
