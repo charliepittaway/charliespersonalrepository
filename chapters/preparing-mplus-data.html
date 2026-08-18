@@ -422,11 +422,17 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#edit-.inp-file-by-hand" id="toc-edit-.inp-file-by-hand" class="nav-link active" data-scroll-target="#edit-.inp-file-by-hand"><span class="header-section-number">10.1</span> Edit <code>.inp</code> file by hand</a></li>
-  <li><a href="#check-.inp-syntax-before-running" id="toc-check-.inp-syntax-before-running" class="nav-link" data-scroll-target="#check-.inp-syntax-before-running"><span class="header-section-number">10.2</span> Check <code>.inp</code> syntax before running</a></li>
-  <li><a href="#running-models-in-r" id="toc-running-models-in-r" class="nav-link" data-scroll-target="#running-models-in-r"><span class="header-section-number">10.3</span> Running models in R</a></li>
-  <li><a href="#reading-model-output-into-r" id="toc-reading-model-output-into-r" class="nav-link" data-scroll-target="#reading-model-output-into-r"><span class="header-section-number">10.4</span> Reading model output into R</a></li>
-  <li><a href="#plotting-results-in-r" id="toc-plotting-results-in-r" class="nav-link" data-scroll-target="#plotting-results-in-r"><span class="header-section-number">10.5</span> Plotting results in R</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link active" data-scroll-target="#next-steps"><span class="header-section-number">10.1</span> <strong>Next steps:</strong></a></li>
+  <li><a href="#running-models-in-r" id="toc-running-models-in-r" class="nav-link" data-scroll-target="#running-models-in-r"><span class="header-section-number">10.2</span> Running models in R</a></li>
+  <li><a href="#reading-model-output-into-r" id="toc-reading-model-output-into-r" class="nav-link" data-scroll-target="#reading-model-output-into-r"><span class="header-section-number">10.3</span> Reading model output into R</a></li>
+  <li><a href="#full-workflow" id="toc-full-workflow" class="nav-link" data-scroll-target="#full-workflow"><span class="header-section-number">10.4</span> Full workflow</a>
+  <ul class="collapse">
+  <li><a href="#step-1-prepare-the-data-and-retain-only-the-variables-required-across-your-analyses" id="toc-step-1-prepare-the-data-and-retain-only-the-variables-required-across-your-analyses" class="nav-link" data-scroll-target="#step-1-prepare-the-data-and-retain-only-the-variables-required-across-your-analyses"><span class="header-section-number">10.4.1</span> Step 1: Prepare the data and retain only the variables required across your analyses</a></li>
+  <li><a href="#step-2-define-the-model" id="toc-step-2-define-the-model" class="nav-link" data-scroll-target="#step-2-define-the-model"><span class="header-section-number">10.4.2</span> Step 2: Define the model</a></li>
+  <li><a href="#step-3-write-the-.dat-and-.inp-files" id="toc-step-3-write-the-.dat-and-.inp-files" class="nav-link" data-scroll-target="#step-3-write-the-.dat-and-.inp-files"><span class="header-section-number">10.4.3</span> Step 3: Write the .dat and .inp files</a></li>
+  <li><a href="#step-4-checking-syntax" id="toc-step-4-checking-syntax" class="nav-link" data-scroll-target="#step-4-checking-syntax"><span class="header-section-number">10.4.4</span> Step 4: Checking syntax</a></li>
+  <li><a href="#step-5-reading-model-output-into-r" id="toc-step-5-reading-model-output-into-r" class="nav-link" data-scroll-target="#step-5-reading-model-output-into-r"><span class="header-section-number">10.4.5</span> Step 5: Reading model output into R</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -452,7 +458,7 @@ div.csl-indent {
 </header>
 
 
-<p>Mplus data must be in space-delimited format with no header (e.g., no variable names). Mplus also cannot handle R’s <code>NA</code> values, and missing data must therefore be recoded as a numeric placeholder (e.g., -99) that does no overlap with any valid value in the dataset.</p>
+<p>Mplus data must be in space-delimited format with no header (e.g., no variable names).</p>
 <p>This process can be automated using the <strong>MplusAutomation</strong> package <span class="citation" data-cites="mplusautomation2018">(<a href="../references.html#ref-mplusautomation2018" role="doc-biblioref">Hallquist &amp; Wiley, 2018</a>)</span>, which exports a properly formatted <code>.dat</code> file and generates a starter <code>.inp</code> file with the variable names, order, and missing-value code already filled in – removing the need to manually retype variable lists (a common source of misalignment errors between R/SPSS and Mplus).</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -508,18 +514,16 @@ div.csl-indent {
 <li><p><code>ownership_s2.inp</code> – a template Mplus input file with the <code>DATA:</code> and <code>VARIABLE:</code> sections pre-filled, including <code>NAMES ARE</code> (variable list, correctly ordered) and <code>MISSING ARE ALL (-99);</code></p></li>
 </ul></li>
 </ul>
-<section id="edit-.inp-file-by-hand" class="level2" data-number="10.1">
-<h2 data-number="10.1" class="anchored" data-anchor-id="edit-.inp-file-by-hand"><span class="header-section-number">10.1</span> Edit <code>.inp</code> file by hand</h2>
-<p>Once you have prepared the data and produced the template <code>.inp</code> file, you must manually add the model and output sections by hand.</p>
-<p>Add <code>CATEGORICAL ARE</code>, <code>MODEL:</code>, <code>OUTPUT:</code> sections.</p>
+<section id="next-steps" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="next-steps"><span class="header-section-number">10.1</span> <strong>Next steps:</strong></h2>
+<ol type="1">
+<li>Edit .inp file by hand</li>
+<li>Run models in Mplus</li>
+<li>Etc.</li>
+</ol>
 </section>
-<section id="check-.inp-syntax-before-running" class="level2" data-number="10.2">
-<h2 data-number="10.2" class="anchored" data-anchor-id="check-.inp-syntax-before-running"><span class="header-section-number">10.2</span> Check <code>.inp</code> syntax before running</h2>
-<p>Before you then run the model, you can check it using <code>parseMplus()</code>. This checks for common syntax issues (e.g., missing semicolons, lines exceeding Mplus’s character limit) before you attempt to run it.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parseMplus</span>(<span class="st">"ownership_s2.inp"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="running-models-in-r" class="level2" data-number="10.3">
-<h2 data-number="10.3" class="anchored" data-anchor-id="running-models-in-r"><span class="header-section-number">10.3</span> Running models in R</h2>
+<section id="running-models-in-r" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="running-models-in-r"><span class="header-section-number">10.2</span> Running models in R</h2>
 <p>Once your <code>.inp</code> file is complete (data/variable sections generated by <code>prepareMplusData()</code>, plus your <code>MODEL:</code> and <code>OUTPUT:</code> sections added by hand), you can actually run it directly from R using <code>runModels()</code>.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -534,24 +538,18 @@ div.csl-indent {
 <p>Running the Mplus models in R still requires Mplus to be installed locally, as <code>runModels()</code> actually calls Mplus behind the scenes.</p>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">runModels</span>(<span class="st">"ownership_s2.inp"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">runModels</span>(<span class="st">"ownership_s2.inp"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>By default, this looks for ownership_s2.inp in the working directory and produces ownership_s2.out alongside it, exactly as if you’d opened and run the file in the Mplus GUI. If you have several related .inp files in a folder (e.g., a set of measurement invariance models), you can run them all in one call.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">runModels</span>(<span class="st">"path/to/folder"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">runModels</span>(<span class="st">"path/to/folder"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li><p>Note: <code>recursive = TRUE</code> also parses <code>.inp</code> files in subdirectories, which is useful for batches of nested model comparisons.</p></li>
 <li><p>Also note: I do not have Mplus locally installed, so I haven’t tried this myself. See <a href="https://michaelhallquist.github.io/MplusAutomation/index.html" class="uri">https://michaelhallquist.github.io/MplusAutomation/index.html</a> for more guides.</p></li>
 </ul>
 </section>
-<section id="reading-model-output-into-r" class="level2" data-number="10.4">
-<h2 data-number="10.4" class="anchored" data-anchor-id="reading-model-output-into-r"><span class="header-section-number">10.4</span> Reading model output into R</h2>
+<section id="reading-model-output-into-r" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="reading-model-output-into-r"><span class="header-section-number">10.3</span> Reading model output into R</h2>
 <p>If you have been sent an .out file, or you ran your models in Mplus on another device, you can still read them into R and parse out the model results from there. This is done using the <code>readModels()</code> function, which parses one or more <code>.out</code> files and returns their contents as structured R objects (fit statistics, parameter estimates, modification indices, etc.). To reiterate, this works on <strong>any</strong> <code>.out</code> file, whether it was produced by <code>runModels()</code> or run independently through the Mplus program, so this step does not require Mplus to be installed locally.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">readModels</span>(<span class="st">"ownership_s2.out"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># View fit statistics</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>summaries</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># View parameter estimates</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>parameters<span class="sc">$</span>unstandardized</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">readModels</span>(<span class="st">"ownership_s2.out"</span>)  <span class="co"># View fit statistics results$summaries  # View parameter estimates results$parameters$unstandardized</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Useful sub-elements of the returned object include:</strong></p>
 <ul>
 <li><p><code>summaries</code> – fit indices (CFI, TLI, RMSEA, chi-square, etc.)</p></li>
@@ -561,22 +559,150 @@ div.csl-indent {
 <li><p><code>indirect</code> – indirect effect estimates (for mediation models)</p></li>
 </ul>
 <p>If you’re parsing many output files at once (e.g., a batch of related models), point <code>readModels()</code> at the containing folder with all <code>.out</code> files.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>all_results <span class="ot">&lt;-</span> <span class="fu">readModels</span>(<span class="st">"path/to/folder"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>all_results <span class="ot">&lt;-</span> <span class="fu">readModels</span>(<span class="st">"path/to/folder"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="plotting-results-in-r" class="level2" data-number="10.5">
-<h2 data-number="10.5" class="anchored" data-anchor-id="plotting-results-in-r"><span class="header-section-number">10.5</span> Plotting results in R</h2>
-<p>Because <code>readModels()</code> returns tidy data frames, parameter estimates can be piped straight into <code>ggplot2</code> for custom plots - this is useful for coefficient plots, latent class comparisons, or growth trajectories.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>model_params <span class="ot">&lt;-</span> <span class="fu">readModels</span>(<span class="st">"ownership_s2.out"</span>)<span class="sc">$</span>parameters<span class="sc">$</span>unstandardized</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(model_params, <span class="fu">aes</span>(<span class="at">x =</span> param, <span class="at">y =</span> est)) <span class="sc">+</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> est <span class="sc">-</span> se, <span class="at">ymax =</span> est <span class="sc">+</span> se)) <span class="sc">+</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Estimate"</span>) <span class="sc">+</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This plots each parameter’s estimate with error bars based on its standard error.</p>
+<section id="full-workflow" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="full-workflow"><span class="header-section-number">10.4</span> Full workflow</h2>
+<p>You can also write your .inp file in R as well. I choose to do this because I prefer to work in R as much as possible. As such, I like to keep a transparent record of the model building process in R, as well as read my Mplus output back into R so that everything I need is in my R project for when I upload it all to OSF.</p>
+<section id="step-1-prepare-the-data-and-retain-only-the-variables-required-across-your-analyses" class="level3" data-number="10.4.1">
+<h3 data-number="10.4.1" class="anchored" data-anchor-id="step-1-prepare-the-data-and-retain-only-the-variables-required-across-your-analyses"><span class="header-section-number">10.4.1</span> Step 1: Prepare the data and retain only the variables required across your analyses</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ownership_s2 <span class="ot">&lt;-</span> gender_ownership_t2 <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">GENDER =</span> <span class="fu">case_when</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>      GENID <span class="sc">==</span> <span class="st">"man"</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>      GENID <span class="sc">==</span> <span class="st">"woman"</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_real_</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">OPP =</span> <span class="fu">case_when</span>(</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>      opinion_group <span class="sc">==</span> <span class="st">"supporter"</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      opinion_group <span class="sc">==</span> <span class="st">"opponent"</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_real_</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(COGE1, COGE2, COGE3,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>                TTHR3, TTHR4,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>                TEM12, OPP, PREJ,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>                TCA3, TCA4, TCA5, TCA7, TCA9,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>                TFA3, TFA4, TFA5, TFA7, TFA9,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>                GENST, AGE, EDUC, CONS, GENDER)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li>This is the same as above, except rather than specifying -99 as missing data, I am letting the <strong>MplusAutomation</strong> package use it’s automatic process of turning all <code>NA</code> values to <code>.</code> – this is a readable missing value code in Mplus.</li>
+</ul>
+</section>
+<section id="step-2-define-the-model" class="level3" data-number="10.4.2">
+<h3 data-number="10.4.2" class="anchored" data-anchor-id="step-2-define-the-model"><span class="header-section-number">10.4.2</span> Step 2: Define the model</h3>
+<p>The model itself is defined using <code>mplusObject()</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>m1a <span class="ot">&lt;-</span> <span class="fu">mplusObject</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">TITLE =</span> <span class="st">"M1a - Predicting opponent self-categorisation (categorical);"</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">VARIABLE =</span> <span class="st">"</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="st">    USEVARIABLES = TEM12 OPP COGE1 COGE2 COGE3 SYMB;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="st">    CATEGORICAL = OPP;"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">DEFINE =</span> <span class="st">"</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="st">    SYMB = (TTHR3 + TTHR4) / 2;"</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">ANALYSIS =</span> <span class="st">"</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="st">    ESTIMATOR = WLSMV;"</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">MODEL =</span> <span class="st">"</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="st">    CPO BY COGE1* COGE2 COGE3;</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="st">    CPO@1;</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="st">    SYMB ON CPO;</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="st">    TEM12 ON CPO;</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="st">    SYMB WITH TEM12;</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="st">    OPP ON CPO SYMB TEM12;"</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">MODELINDIRECT =</span> <span class="st">"</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="st">    OPP IND SYMB CPO;</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="st">    OPP IND TEM12 CPO;</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="st">    OPP IND CPO;"</span>,</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">OUTPUT =</span> <span class="st">"</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="st">    STDYX;</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="st">    CINTERVAL;</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="st">    SAMPSTAT;</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="st">    TECH1;"</span>,</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">rdata =</span> ownership_s2</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li>This is filling in all the missing sections of the <code>.inp</code> file that were excluded in the first step. Write it as you would typically write an Mplus <code>.inp</code> file.</li>
+</ul>
+</section>
+<section id="step-3-write-the-.dat-and-.inp-files" class="level3" data-number="10.4.3">
+<h3 data-number="10.4.3" class="anchored" data-anchor-id="step-3-write-the-.dat-and-.inp-files"><span class="header-section-number">10.4.3</span> Step 3: Write the .dat and .inp files</h3>
+<p>Once the model object has been created, mplusModeler() generates both the Mplus data file and the Mplus input file.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>m1a_fit <span class="ot">&lt;-</span> <span class="fu">mplusModeler</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  m1a,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">dataout =</span> <span class="st">"mplus/ownership_s2.dat"</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">modelout =</span> <span class="st">"mplus/m1a.inp"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">run =</span> <span class="dv">0</span>L,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">hashfilename =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">writeData =</span> <span class="st">"always"</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li><p>This creates two files:</p>
+<ul>
+<li><p><code>ownership_s2.dat</code>, containing the data in Mplus format</p></li>
+<li><p><code>m1a.inp</code>, containing the complete Mplus syntax generated from <code>mplusObject()</code></p></li>
+</ul></li>
+<li><p><code>hashfilename = FALSE</code> means that earlier versions of the files are overwritten if you run the code multiple times. If you turn this feature on, it saves a new version of the file each time with a unique identifier.</p></li>
+<li><p><code>run = 0L</code> means that the input file is generated but the model is not run. If you have a locally stored copy of Mplus on your device, you can change this to <code>1L</code> and it will save both the <code>.dat</code> and <code>.inp</code> files as well as actually run the models using Mplus integration.</p></li>
+</ul>
+</section>
+<section id="step-4-checking-syntax" class="level3" data-number="10.4.4">
+<h3 data-number="10.4.4" class="anchored" data-anchor-id="step-4-checking-syntax"><span class="header-section-number">10.4.4</span> Step 4: Checking syntax</h3>
+<p>Before running the model, it can be useful to check the generated syntax.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parseMplus</span>(<span class="fu">readLines</span>(<span class="st">"mplus/m1a.inp"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What this is doing</strong>:</p>
+<ul>
+<li><p>This identifies common syntax problems before Mplus attempts to run the model.</p></li>
+<li><p>However, it may tell you that you’re missing semicolons at the end of lines but does not know when you have split your syntax across multiple lines to get around Mplus’s per-line character limit. So, better to open the <code>.inp</code> file in a plain text reader to see if that really is a problem or not.</p></li>
+<li><p>If you did need to add a semicolon for whatever reason, you can run that same code again with <code>add = TRUE</code> tacked on at the end of the function, and this will ensure there is a semicolon at the end of every line. But if you use this automatically, it will literally do this for every line even if your syntax is split across multiple, which will then cause the model to produce errors.</p></li>
+</ul>
+</section>
+<section id="step-5-reading-model-output-into-r" class="level3" data-number="10.4.5">
+<h3 data-number="10.4.5" class="anchored" data-anchor-id="step-5-reading-model-output-into-r"><span class="header-section-number">10.4.5</span> Step 5: Reading model output into R</h3>
+<p>Say I had run multiple models in Mplus. I could read all of the corresponding .out files separately into R like so.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>results_m1a <span class="ot">&lt;-</span> <span class="fu">readModels</span>(<span class="st">"mplus/m1a.out"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>results_m1b <span class="ot">&lt;-</span> <span class="fu">readModels</span>(<span class="st">"mplus/m1b.out"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>results_m2a <span class="ot">&lt;-</span> <span class="fu">readModels</span>(<span class="st">"mplus/m2a.out"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>results_m2b <span class="ot">&lt;-</span> <span class="fu">readModels</span>(<span class="st">"mplus/m2b.out"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>And then get the summary statistics, and inspect the model outputs.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># View fit statistics</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>results_m1a<span class="sc">$</span>summaries</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>results_m1b<span class="sc">$</span>summaries</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>results_m2a<span class="sc">$</span>summaries</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>results_m2b<span class="sc">$</span>summaries</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># View standardised estimates</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>results_m1a<span class="sc">$</span>parameters<span class="sc">$</span>stdyx.standardized</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>results_m1b<span class="sc">$</span>parameters<span class="sc">$</span>stdyx.standardized</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>results_m2a<span class="sc">$</span>parameters<span class="sc">$</span>stdyx.standardized</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>results_m2b<span class="sc">$</span>parameters<span class="sc">$</span>stdyx.standardized</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You can also read them into several larger overview objects. For example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>all_results <span class="ot">&lt;-</span> <span class="fu">readModels</span>(<span class="st">"mplus/"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(all_results) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"M1a"</span>, <span class="st">"M1b"</span>, <span class="st">"M2a"</span>, <span class="st">"M2b"</span>) <span class="co"># Rename to something meaningful rather than automatic file path name</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>all_results</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the summaries from all models into one dataframe</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">M1a =</span> all_results<span class="sc">$</span>M1a<span class="sc">$</span>summaries,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">M1b =</span> all_results<span class="sc">$</span>M1b<span class="sc">$</span>summaries,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">M2a =</span> all_results<span class="sc">$</span>M2a<span class="sc">$</span>summaries,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">M2b =</span> all_results<span class="sc">$</span>M2b<span class="sc">$</span>summaries,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">.id =</span> <span class="st">"model"</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>AnalysisType, <span class="sc">-</span>DataType, <span class="sc">-</span>Title, <span class="sc">-</span>NGroups, <span class="sc">-</span>NDependentVars, <span class="sc">-</span>NIndependentVars, <span class="sc">-</span>NContinuousLatentVars, <span class="sc">-</span>ChiSqBaseline_Value, <span class="sc">-</span>ChiSqBaseline_DF, <span class="sc">-</span>ChiSqBaseline_PValue, <span class="sc">-</span>ChiSqM_ScalingCorrection, <span class="sc">-</span>LL, <span class="sc">-</span>LLCorrectionFactor, <span class="sc">-</span>UnrestrictedLL, <span class="sc">-</span>UnrestrictedLLCorrectionFactor, <span class="sc">-</span>ParametersWithAux, <span class="sc">-</span>AICC, <span class="sc">-</span>Filename)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>What this is doing:</strong></p>
+<ul>
+<li>This is reading all models into one object and renaming the models to a short and more meaningful call name, so that if you were, for example, to run <code>all_results$m1a$parameters$stdyx.standardized</code> you would get the standardised estimates for Model 1a, and if you ran <code>all_results$m1b$parameters$stdyx.standardized</code> you’d get the same for Model 1b, and so on and so forth.</li>
+</ul>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
@@ -584,6 +710,7 @@ div.csl-indent {
 Hallquist, M. N., &amp; Wiley, J. F. (2018). <span>MplusAutomation</span>: An <span>R</span> package for facilitating large-scale latent variable analyses in <span>Mplus</span>. <em>Structural Equation Modeling</em>, 621–638. <a href="https://doi.org/10.1080/10705511.2017.1402334">https://doi.org/10.1080/10705511.2017.1402334</a>
 </div>
 </div>
+</section>
 </section>
 
 </main> <!-- /main -->
