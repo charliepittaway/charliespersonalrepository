@@ -134,7 +134,7 @@ all_results <- readModels("path/to/folder", recursive = TRUE)
 
 ## Plotting results in R
 
-Because `readModels()` returns tidy data frames, parameter estimates can be piped straight into ggplot2 for custom plots - this is useful for coefficient plots, latent class comparisons, or growth trajectories.
+Because `readModels()` returns tidy data frames, parameter estimates can be piped straight into `ggplot2` for custom plots - this is useful for coefficient plots, latent class comparisons, or growth trajectories.
 
 ``` r
 library(ggplot2)
