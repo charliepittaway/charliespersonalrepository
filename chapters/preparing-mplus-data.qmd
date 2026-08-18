@@ -3,7 +3,7 @@ title: "Preparing and Reading Mplus Files"
 format: html
 ---
 
-Mplus data must be in space-delimited format with no header (e.g., no variable names). Mplus also cannot handle R's `NA` values, and missing data must therefore be recoded as a numeric placeholder (e.g., -99) that does no overlap with any valid value in the dataset.
+Mplus data must be in space-delimited format with no header (e.g., no variable names).
 
 This process can be automated using the **MplusAutomation** package [@mplusautomation2018], which exports a properly formatted `.dat` file and generates a starter `.inp` file with the variable names, order, and missing-value code already filled in – removing the need to manually retype variable lists (a common source of misalignment errors between R/SPSS and Mplus).
 
@@ -62,19 +62,11 @@ gender_ownership_t2 %>%
 
     -   `ownership_s2.inp` – a template Mplus input file with the `DATA:` and `VARIABLE:` sections pre-filled, including `NAMES ARE` (variable list, correctly ordered) and `MISSING ARE ALL (-99);`
 
-## Edit `.inp` file by hand
+## **Next steps:**
 
-Once you have prepared the data and produced the template `.inp` file, you must manually add the model and output sections by hand.
-
-Add `CATEGORICAL ARE`, `MODEL:`, `OUTPUT:` sections.
-
-## Check `.inp` syntax before running
-
-Before you then run the model, you can check it using `parseMplus()`. This checks for common syntax issues (e.g., missing semicolons, lines exceeding Mplus's character limit) before you attempt to run it.
-
-``` r
-parseMplus("ownership_s2.inp")
-```
+1.  Edit .inp file by hand
+2.  Run models in Mplus
+3.  Etc.
 
 ## Running models in R
 
@@ -105,13 +97,7 @@ runModels("path/to/folder", recursive = TRUE)
 If you have been sent an .out file, or you ran your models in Mplus on another device, you can still read them into R and parse out the model results from there. This is done using the `readModels()` function, which parses one or more `.out` files and returns their contents as structured R objects (fit statistics, parameter estimates, modification indices, etc.). To reiterate, this works on **any** `.out` file, whether it was produced by `runModels()` or run independently through the Mplus program, so this step does not require Mplus to be installed locally.
 
 ``` r
-results <- readModels("ownership_s2.out")
-
-# View fit statistics
-results$summaries
-
-# View parameter estimates
-results$parameters$unstandardized
+results <- readModels("ownership_s2.out")  # View fit statistics results$summaries  # View parameter estimates results$parameters$unstandardized
 ```
 
 **Useful sub-elements of the returned object include:**
@@ -132,21 +118,172 @@ If you're parsing many output files at once (e.g., a batch of related models), p
 all_results <- readModels("path/to/folder", recursive = TRUE)
 ```
 
-## Plotting results in R
+## Full workflow
 
-Because `readModels()` returns tidy data frames, parameter estimates can be piped straight into `ggplot2` for custom plots - this is useful for coefficient plots, latent class comparisons, or growth trajectories.
+You can also write your .inp file in R as well. I choose to do this because I prefer to work in R as much as possible. As such, I like to keep a transparent record of the model building process in R, as well as read my Mplus output back into R so that everything I need is in my R project for when I upload it all to OSF.
+
+### Step 1: Prepare the data and retain only the variables required across your analyses
 
 ``` r
-library(ggplot2)
-
-model_params <- readModels("ownership_s2.out")$parameters$unstandardized
-
-
-ggplot(model_params, aes(x = param, y = est)) +
-  geom_pointrange(aes(ymin = est - se, ymax = est + se)) +
-  geom_hline(yintercept = 0, color = "grey50") +
-  labs(x = NULL, y = "Estimate") +
-  coord_flip()
+ownership_s2 <- gender_ownership_t2 %>%
+  mutate(
+    GENDER = case_when(
+      GENID == "man" ~ 1,
+      GENID == "woman" ~ 2,
+      TRUE ~ NA_real_
+    ),
+    OPP = case_when(
+      opinion_group == "supporter" ~ 1,
+      opinion_group == "opponent" ~ 2,
+      TRUE ~ NA_real_
+    )
+  ) %>%
+  dplyr::select(COGE1, COGE2, COGE3,
+                TTHR3, TTHR4,
+                TEM12, OPP, PREJ,
+                TCA3, TCA4, TCA5, TCA7, TCA9,
+                TFA3, TFA4, TFA5, TFA7, TFA9,
+                GENST, AGE, EDUC, CONS, GENDER)
 ```
 
-This plots each parameter's estimate with error bars based on its standard error.
+**What this is doing:**
+
+-   This is the same as above, except rather than specifying -99 as missing data, I am letting the **MplusAutomation** package use it's automatic process of turning all `NA` values to `.` – this is a readable missing value code in Mplus.
+
+### Step 2: Define the model
+
+The model itself is defined using `mplusObject()`.
+
+``` r
+m1a <- mplusObject(
+  TITLE = "M1a - Predicting opponent self-categorisation (categorical);",
+
+  VARIABLE = "
+    USEVARIABLES = TEM12 OPP COGE1 COGE2 COGE3 SYMB;
+    CATEGORICAL = OPP;",
+
+  DEFINE = "
+    SYMB = (TTHR3 + TTHR4) / 2;",
+
+  ANALYSIS = "
+    ESTIMATOR = WLSMV;",
+
+  MODEL = "
+    CPO BY COGE1* COGE2 COGE3;
+    CPO@1;
+    SYMB ON CPO;
+    TEM12 ON CPO;
+    SYMB WITH TEM12;
+    OPP ON CPO SYMB TEM12;",
+
+  MODELINDIRECT = "
+    OPP IND SYMB CPO;
+    OPP IND TEM12 CPO;
+    OPP IND CPO;",
+
+  OUTPUT = "
+    STDYX;
+    CINTERVAL;
+    SAMPSTAT;
+    TECH1;",
+
+  rdata = ownership_s2
+)
+```
+
+**What this is doing:**
+
+-   This is filling in all the missing sections of the `.inp` file that were excluded in the first step. Write it as you would typically write an Mplus `.inp` file.
+
+### Step 3: Write the .dat and .inp files
+
+Once the model object has been created, mplusModeler() generates both the Mplus data file and the Mplus input file.
+
+``` r
+m1a_fit <- mplusModeler(
+  m1a,
+  dataout = "mplus/ownership_s2.dat",
+  modelout = "mplus/m1a.inp",
+  run = 0L,
+  hashfilename = FALSE,
+  writeData = "always"
+)
+```
+
+**What this is doing:**
+
+-   This creates two files:
+
+    -   `ownership_s2.dat`, containing the data in Mplus format
+
+    -   `m1a.inp`, containing the complete Mplus syntax generated from `mplusObject()`
+
+-   `hashfilename = FALSE` means that earlier versions of the files are overwritten if you run the code multiple times. If you turn this feature on, it saves a new version of the file each time with a unique identifier.
+
+-   `run = 0L` means that the input file is generated but the model is not run. If you have a locally stored copy of Mplus on your device, you can change this to `1L` and it will save both the `.dat` and `.inp` files as well as actually run the models using Mplus integration.
+
+### Step 4: Checking syntax
+
+Before running the model, it can be useful to check the generated syntax.
+
+``` r
+parseMplus(readLines("mplus/m1a.inp"))
+```
+
+**What this is doing**:
+
+-   This identifies common syntax problems before Mplus attempts to run the model.
+
+-   However, it may tell you that you're missing semicolons at the end of lines but does not know when you have split your syntax across multiple lines to get around Mplus's per-line character limit. So, better to open the `.inp` file in a plain text reader to see if that really is a problem or not.
+
+-   If you did need to add a semicolon for whatever reason, you can run that same code again with `add = TRUE` tacked on at the end of the function, and this will ensure there is a semicolon at the end of every line. But if you use this automatically, it will literally do this for every line even if your syntax is split across multiple, which will then cause the model to produce errors.
+
+### Step 5: Reading model output into R
+
+Say I had run multiple models in Mplus. I could read all of the corresponding .out files separately into R like so.
+
+``` r
+results_m1a <- readModels("mplus/m1a.out")
+results_m1b <- readModels("mplus/m1b.out")
+results_m2a <- readModels("mplus/m2a.out")
+results_m2b <- readModels("mplus/m2b.out")
+```
+
+And then get the summary statistics, and inspect the model outputs.
+
+``` r
+# View fit statistics
+results_m1a$summaries
+results_m1b$summaries
+results_m2a$summaries
+results_m2b$summaries
+
+# View standardised estimates
+results_m1a$parameters$stdyx.standardized
+results_m1b$parameters$stdyx.standardized
+results_m2a$parameters$stdyx.standardized
+results_m2b$parameters$stdyx.standardized
+```
+
+You can also read them into several larger overview objects. For example:
+
+``` r
+all_results <- readModels("mplus/", recursive = TRUE)
+
+names(all_results) <- c("M1a", "M1b", "M2a", "M2b") # Rename to something meaningful rather than automatic file path name
+all_results
+
+# Combine the summaries from all models into one dataframe
+fit <- bind_rows(
+  M1a = all_results$M1a$summaries,
+  M1b = all_results$M1b$summaries,
+  M2a = all_results$M2a$summaries,
+  M2b = all_results$M2b$summaries,
+  .id = "model"
+) %>%
+  dplyr::select(-AnalysisType, -DataType, -Title, -NGroups, -NDependentVars, -NIndependentVars, -NContinuousLatentVars, -ChiSqBaseline_Value, -ChiSqBaseline_DF, -ChiSqBaseline_PValue, -ChiSqM_ScalingCorrection, -LL, -LLCorrectionFactor, -UnrestrictedLL, -UnrestrictedLLCorrectionFactor, -ParametersWithAux, -AICC, -Filename)
+```
+
+**What this is doing:**
+
+-   This is reading all models into one object and renaming the models to a short and more meaningful call name, so that if you were, for example, to run `all_results$m1a$parameters$stdyx.standardized` you would get the standardised estimates for Model 1a, and if you ran `all_results$m1b$parameters$stdyx.standardized` you'd get the same for Model 1b, and so on and so forth.
