@@ -287,3 +287,5 @@ fit <- bind_rows(
 **What this is doing:**
 
 -   This is reading all models into one object and renaming the models to a short and more meaningful call name, so that if you were, for example, to run `all_results$m1a$parameters$stdyx.standardized` you would get the standardised estimates for Model 1a, and if you ran `all_results$m1b$parameters$stdyx.standardized` you'd get the same for Model 1b, and so on and so forth.
+
+-   The removed variables are just those that I don't typically use to make the dataframe easier to read in my window. However, you could just as easily leave those columns in the dataframe if you would prefer.
