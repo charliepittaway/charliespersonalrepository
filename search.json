@@ -395,12 +395,56 @@
   {
     "objectID": "chapters/preparing-mplus-data.html",
     "href": "chapters/preparing-mplus-data.html",
-    "title": "10  Preparing Mplus Data",
+    "title": "10  Preparing and Reading Mplus Files",
     "section": "",
-    "text": "Mplus data must be in space-delimited format with no header (e.g., no variable names). Mplus also cannot handle R’s NA values, and missing data must therefore be recoded as a numeric placeholder (e.g., -99) that does no overlap with any valid value in the dataset.\nThis process can be automated using the MplusAutomation package (Hallquist & Wiley, 2018), which exports a properly formatted .dat file and generates a starter .inp file with the variable names, order, and missing-value code already filled in – removing the need to manually retype variable lists (a common source of misalignment errors between R/SPSS and Mplus).\n\n\n\n\n\n\nNoteWhat is an .inp file?\n\n\n\nAn .inp file is a plain-text Mplus input file – it’s the script that tells Mplus what data to read, how to treat each variable, and what model to run. Every Mplus analysis starts from one. It’s organised into commands like:\n\nDATA: – where to find the .dat file\nVARIABLE: – variable names, missing-value codes, which variables are categorical, which to use in the model, etc.\nMODEL: – the actual model specification (e.g., factor structure, regressions, paths)\nOUTPUT: – what results to print (standardised estimates, modification indices, etc.)\n\nThe code below only fills in the DATA: and VARIABLE: sections automatically, since those depend on the structure of your dataset.\n\n\ninstall.packages(\"MplusAutomation\")\nlibrary(MplusAutomation)\n\ngender_ownership_t2 %&gt;%\n  mutate(\n    GENDER = case_when(\n      GENID == \"man\" ~ 1,\n      GENID == \"woman\" ~ 2,\n      TRUE ~ NA_real_\n    ),\n    OPP = case_when(\n      opinion_group == \"supporter\" ~ 1,\n      opinion_group == \"opponent\" ~ 2,\n      TRUE ~ NA_real_\n    )\n  ) %&gt;%\n  dplyr::select(COGE1, COGE2, COGE3,\n                TTHR3, TTHR4,\n                TEM12, TEM13,\n                OPP,\n                TCA3, TCA4, TCA5, TCA7, TCA9,\n                TFA3, TFA4, TFA5, TFA7, TFA9,\n                GENST, AGE, EDUC, CONS, GENDER) %&gt;%\n  prepareMplusData(filename = \"ownership_s2.dat\", inpfile = TRUE)\nWhat this is doing:\n\nmutate() recodes to factor variables into numeric form, since Mplus requires all variables to be numeric. GENID (“man”, “woman”, “non-binary person”, “other gender diverse person”) is recoded into GENDER (1/2 - only controlling for binary gender in the models as there are insufficient cases of gender diverse folk in the data), and opinion_group (“supporter”/“opponent”) is recoded into OPP (1/2) because the models I was running were predicting opponent (vs supporter) self-categorisation. Any value that doesn’t match the specified condition becomes NA.\ndplyr::select() retains only the variables needed for the Mplus model, in a fixed order. The column order matters here, since Mplus reads data by position rather than by name – the order in select() determines the order Mplus expects in NAMES ARE\nprepareMplusData() writes two files here:\n\nownership_s2.dat – the space-delimited data file, with all NA values automatically recoded to -99.\nownership_s2.inp – a template Mplus input file with the DATA: and VARIABLE: sections pre-filled, including NAMES ARE (variable list, correctly ordered) and MISSING ARE ALL (-99);\n\n\n\n\n\n\nHallquist, M. N., & Wiley, J. F. (2018). MplusAutomation: An R package for facilitating large-scale latent variable analyses in Mplus. Structural Equation Modeling, 621–638. https://doi.org/10.1080/10705511.2017.1402334",
+    "text": "10.1 Edit .inp file by hand\nMplus data must be in space-delimited format with no header (e.g., no variable names). Mplus also cannot handle R’s NA values, and missing data must therefore be recoded as a numeric placeholder (e.g., -99) that does no overlap with any valid value in the dataset.\nThis process can be automated using the MplusAutomation package (Hallquist & Wiley, 2018), which exports a properly formatted .dat file and generates a starter .inp file with the variable names, order, and missing-value code already filled in – removing the need to manually retype variable lists (a common source of misalignment errors between R/SPSS and Mplus).\nWhat this is doing:\nOnce you have prepared the data and produced the template .inp file, you must manually add the model and output sections by hand.\nAdd CATEGORICAL ARE, MODEL:, OUTPUT: sections.",
     "crumbs": [
       "Data Wrangling & Basics",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Preparing Mplus Data</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Preparing and Reading Mplus Files</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/preparing-mplus-data.html#check-.inp-syntax-before-running",
+    "href": "chapters/preparing-mplus-data.html#check-.inp-syntax-before-running",
+    "title": "10  Preparing and Reading Mplus Files",
+    "section": "10.2 Check .inp syntax before running",
+    "text": "10.2 Check .inp syntax before running\nBefore you then run the model, you can check it using parseMplus(). This checks for common syntax issues (e.g., missing semicolons, lines exceeding Mplus’s character limit) before you attempt to run it.\nparseMplus(\"ownership_s2.inp\")",
+    "crumbs": [
+      "Data Wrangling & Basics",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Preparing and Reading Mplus Files</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/preparing-mplus-data.html#running-models-in-r",
+    "href": "chapters/preparing-mplus-data.html#running-models-in-r",
+    "title": "10  Preparing and Reading Mplus Files",
+    "section": "10.3 Running models in R",
+    "text": "10.3 Running models in R\nOnce your .inp file is complete (data/variable sections generated by prepareMplusData(), plus your MODEL: and OUTPUT: sections added by hand), you can actually run it directly from R using runModels().\n\n\n\n\n\n\nWarningRequirements\n\n\n\nRunning the Mplus models in R still requires Mplus to be installed locally, as runModels() actually calls Mplus behind the scenes.\n\n\nrunModels(\"ownership_s2.inp\")\nBy default, this looks for ownership_s2.inp in the working directory and produces ownership_s2.out alongside it, exactly as if you’d opened and run the file in the Mplus GUI. If you have several related .inp files in a folder (e.g., a set of measurement invariance models), you can run them all in one call.\nrunModels(\"path/to/folder\", recursive = TRUE)\n\nNote: recursive = TRUE also parses .inp files in subdirectories, which is useful for batches of nested model comparisons.\nAlso note: I do not have Mplus locally installed, so I haven’t tried this myself. See https://michaelhallquist.github.io/MplusAutomation/index.html for more guides.",
+    "crumbs": [
+      "Data Wrangling & Basics",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Preparing and Reading Mplus Files</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/preparing-mplus-data.html#reading-model-output-into-r",
+    "href": "chapters/preparing-mplus-data.html#reading-model-output-into-r",
+    "title": "10  Preparing and Reading Mplus Files",
+    "section": "10.4 Reading model output into R",
+    "text": "10.4 Reading model output into R\nIf you have been sent an .out file, or you ran your models in Mplus on another device, you can still read them into R and parse out the model results from there. This is done using the readModels() function, which parses one or more .out files and returns their contents as structured R objects (fit statistics, parameter estimates, modification indices, etc.). To reiterate, this works on any .out file, whether it was produced by runModels() or run independently through the Mplus program, so this step does not require Mplus to be installed locally.\nresults &lt;- readModels(\"ownership_s2.out\")\n\n# View fit statistics\nresults$summaries\n\n# View parameter estimates\nresults$parameters$unstandardized\nUseful sub-elements of the returned object include:\n\nsummaries – fit indices (CFI, TLI, RMSEA, chi-square, etc.)\nparameters – unstandardised and standardised estimates, standard errors, p-values\nmod_indices – modification indices\nclass_counts – latent class counts/proportions (for mixture models)\nindirect – indirect effect estimates (for mediation models)\n\nIf you’re parsing many output files at once (e.g., a batch of related models), point readModels() at the containing folder with all .out files.\nall_results &lt;- readModels(\"path/to/folder\", recursive = TRUE)",
+    "crumbs": [
+      "Data Wrangling & Basics",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Preparing and Reading Mplus Files</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/preparing-mplus-data.html#plotting-results-in-r",
+    "href": "chapters/preparing-mplus-data.html#plotting-results-in-r",
+    "title": "10  Preparing and Reading Mplus Files",
+    "section": "10.5 Plotting results in R",
+    "text": "10.5 Plotting results in R\nBecause readModels() returns tidy data frames, parameter estimates can be piped straight into ggplot2 for custom plots - this is useful for coefficient plots, latent class comparisons, or growth trajectories.\nlibrary(ggplot2)\n\nmodel_params &lt;- readModels(\"ownership_s2.out\")$parameters$unstandardized\n\n\nggplot(model_params, aes(x = param, y = est)) +\n  geom_pointrange(aes(ymin = est - se, ymax = est + se)) +\n  geom_hline(yintercept = 0, color = \"grey50\") +\n  labs(x = NULL, y = \"Estimate\") +\n  coord_flip()\nThis plots each parameter’s estimate with error bars based on its standard error.\n\n\n\n\nHallquist, M. N., & Wiley, J. F. (2018). MplusAutomation: An R package for facilitating large-scale latent variable analyses in Mplus. Structural Equation Modeling, 621–638. https://doi.org/10.1080/10705511.2017.1402334",
+    "crumbs": [
+      "Data Wrangling & Basics",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Preparing and Reading Mplus Files</span>"
     ]
   },
   {

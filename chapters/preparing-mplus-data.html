@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>10&nbsp; Preparing Mplus Data – Charlie's Personal R for Psychology Repository</title>
+<title>10&nbsp; Preparing and Reading Mplus Files – Charlie's Personal R for Psychology Repository</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -143,7 +143,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/getting-started.html">Data Wrangling &amp; Basics</a></li><li class="breadcrumb-item"><a href="../chapters/preparing-mplus-data.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Preparing Mplus Data</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/getting-started.html">Data Wrangling &amp; Basics</a></li><li class="breadcrumb-item"><a href="../chapters/preparing-mplus-data.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Preparing and Reading Mplus Files</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -240,7 +240,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/preparing-mplus-data.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Preparing Mplus Data</span></span></a>
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Preparing and Reading Mplus Files</span></span></a>
   </div>
 </li>
       </ul>
@@ -417,15 +417,25 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#edit-.inp-file-by-hand" id="toc-edit-.inp-file-by-hand" class="nav-link active" data-scroll-target="#edit-.inp-file-by-hand"><span class="header-section-number">10.1</span> Edit <code>.inp</code> file by hand</a></li>
+  <li><a href="#check-.inp-syntax-before-running" id="toc-check-.inp-syntax-before-running" class="nav-link" data-scroll-target="#check-.inp-syntax-before-running"><span class="header-section-number">10.2</span> Check <code>.inp</code> syntax before running</a></li>
+  <li><a href="#running-models-in-r" id="toc-running-models-in-r" class="nav-link" data-scroll-target="#running-models-in-r"><span class="header-section-number">10.3</span> Running models in R</a></li>
+  <li><a href="#reading-model-output-into-r" id="toc-reading-model-output-into-r" class="nav-link" data-scroll-target="#reading-model-output-into-r"><span class="header-section-number">10.4</span> Reading model output into R</a></li>
+  <li><a href="#plotting-results-in-r" id="toc-plotting-results-in-r" class="nav-link" data-scroll-target="#plotting-results-in-r"><span class="header-section-number">10.5</span> Plotting results in R</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/getting-started.html">Data Wrangling &amp; Basics</a></li><li class="breadcrumb-item"><a href="../chapters/preparing-mplus-data.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Preparing Mplus Data</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/getting-started.html">Data Wrangling &amp; Basics</a></li><li class="breadcrumb-item"><a href="../chapters/preparing-mplus-data.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Preparing and Reading Mplus Files</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Preparing Mplus Data</span></h1>
+<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Preparing and Reading Mplus Files</span></h1>
 </div>
 
 
@@ -498,6 +508,75 @@ div.csl-indent {
 <li><p><code>ownership_s2.inp</code> – a template Mplus input file with the <code>DATA:</code> and <code>VARIABLE:</code> sections pre-filled, including <code>NAMES ARE</code> (variable list, correctly ordered) and <code>MISSING ARE ALL (-99);</code></p></li>
 </ul></li>
 </ul>
+<section id="edit-.inp-file-by-hand" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="edit-.inp-file-by-hand"><span class="header-section-number">10.1</span> Edit <code>.inp</code> file by hand</h2>
+<p>Once you have prepared the data and produced the template <code>.inp</code> file, you must manually add the model and output sections by hand.</p>
+<p>Add <code>CATEGORICAL ARE</code>, <code>MODEL:</code>, <code>OUTPUT:</code> sections.</p>
+</section>
+<section id="check-.inp-syntax-before-running" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="check-.inp-syntax-before-running"><span class="header-section-number">10.2</span> Check <code>.inp</code> syntax before running</h2>
+<p>Before you then run the model, you can check it using <code>parseMplus()</code>. This checks for common syntax issues (e.g., missing semicolons, lines exceeding Mplus’s character limit) before you attempt to run it.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parseMplus</span>(<span class="st">"ownership_s2.inp"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="running-models-in-r" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="running-models-in-r"><span class="header-section-number">10.3</span> Running models in R</h2>
+<p>Once your <code>.inp</code> file is complete (data/variable sections generated by <code>prepareMplusData()</code>, plus your <code>MODEL:</code> and <code>OUTPUT:</code> sections added by hand), you can actually run it directly from R using <code>runModels()</code>.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Requirements
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Running the Mplus models in R still requires Mplus to be installed locally, as <code>runModels()</code> actually calls Mplus behind the scenes.</p>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">runModels</span>(<span class="st">"ownership_s2.inp"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>By default, this looks for ownership_s2.inp in the working directory and produces ownership_s2.out alongside it, exactly as if you’d opened and run the file in the Mplus GUI. If you have several related .inp files in a folder (e.g., a set of measurement invariance models), you can run them all in one call.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">runModels</span>(<span class="st">"path/to/folder"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><p>Note: <code>recursive = TRUE</code> also parses <code>.inp</code> files in subdirectories, which is useful for batches of nested model comparisons.</p></li>
+<li><p>Also note: I do not have Mplus locally installed, so I haven’t tried this myself. See <a href="https://michaelhallquist.github.io/MplusAutomation/index.html" class="uri">https://michaelhallquist.github.io/MplusAutomation/index.html</a> for more guides.</p></li>
+</ul>
+</section>
+<section id="reading-model-output-into-r" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="reading-model-output-into-r"><span class="header-section-number">10.4</span> Reading model output into R</h2>
+<p>If you have been sent an .out file, or you ran your models in Mplus on another device, you can still read them into R and parse out the model results from there. This is done using the <code>readModels()</code> function, which parses one or more <code>.out</code> files and returns their contents as structured R objects (fit statistics, parameter estimates, modification indices, etc.). To reiterate, this works on <strong>any</strong> <code>.out</code> file, whether it was produced by <code>runModels()</code> or run independently through the Mplus program, so this step does not require Mplus to be installed locally.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">readModels</span>(<span class="st">"ownership_s2.out"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># View fit statistics</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>summaries</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># View parameter estimates</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>parameters<span class="sc">$</span>unstandardized</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Useful sub-elements of the returned object include:</strong></p>
+<ul>
+<li><p><code>summaries</code> – fit indices (CFI, TLI, RMSEA, chi-square, etc.)</p></li>
+<li><p><code>parameters</code> – unstandardised and standardised estimates, standard errors, p-values</p></li>
+<li><p><code>mod_indices</code> – modification indices</p></li>
+<li><p><code>class_counts</code> – latent class counts/proportions (for mixture models)</p></li>
+<li><p><code>indirect</code> – indirect effect estimates (for mediation models)</p></li>
+</ul>
+<p>If you’re parsing many output files at once (e.g., a batch of related models), point <code>readModels()</code> at the containing folder with all <code>.out</code> files.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>all_results <span class="ot">&lt;-</span> <span class="fu">readModels</span>(<span class="st">"path/to/folder"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="plotting-results-in-r" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="plotting-results-in-r"><span class="header-section-number">10.5</span> Plotting results in R</h2>
+<p>Because <code>readModels()</code> returns tidy data frames, parameter estimates can be piped straight into ggplot2 for custom plots - this is useful for coefficient plots, latent class comparisons, or growth trajectories.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>model_params <span class="ot">&lt;-</span> <span class="fu">readModels</span>(<span class="st">"ownership_s2.out"</span>)<span class="sc">$</span>parameters<span class="sc">$</span>unstandardized</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(model_params, <span class="fu">aes</span>(<span class="at">x =</span> param, <span class="at">y =</span> est)) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> est <span class="sc">-</span> se, <span class="at">ymax =</span> est <span class="sc">+</span> se)) <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Estimate"</span>) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This plots each parameter’s estimate with error bars based on its standard error.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
@@ -505,6 +584,7 @@ div.csl-indent {
 Hallquist, M. N., &amp; Wiley, J. F. (2018). <span>MplusAutomation</span>: An <span>R</span> package for facilitating large-scale latent variable analyses in <span>Mplus</span>. <em>Structural Equation Modeling</em>, 621–638. <a href="https://doi.org/10.1080/10705511.2017.1402334">https://doi.org/10.1080/10705511.2017.1402334</a>
 </div>
 </div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
