@@ -565,7 +565,7 @@ div.csl-indent {
 </section>
 <section id="plotting-results-in-r" class="level2" data-number="10.5">
 <h2 data-number="10.5" class="anchored" data-anchor-id="plotting-results-in-r"><span class="header-section-number">10.5</span> Plotting results in R</h2>
-<p>Because <code>readModels()</code> returns tidy data frames, parameter estimates can be piped straight into ggplot2 for custom plots - this is useful for coefficient plots, latent class comparisons, or growth trajectories.</p>
+<p>Because <code>readModels()</code> returns tidy data frames, parameter estimates can be piped straight into <code>ggplot2</code> for custom plots - this is useful for coefficient plots, latent class comparisons, or growth trajectories.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>model_params <span class="ot">&lt;-</span> <span class="fu">readModels</span>(<span class="st">"ownership_s2.out"</span>)<span class="sc">$</span>parameters<span class="sc">$</span>unstandardized</span>
