@@ -50,6 +50,8 @@ book:
     - part: References
       chapters: 
         - references.qmd
+        
+number-sections: false
 
 language:
   title-block-published: "Last updated"
